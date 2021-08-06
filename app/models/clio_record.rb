@@ -298,11 +298,16 @@ class ClioRecord
     holdings = {}
     @marc_record.each_by_tag('852') do |tag852|
       mfhd_id = tag852['0']
+
+      # Call Number might be defined at the Bib or Holdings level.
+      # Holdings call number, if present, takes precedence.
+      best_call_number = tag852['h'].present? ? tag852['h'] : self.call_number
+
       holdings[mfhd_id] = {
         mfhd_id:                  mfhd_id,
         location_display:         tag852['a'],
         location_code:            tag852['b'],
-        display_call_number:      tag852['h'],
+        display_call_number:      best_call_number,
         items:                    []
       }
       # And fill in all possible mfhd fields with empty array
