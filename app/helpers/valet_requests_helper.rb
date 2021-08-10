@@ -148,7 +148,7 @@ module ValetRequestsHelper
   def holding_radio_button_label(holding)
     mfhd_id = holding[:mfhd_id]
     radio_button_id = "mfhd_id_#{mfhd_id}"
-    label = 'Call number ' + holding[:display_call_number].upcase +
+    label = 'Call number ' + holding[:display_call_number] +
             ', location ' + location_label(holding[:location_code])
 
     label_tag(radio_button_id, label)
