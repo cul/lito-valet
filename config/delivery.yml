@@ -11,7 +11,7 @@ standard_delivery_locations:
   - GS
   - LE
   - ML
-  # - MR
+  - MR
   - MZ
   - CA
   - SW
