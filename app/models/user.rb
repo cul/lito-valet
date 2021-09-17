@@ -77,7 +77,18 @@ class User < ApplicationRecord
     # Rails.logger.debug "Querying LDAP #{ldap_ip_address} #{ldap_args.inspect} for uid=#{uid}"
     # entry = Net::LDAP.new(host: ldap_ip_address, port: ldap_args[:port]).search(base: ldap_args[:base], filter: Net::LDAP::Filter.eq('uid', uid)) || []
     Rails.logger.debug "Querying LDAP #{ldap_args.inspect} for uid=#{uid}"
-    # entry = Net::LDAP.new(host: ldap_args[:host], port: ldap_args[:port]).search(base: ldap_args[:base], filter: Net::LDAP::Filter.eq('uid', uid)) || []
+
+    # ### this does not work?
+    # ldap = Net::LDAP.new
+    # ldap.host = ldap_ip_address
+    # ldap.port = ldap_args[:port]
+    # ldap.auth ldap_args[:username], ldap_args[:password]
+    # unless ldap.bind
+    #   Rails.logger.error "LDAP Authentication Failed!"
+    #   return
+    # end
+    # entry = ldap.search(base: ldap_args[:base], filter: Net::LDAP::Filter.eq('uid', uid)) || []
+
     entry = Net::LDAP.new(host: ldap_ip_address, port: ldap_args[:port]).search(base: ldap_args[:base], filter: Net::LDAP::Filter.eq('uid', uid)) || []
     entry = entry.first
     Rails.logger.debug "LDAP response: #{entry.inspect}"
