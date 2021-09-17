@@ -108,7 +108,7 @@ off,glx:
   default:  BU
 
 off,gsc:
-  default:  GS
+  default:  CA
 
 off,hsl:
   default:  HS
