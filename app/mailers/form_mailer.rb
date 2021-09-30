@@ -40,6 +40,17 @@ class FormMailer < ApplicationMailer
   end
   
   ###
+  ### ITEM FEEDBACK - single mail to both staff and patron
+  ###
+  def item_feedback
+    to = params[:patron_email] + ', ' + params[:staff_email]
+    from = "Item Feedback <#{params[:staff_email]}>"
+    title = params[:bib_record].title
+    subject = "Item Feedback [#{title}]"
+    mail(to: to, from: from, subject: subject)
+  end
+  
+  ###
   ### RECAP - confirmation emails to patrons
   ###
   

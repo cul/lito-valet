@@ -1,0 +1,73 @@
+<h4>Item Feedback</h4>
+
+<!-- display basic bib data -->
+<%= render 'bib', bib_record: bib_record %>
+
+
+<%= form_with url: item_feedback_index_path do |form| %>
+
+  <!-- we need this passed via the form params -->
+  <%= form.hidden_field(:id, value: bib_record.id) %>
+
+  <% if bib_record.holdings.count == 1 %>
+    <%= hidden_field_tag(:mfhd_id, bib_record.holdings.first[:mfhd_id]) %>
+  <% else %>
+    <br>
+    <div class='instructional_title'>
+      Select a Copy
+    </div>
+
+    <% bib_record.holdings.each do |holding| %>
+      <% mfhd_id = holding[:mfhd_id] %>
+      <% display_label = holding[:location_display] + ' - '  + holding[:display_call_number] %>
+
+      <%= form.radio_button(:mfhd_id, mfhd_id, id: "mfhd_id_#{mfhd_id}" ) %>
+      <%= label_tag("mfhd_id_#{mfhd_id}", display_label) %>
+      <br>
+    <% end %>
+  <% end %>
+
+  <br>
+
+  <div class='instructional_title'>
+    Please select one of the options below to recommend that an item be:
+  </div>
+  
+  <% # the possible feedback options are stored as a hash in item_feedback.rb %>
+  <% feedback_options.each do |key, value| %>
+    <%= form.radio_button(:feedback, key, id: "feedback_#{key}") %>
+    <%= label_tag("feedback_#{key}", value) %>
+    <br>
+  <% end %>
+  
+  <br>
+  
+  <div class='instructional_title'>
+    Notes:
+  </div>
+  <%= text_area_tag(:note, '', rows: '3', class: 'form-control', disabled: false) %>
+  
+  <br>
+  
+  <%= form.submit('Submit Item Feedback', onclick: 'return validateItemFeedbackForm()') %>
+
+<% end %>
+
+<br>
+
+
+<div class="bg-info">
+<small>
+<br>
+* If this pertains to a single volume in a set or series, please indicate the volume(s) in notes.
+<br>
+<br>
+
+<ul>
+<li>A copy of this suggestion will be sent to: <strong><%=current_user.email%></strong></li>
+<li>If you have questions about your suggestion, please email <strong>itemfeedback@library.columbia.edu</strong></li>
+</ul>
+
+<br>
+
+</div>

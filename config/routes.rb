@@ -43,7 +43,7 @@ Rails.application.routes.draw do
             :intercampus,
             :inprocess,
             :precat,
-            :itemfeedback,
+            :item_feedback,
             :notonshelf,
             :bearstor,
             :avery_onsite,
