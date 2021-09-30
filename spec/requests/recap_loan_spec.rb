@@ -33,6 +33,22 @@ RSpec.describe 'ReCAP Loan' do
     expect(response).to redirect_to( APP_CONFIG[:recap_loan][:ineligible_url] )
   end
 
+  it 'restricts campus-delivery location by customer code' do
+    sign_in FactoryBot.create(:happyuser)
+
+    # Princeton QK customer code: SCSB-1855010
+    get recap_loan_path('SCSB-1855010', '1830621')
+    # - specific delivery location as only option in drop-down menu
+    music_only = '<select name="deliveryLocation" id="deliveryLocation" class="retrieval-field"><option selected="selected" value="MR">Music &amp; Arts Library</option></select>'
+    expect(response.body).to include( music_only )
+
+    # Harvard FL customer code: SCSB-10471305, SCSB-10058654, SCSB-10485093
+    get recap_loan_path('SCSB-10471305')
+    # - specific delivery location as only option in drop-down menu
+    avery_only = '<select name="deliveryLocation" id="deliveryLocation" class="retrieval-field"><option selected="selected" value="AR">Avery Library</option></select>'
+    expect(response.body).to include( avery_only )
+  end
+
 end
 
 

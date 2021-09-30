@@ -39,7 +39,7 @@ module ValetRequestsHelper
   end
 
   # For a given offsite location code ('OFF AVE', 'OFF BIO'),
-  # (or a customer code, e.g., 'QK')
+  # (or a customer code, e.g., 'QK', 'FL')
   # return the default on-campus delivery location ('AR', 'CA')
   def get_delivery_default(code)
     delivery_config = get_delivery_config(code)

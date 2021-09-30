@@ -28,6 +28,11 @@ QK:
     - MR
     # - MZ
     # - QP
+# LIBSYS-4277 - SCSB-797 Harvard customer code FL Error
+FL:
+  default:  AR
+  available:
+    - AR
 
 
 # configuration for each offsite location code
