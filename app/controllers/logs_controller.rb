@@ -135,8 +135,10 @@ class LogsController < ApplicationController
       group_clause = 'strftime("%Y", created_at)'
     end
 
-    Log.where(logset: @logset).group(group_clause).count
-    raise
+    counts = Log.where(logset: @logset).group(group_clause).count
+
+    # return counts, sorted by hash key (year)
+    return counts.sort.to_h
   end
 
   def get_month_counts
@@ -148,7 +150,10 @@ class LogsController < ApplicationController
       group_clause = 'strftime("%Y-%m", created_at)'
     end
 
-    Log.where(logset: @logset).order(group_clause).group(group_clause).count
+    counts = Log.where(logset: @logset).group(group_clause).count
+
+    # return counts, sorted by hash key (year-month)
+    return counts.sort.to_h
   end
 
   # download param may be a year (YYYY) or year/month (YYYY-MM).
