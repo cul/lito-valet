@@ -135,7 +135,7 @@ class LogsController < ApplicationController
       group_clause = 'strftime("%Y", created_at)'
     end
 
-    Log.where(logset: @logset).order(:created_at).group(group_clause).count
+    Log.where(logset: @logset).order(group_clause).group(group_clause).count
   end
 
   def get_month_counts
@@ -147,7 +147,7 @@ class LogsController < ApplicationController
       group_clause = 'strftime("%Y-%m", created_at)'
     end
 
-    Log.where(logset: @logset).order(:created_at).group(group_clause).count
+    Log.where(logset: @logset).order(group_clause).group(group_clause).count
   end
 
   # download param may be a year (YYYY) or year/month (YYYY-MM).
