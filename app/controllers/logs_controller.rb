@@ -135,7 +135,8 @@ class LogsController < ApplicationController
       group_clause = 'strftime("%Y", created_at)'
     end
 
-    Log.where(logset: @logset).order(group_clause).group(group_clause).count
+    Log.where(logset: @logset).group(group_clause).count
+    raise
   end
 
   def get_month_counts
