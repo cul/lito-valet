@@ -221,4 +221,13 @@ module ValetRequestsHelper
     # Otherwise, return nothing
     {}
   end
+
+  def in_process_holdings_label(holding)
+    location    = holding[:location_display]
+    call_number = holding[:display_call_number]
+    acq_info    = holding[:acquisitions_information].join(', ')
+    data = [ location, call_number, acq_info ]
+    return data.compact_blank.join(' - ')
+  end
+
 end

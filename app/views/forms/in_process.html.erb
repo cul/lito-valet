@@ -1,0 +1,90 @@
+
+<% if holdings.first[:in_process_flag] == true %>
+  <h4>In Process Request</h4>
+<% else %>
+  <h4>On Order Request</h4>
+<% end %>
+
+<%= form_with url: in_process_index_path do |form| %>
+
+  <!-- what we'll need to make the request -->
+  <%= form.hidden_field(:id, value: bib_record.id) %>
+
+  <!-- display basic bib data -->
+  <%= render 'bib', bib_record: bib_record %>
+
+  <br>
+
+  <% if holdings.count == 1 %>
+    <%= hidden_field_tag(:mfhd_id, holdings.first[:mfhd_id]) %>
+    <%= in_process_holdings_label(holdings.first) %>
+  <% else %>
+    <br>
+    <div class='instructional_title'>
+      Select a Copy
+    </div>
+
+    <% holdings.each do |holding| %>
+      <% mfhd_id = holding[:mfhd_id] %>
+      <%= form.radio_button(:mfhd_id, mfhd_id, id: "mfhd_id_#{mfhd_id}" ) %>
+      <%= label_tag("mfhd_id_#{mfhd_id}", in_process_holdings_label(holding)) %>
+      <br>
+    <% end %>
+  <% end %>
+
+  <br>
+
+  <% # for In-Process requests offer a choice of pickup location %>
+  <% if holdings.first[:in_process_flag] == true %>
+    <br>
+    <div class='instructional_title'>Select a Pickup Location</div>
+
+    <%= form.radio_button(:pickup, 'butler', id: :pickup_butler, checked: true) %>
+    <%= label_tag(:pickup_butler, 'Butler Library (1-3 days)') %>
+    <br>
+
+    <%= form.radio_button(:pickup, 'dptmntl', id: :pickup_dptmntl) %>
+    <%= label_tag(:pickup_dptmntl, 'Departmental Library (5-10 days)') %>
+    <br>
+  <% end %>
+
+
+  <h5>Note:</h5>
+  <textarea name="note" cols="60" rows="3" class="forminput"></textarea> 
+
+  <br>
+  
+  <%= form.submit('Submit Request') %>
+
+<% end %>
+
+<br>
+
+
+<div class="bg-info">
+<small>
+<br>
+<ul>
+
+<li>Use this form to request an item that is listed in CLIO as <strong>In Process</strong> or <strong>On Order</strong>. 
+If other copies listed are not checked out, try obtaining those copies at the owning library instead of submitting this form.</li>
+
+<li>Do not use this form for requesting individual volumes of sets or serials.</li>
+
+<li>Some material cannot be checked out, but used on-site only.</li>
+
+<li>You will be notified by email to <strong><%=current_user.email%></strong> when the item is received and is ready for use.</li>
+
+<% if holdings.first[:in_process_flag] == false %>
+  <li>Please note that it is not possible to predict how long it will take for a requested book to be available.
+  If you need it soon, please try 
+  <a href="http://www.columbia.edu/cgi-bin/cul/resolve?lweb0097">Borrow Direct</a> or 
+  <a href="http://www.columbia.edu/cgi-bin/cul/resolve?lweb0014">ILL</a>.</li>
+<% end %>
+
+</ul>
+
+
+<br>
+
+</div>

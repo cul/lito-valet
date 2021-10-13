@@ -39,6 +39,19 @@ class FormMailer < ApplicationMailer
     mail(to: to, from: from, subject: subject)
   end
   
+
+  ###
+  ### IN PROCESS / ON ORDER - single mail to both staff and patron
+  ###
+  def in_process
+    to = params[:patron_email] + ', ' + params[:staff_email]
+    from = "Request Services <#{params[:staff_email]}>"
+    title = params[:bib_record].title
+    subject = "On Order / In Process Request [#{title}]"
+    mail(to: to, from: from, subject: subject)
+  end
+  
+
   ###
   ### ITEM FEEDBACK - single mail to both staff and patron
   ###

@@ -1,0 +1,21 @@
+-------
+In Process/On Order Request 
+-------
+
+SEARCH REQUEST sent to: <%= @params[:staff_email] %>
+
+AUTHOR===<%= @params[:bib_record].author %>
+TITLE====<%= @params[:bib_record].title %>
+PLACE====<%= @params[:bib_record].pub_place %>
+DATE=====<%= @params[:bib_record].pub_date %>
+PUB======<%= @params[:bib_record].pub_name %>
+BIBID====<%= @params[:bib_record].id %>
+OPAC=====https://clio.columbia.edu/catalog/<%= @params[:bib_record].id %>
+LOC======<%= @params[:location_name] %>
+VLOC=====<%= @params[:location_code] %>
+EMAIL====<%= @params[:patron_email] %>
+PICKUP===<%= @params[:pickup] %>
+ALIAS====<%= @params[:staff_email] %>
+NOTE=====<%= @params[:note] %>
+
+

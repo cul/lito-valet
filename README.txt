@@ -28,7 +28,7 @@ listed which map to controller: 'forms'
             :ill,
             :docdel,
             :intercampus,
-            :inprocess,
+            :in_process,
             :precat,
             :itemfeedback,
             :notonshelf,

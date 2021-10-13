@@ -41,7 +41,7 @@ Rails.application.routes.draw do
             :borrow_direct,
             :ill_scan,
             :intercampus,
-            :inprocess,
+            :in_process,
             :precat,
             :item_feedback,
             :notonshelf,

@@ -1,0 +1,29 @@
+
+<h4>On Order / In Process Confirmation</h4>
+
+<br>
+
+A request for the following item has been submitted to <strong><%= staff_email %></strong>. 
+
+<br>
+<br>
+
+<strong>
+TITLE : 
+<%= bib_record.title %>
+<br>
+AUTHOR : 
+<%= bib_record.author %>
+</strong>
+
+
+<br>
+<br>
+
+<br>
+You can now close this browser window.
+<br>
+<br>
+<div id='close_popup_button'></div>
+<%= javascript_tag 'close_popup_button();' %>
+
