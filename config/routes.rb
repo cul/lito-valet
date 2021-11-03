@@ -36,6 +36,7 @@ Rails.application.routes.draw do
   # - #create, the form-handler - logs, emails, bounces, etc.
   # resources :borrowdirect,
   resources :campus_paging,
+            :campus_paging_pilot,
             :flip_paging,
             :campus_scan,
             :borrow_direct,
