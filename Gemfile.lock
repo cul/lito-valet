@@ -187,7 +187,7 @@ GEM
       unf
     marcel (1.0.2)
     method_source (1.0.0)
-    mini_mime (1.1.1)
+    mini_mime (1.1.2)
     mini_portile2 (2.4.0)
     minitest (5.14.4)
     msgpack (1.4.2)
@@ -265,7 +265,7 @@ GEM
       rspec-expectations (~> 3.10)
       rspec-mocks (~> 3.10)
       rspec-support (~> 3.10)
-    rspec-support (3.10.2)
+    rspec-support (3.10.3)
     ruby-oci8 (2.2.9)
     ruby2_keywords (0.0.5)
     sass (3.7.4)
@@ -306,7 +306,7 @@ GEM
     websocket-driver (0.7.5)
       websocket-extensions (>= 0.1.0)
     websocket-extensions (0.1.5)
-    zeitwerk (2.4.2)
+    zeitwerk (2.5.1)
 
 PLATFORMS
   ruby
