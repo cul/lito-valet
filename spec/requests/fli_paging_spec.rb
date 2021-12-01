@@ -1,11 +1,11 @@
-RSpec.describe 'FLIP Paging' do
+RSpec.describe 'FLI Paging' do
 
   it 'redirects SAC patron to ezproxy/illiad' do
     user = FactoryBot.create(:happyuser)
     user.affils = ['CUL_role-clio-SAC'] 
     sign_in user
 
-    get flip_paging_path('2049141')
+    get fli_paging_path('2049141')
 
     illiad_params = [
       'Action=10',
@@ -36,22 +36,22 @@ RSpec.describe 'FLIP Paging' do
 
   it 'redirects to REG patron to failure page' do
     sign_in FactoryBot.create(:happyuser)
-    get flip_paging_path('123')
-    expect(response).to redirect_to( APP_CONFIG[:flip_paging][:ineligible_url] )
+    get fli_paging_path('123')
+    expect(response).to redirect_to( APP_CONFIG[:fli_paging][:ineligible_url] )
   end
 
 
   it 'redirects blocked patron to failure page' do
     sign_in FactoryBot.create(:blockeduser)
-    get flip_paging_path('123')
-    expect(response).to redirect_to( APP_CONFIG[:flip_paging][:ineligible_url] )
+    get fli_paging_path('123')
+    expect(response).to redirect_to( APP_CONFIG[:fli_paging][:ineligible_url] )
   end
 
-  it 'fails for non-FLIP material' do
+  it 'fails for non-FLI material' do
     user = FactoryBot.create(:happyuser)
     user.affils = ['CUL_role-clio-SAC'] 
     sign_in user
-    get flip_paging_path('123')
+    get fli_paging_path('123')
     expect(response.body).to include('This record has no FLI Partnership holdings')
   end
 

@@ -37,7 +37,7 @@ Rails.application.routes.draw do
   # resources :borrowdirect,
   resources :campus_paging,
             :campus_paging_pilot,
-            :flip_paging,
+            :fli_paging,
             :campus_scan,
             :borrow_direct,
             :ill_scan,

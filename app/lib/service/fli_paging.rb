@@ -1,8 +1,8 @@
 module Service
   # This service is like Campus-Paging, but for FLI Partnership.
-  # It's only valid for FLIP holdings (bar,flip and mrr,flip),
+  # It's only valid for FLI holdings (bar,fli and mrr,fli),
   # and the only permitted patron affil is SAC.
-  class FlipPaging < Service::Base
+  class FliPaging < Service::Base
 
     # Is the current patron allowed to use the Paging service?
     def patron_eligible?(current_user = nil)
@@ -24,11 +24,11 @@ module Service
       # Because we want to list holdings from all valid locations,
       # and want to OMIT holdings from any non-avery-onsite location
 
-      flip_holdings = bib_record.holdings.select do |holding|
+      fli_holdings = bib_record.holdings.select do |holding|
         @service_config[:locations].include?( holding[:location_code] )
       end
 
-      return true if flip_holdings.present?
+      return true if fli_holdings.present?
 
       self.error = "This record has no FLI Partnership holdings.
       <br><br>
