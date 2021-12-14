@@ -33,6 +33,11 @@ FL:
   default:  AR
   available:
     - AR
+# LIBSYS-4474 - Princeton PJ items - restrict delivery to Avery
+PJ:
+  default:  AR
+  available:
+    - AR
 
 
 # configuration for each offsite location code
