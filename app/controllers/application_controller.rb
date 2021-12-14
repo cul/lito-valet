@@ -68,16 +68,17 @@ class ApplicationController < ActionController::Base
   end
   
 
-  # CUMC staff who have not completed security training
-  # may not use authenticated online request services.
-  def cumc_block
-    return unless current_user && current_user.affils
-    return error('Internal error - CUMC Block config missing') unless APP_CONFIG[:cumc]
-    if current_user.has_affil(APP_CONFIG[:cumc][:block_affil])
-      Rails.logger.info "CUMC block: #{current_user.login}"
-      return redirect_to APP_CONFIG[:cumc][:block_url]
-    end
-  end
+  # LIBSYS-4432 - Deprecation of IDMACCESS_ADTO affiliation
+  # # CUMC staff who have not completed security training
+  # # may not use authenticated online request services.
+  # def cumc_block
+  #   return unless current_user && current_user.affils
+  #   return error('Internal error - CUMC Block config missing') unless APP_CONFIG[:cumc]
+  #   if current_user.has_affil(APP_CONFIG[:cumc][:block_affil])
+  #     Rails.logger.info "CUMC block: #{current_user.login}"
+  #     return redirect_to APP_CONFIG[:cumc][:block_url]
+  #   end
+  # end
 
   # apparently now fixed.
   # # UNIX-5942 - work around spotty CUIT DNS

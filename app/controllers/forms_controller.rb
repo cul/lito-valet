@@ -4,9 +4,10 @@ class FormsController < ApplicationController
   # Initialize based on active service.
   before_action :initialize_service
 
-  # CUMC staff who have not completed security training
-  # may not use ANY authenticated online request services.
-  before_action :cumc_block
+  # LIBSYS-4432 - Deprecation of IDMACCESS_ADTO affiliation
+  # # CUMC staff who have not completed security training
+  # # may not use ANY authenticated online request services.
+  # before_action :cumc_block
 
   # Given a bib record id as an 'id' param,
   # Lookup bibliographic information on that bib,
