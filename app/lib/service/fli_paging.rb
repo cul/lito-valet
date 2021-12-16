@@ -1,6 +1,6 @@
 module Service
   # This service is like Campus-Paging, but for FLI Partnership.
-  # It's only valid for FLI holdings (bar,fli and mrr,fli),
+  # It's only valid for FLI holdings (bar,fli and mil,fli),
   # and the only permitted patron affil is SAC.
   class FliPaging < Service::Base
 
