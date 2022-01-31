@@ -33,7 +33,7 @@ RSpec.describe 'ReCAP Loan' do
     expect(response).to redirect_to( APP_CONFIG[:recap_loan][:ineligible_url] )
   end
 
-  it 'restricts campus-delivery location by customer code' do
+  it 'restricts campus-delivery location by customer code for Princeton QK' do
     sign_in FactoryBot.create(:happyuser)
 
     # Princeton QK customer code: SCSB-1855010
@@ -41,9 +41,23 @@ RSpec.describe 'ReCAP Loan' do
     # - specific delivery location as only option in drop-down menu
     music_only = '<select name="deliveryLocation" id="deliveryLocation" class="retrieval-field"><option selected="selected" value="MR">Music &amp; Arts Library</option></select>'
     expect(response.body).to include( music_only )
+  end
+
+  it 'restricts campus-delivery location by customer code for Harvard FL' do
+    sign_in FactoryBot.create(:happyuser)
 
     # Harvard FL customer code: SCSB-10471305, SCSB-10058654, SCSB-10485093
     get recap_loan_path('SCSB-10471305')
+    # - specific delivery location as only option in drop-down menu
+    avery_only = '<select name="deliveryLocation" id="deliveryLocation" class="retrieval-field"><option selected="selected" value="AR">Avery Library</option></select>'
+    expect(response.body).to include( avery_only )
+  end
+
+  it 'restricts campus-delivery location by customer code for Princeton PJ' do
+    sign_in FactoryBot.create(:happyuser)
+
+    # Harvard PJ customer code: SCSB-1823394
+    get recap_loan_path('SCSB-1823394')
     # - specific delivery location as only option in drop-down menu
     avery_only = '<select name="deliveryLocation" id="deliveryLocation" class="retrieval-field"><option selected="selected" value="AR">Avery Library</option></select>'
     expect(response.body).to include( avery_only )
