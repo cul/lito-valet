@@ -114,6 +114,8 @@ off,fax:
 off,glg:
   default:  CA
 
+# DEFAULT:  If there are no specific delivery rules defined for
+# a given offsite location, Valet uses the rules for 'OFF GLX'
 off,glx:
   default:  BU
 
