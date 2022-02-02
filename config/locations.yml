@@ -14,6 +14,9 @@ AR:  Avery Library
 BL:  Barnard Library
 UT:  Burke Library (UTS)
 BS:  Business/Econ Library
+# LIBSYS-4601 - two different Business libraries
+# BS:  Business Library (Manhattanville)
+# CH:  Business Library (Uris)
 BU:  Butler Library
 # EA:  East Asian Library
 EA:  East Asian (C.V. Starr Library)
