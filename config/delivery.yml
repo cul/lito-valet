@@ -73,7 +73,14 @@ off,ave:
 off,bio:
   default:  CA
 
+# LIBSYS-4603 - media material is physically fragile, 
+# it gets its own exclusive delivery code / tote.
 off,bmc:
+  default:  CV
+  available:
+    -  CV
+
+off,bmcr:
   default:  CV
   available:
     -  CV
