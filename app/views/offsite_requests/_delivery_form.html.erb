@@ -15,7 +15,7 @@
   <table class='valet_request'>
 
     <!-- LIBSYS-2899 - COVID -->
-    <!-- 
+    <!-- LIBSYS-4697 - COVID over, re-enabled -->
     <tr>
       <td width='250px'>
         <%= radio_button_tag(:requestType, 'RETRIEVAL', true) %>
@@ -34,7 +34,7 @@
         <%= delivery_select_tag(@offsite_location_code, @customer_code) %>
       </td>
     </tr>
-    -->
+    <!-- enable/disable physical delivery -->
 
     <% if current_user.offsite_eligible? %>
       <tr>
