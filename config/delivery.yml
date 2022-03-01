@@ -3,7 +3,9 @@ standard_delivery_locations:
   - AR
   - BL
   - UT
+  # LIBSYS-4601 - two different Business libraries
   - BS
+  - CH
   - BU
   - EA
   - HS
