@@ -13,7 +13,7 @@ RSpec.describe 'ReCAP Loan' do
     expect(response.body).to include( 'CU02281120' )
  
     # Delivery Location
-    expect(response.body).to include( 'Please select campus delivery location' )
+    expect(response.body).to include( 'Please select campus pick-up location' )
     # - specific delivery locations in drop-down menu
     expect(response.body).to include( 'Butler Library' )
     expect(response.body).to include( 'Health Sciences Library' )
@@ -23,7 +23,7 @@ RSpec.describe 'ReCAP Loan' do
   it 'non-offsite bib gives error message' do
     sign_in FactoryBot.create(:happyuser)
     get recap_loan_path('123', '144')
-    expect(response.body).to include( 'Bib ID 123 is not eligble for service Offsite Loan' )
+    expect(response.body).to include( 'Bib ID 123 is not eligble for service Offsite Pick-Up' )
   end
 
 

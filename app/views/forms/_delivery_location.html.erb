@@ -8,7 +8,7 @@
       <td width='40%'>
         <strong>Item to Library</strong>
         <br>
-        Hardcopy item will be delivered to pickup location in 3-4 business days.
+        Hardcopy item will be delivered to pick-up location in 3-5 business days.
         <br>
         <div class='offset-block'>
           <%= to_library_info_link %>
@@ -17,12 +17,10 @@
 
       <td>
         <p class="text-center">
-          <strong>Preferred Campus Delivery Location</strong>
+          <strong>Preferred Campus Pick-Up Location</strong>
         </p>
         <%= delivery_select_tag(holding[:location_code], holding[:customer_code]) %>
         <br>
-        <br>
-        ( campus delivery locations temporarily limited )
       </td>
     </tr>
   </table>
