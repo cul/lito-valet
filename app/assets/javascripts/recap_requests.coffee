@@ -26,7 +26,7 @@ $ ->
 
   # Don't allow more than 20 volumes at once
   if checked_barcodes_count > 20
-    errors.push "  * Please do not request more than 20 volumes of a title per day.  If your research requires additional volumes, please contact for access:  recap@libraries.cul.columbia.edu."
+    errors.push "  * Please do not request more than 20 volumes of a title per day.  If your research requires additional volumes, please contact for access:  recap@library.columbia.edu."
 
   # IF WE HAVE ERRORS, alert the user, and fail the form validation
   if errors.length > 0
@@ -59,7 +59,7 @@ $ ->
 
   # Don't allow more than 20 volumes at once
   if checked_barcodes_count > 20
-    errors.push "  * Please do not request more than 20 volumes of a title per day.  If your research requires additional volumes, please contact for access:  recap@libraries.cul.columbia.edu."
+    errors.push "  * Please do not request more than 20 volumes of a title per day.  If your research requires additional volumes, please contact for access:  recap@library.columbia.edu."
 
   # ==================================================
   # Validation rules for Electronic Document Delivery (a.k.a., Scan)

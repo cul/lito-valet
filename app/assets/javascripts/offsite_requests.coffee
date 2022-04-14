@@ -29,7 +29,7 @@ $ ->
 
   # Don't allow more than 20 volumes at once
   if checked_barcodes_count > 20
-    errors.push "  * Please do not request more than 20 volumes of a title per day.  If your research requires additional volumes, please contact for access:  recap@libraries.cul.columbia.edu."
+    errors.push "  * Please do not request more than 20 volumes of a title per day.  If your research requires additional volumes, please contact for access:  recap@library.columbia.edu."
 
   # Which request type is selected?
   selected_request_type = $('input[name="requestType"]:checked').val()

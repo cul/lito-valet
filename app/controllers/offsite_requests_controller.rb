@@ -350,7 +350,7 @@ Requests submitted before 2:30pm Mon-Fri will be filled in one business day; all
 
 You will be contacted by email (to #{@request_item_response[:emailAddress]}) when the item is available.
 
-In order to best serve the Columbia community, please request 20 items or fewer per day. Contact recap@libraries.cul.columbia.edu with questions and comments.
+In order to best serve the Columbia community, please request 20 items or fewer per day. Contact recap@library.columbia.edu with questions and comments.
 #{my_account_link}
 Thank you for using Offsite collections!
 EOT
