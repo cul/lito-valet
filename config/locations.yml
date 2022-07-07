@@ -47,6 +47,7 @@ offsite_locations:
   - off,ave
   - off,bio
   - off,bmc
+  - off,bmcr
   - off,bssc
   - off,bus
   - off,che
