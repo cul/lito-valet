@@ -143,7 +143,7 @@ gem 'lcsort'
 
 # dependency of many other gems
 # need to pin to 1.10, due to old libc on CentOS 6
-gem 'nokogiri', '~> 1.10.0'
+gem 'nokogiri', '~> 1.13.6'
 
 # now fixed.
 # # UNIX-5942 - work around spotty CUIT DNS
