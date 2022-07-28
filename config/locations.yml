@@ -33,7 +33,7 @@ CA:  Science & Engineering Lib (NWC Building)
 SW:  Social Work Library
 
 
-offsite_locations:
+offsite_locations_UNUSED:
   # location codes for the three ReCAP partners
   - scsbhl
   - scsbnypl

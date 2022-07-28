@@ -356,7 +356,8 @@ class ClioRecord
 
   def offsite_holdings
     holdings.select do |holding|
-      LOCATIONS['offsite_locations'].include? holding[:location_code]
+      is_offsite_location_code?(holding[:location_code])
+      # LOCATIONS['offsite_locations'].include? holding[:location_code]
     end
   end
 
@@ -364,7 +365,8 @@ class ClioRecord
   # (e.g., intercampus-delivery service)
   def onsite_holdings
     holdings.select do |holding|
-      !LOCATIONS['offsite_locations'].include? holding[:location_code]
+      !is_offsite_location_code?(holding[:location_code])
+      # !LOCATIONS['offsite_locations'].include? holding[:location_code]
     end
   end
 
@@ -383,8 +385,9 @@ class ClioRecord
   # For Offsite items, return SCSB availability
   #   (Not the Voyager availability of the matching Voyager item)
   def get_item_availability(holding, item)
-    is_offsite = LOCATIONS['offsite_locations'].include? holding[:location_code]
-    if is_offsite
+    # is_offsite = LOCATIONS['offsite_locations'].include? holding[:location_code]
+    # if is_offsite
+    if is_offsite_location_code?(holding[:location_code])
       self.fetch_scsb_availabilty unless @scsb_availability
       return @scsb_availability[ item[:barcode] ] if @scsb_availability.has_key?(item[:barcode])
     else
@@ -503,6 +506,22 @@ class ClioRecord
 
     str
   end
+  
+  # Given a string location code,
+  # return True/False whether the location code is offsite.
+  def is_offsite_location_code?(location_code = shift)
+    return unless location_code and location_code.instance_of?(String)
+
+    # Any location code that begins with "off" is offsite
+    return true if location_code.match(/^off/i)
+    # All SCSB locations are offsite
+    return true if location_code.match(/^scsb/i)
+    
+    # Anything else is NOT offsite
+    return false
+  end
 
 end
+
+
 
