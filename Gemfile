@@ -114,7 +114,7 @@ gem 'library_stdnums'
 
 # Use Twitter Bootstrap for styling
 #  pin to old version, newer needs sassc, which needs libc, which needs CentOS > 6
-gem 'bootstrap-sass', '~> 3.3.0'
+gem 'bootstrap-sass', '~> 3.4.1'
 
 # Talk to SCSB REST API
 # gem 'rest-client'
