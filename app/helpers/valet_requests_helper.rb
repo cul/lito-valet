@@ -15,7 +15,7 @@ module ValetRequestsHelper
   end
 
   def my_library_account_link
-    label = 'My Library Account'
+    label = 'My Borrowing Account'
     url   = "#{CGI}/cul/resolve?lweb0087"
     link_to label, url, target: '_blank'
   end

@@ -326,7 +326,7 @@ EOT
 
     my_account_link = if params[:requestType] == 'RETRIEVAL'
                         '
-                  You can check the status of your request via My Library Account in CLIO:
+                  You can check the status of your request via My Borrowing Account in CLIO:
                   http://www.columbia.edu/cgi-bin/cul/resolve?lweb0087
 
                   '
