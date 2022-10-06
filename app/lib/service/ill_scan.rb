@@ -54,13 +54,14 @@ module Service
     def get_illiad_params_explicit(bib_record, current_user)
       illiad_params = {}
       
-      # OMIT the "CitedIn" routing tag for normal ILL scan requests
-      # illiad_params['CitedIn']      = 
       # ===> These params are the same for Books and Articles
 
       # Bib ID lands into hidden field "Notes" so patron cannot edit
       illiad_params['notes']        = "http://clio.columbia.edu/catalog/#{bib_record.id}"
       
+      # use "CitedIn" as a routing tag, so staff know the origin of the request
+      illiad_params['CitedIn']      = 'CLIO_OPAC-ILL'
+
       # Action=10 tells Illiad that we'll pass the Form ID to use
       illiad_params['Action']        = '10'
 
