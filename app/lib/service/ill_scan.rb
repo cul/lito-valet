@@ -29,7 +29,7 @@ module Service
       # MCC - Medical Center Campus, a.k.a., HSL - use the ZCH URL
       illiad_base_url = APP_CONFIG[:illiad_base_url_zch] if campus == 'MCC'
 
-      illiad_params = get_illiad_params_explicit(bib_record)
+      illiad_params = get_illiad_params_explicit(bib_record, current_user)
 
       illiad_full_url = get_illiad_full_url(illiad_base_url, illiad_params)
       
@@ -51,25 +51,32 @@ module Service
     end
     
     
-    def get_illiad_params_explicit(bib_record)
+    def get_illiad_params_explicit(bib_record, current_user)
       illiad_params = {}
       
-      # Common ILLiad params
       # OMIT the "CitedIn" routing tag for normal ILL scan requests
       # illiad_params['CitedIn']      = 
+      # ===> These params are the same for Books and Articles
+
+      # Bib ID lands into hidden field "Notes" so patron cannot edit
       illiad_params['notes']        = "http://clio.columbia.edu/catalog/#{bib_record.id}"
-      # illiad_params['sid']        = 'CLIO OPAC'   # I suspect this is no longer used?
       
       # Action=10 tells Illiad that we'll pass the Form ID to use
       illiad_params['Action']        = '10'
+
+      # LIBSYS-5293 - add Patron Group / Active Barcode to ILL (cf. LIBSYS-3206)
+      illiad_params['ItemInfo2']     = current_user.barcode
+      illiad_params['ItemInfo4']     = current_user.patron_groups.join(',')
+
+      # illiad_params['sid']        = 'CLIO OPAC'   # I suspect this is no longer used?
       
-      # Different Form and different params for Articles v.s. Books
+      # ===> These params differ between Books and Articles
       if bib_record.issn.present?
-        # If there's an ISSN, make an Article request
+        # If there's an ISSN, make an Article request (ArticleRequest.html)
         illiad_params['Form']        = '22'
         illiad_params.merge!(get_illiad_article_params(bib_record))
       else
-        # Otherwise, make a Book Chapter request
+        # Otherwise, make a Book Chapter request (BookChapterRequest.html)
         illiad_params['Form']        = '23'
         illiad_params.merge!(get_illiad_book_chapter_params(bib_record))
       end

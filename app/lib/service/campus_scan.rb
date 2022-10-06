@@ -49,26 +49,34 @@ module Service
       
       return illiad_full_url
     end
-    
-    
+
+
+    # Gather all of the params that we'll pass to be pre-filled into he ILLiad form.
+    # "_explicit" meaning that Valet passes in values for Action and Form.
+    # Versus passing in OpenURL args and letting ILLiad pick which Form to use.
     def get_illiad_params_explicit(bib_record)
       illiad_params = {}
       
-      # Common ILLiad params
+      # ===> These params are the same for Books and Articles
+
+      # Bib ID lands into hidden field "Notes" so patron cannot edit
+      illiad_params['Notes']        = "http://clio.columbia.edu/catalog/#{bib_record.id}"
+
+      # use "CitedIn" as a routing tag, so staff know the origin of the request
       illiad_params['CitedIn']      = 'CLIO_OPAC-DOCDEL'
-      illiad_params['notes']        = "http://clio.columbia.edu/catalog/#{bib_record.id}"
-      # illiad_params['sid']        = 'CLIO OPAC'   # I suspect this is no longer used?
       
       # Action=10 tells Illiad that we'll pass the Form ID to use
       illiad_params['Action']        = '10'
+
+      # illiad_params['sid']        = 'CLIO OPAC'   # I suspect this is no longer used?
       
-      # Different Form and different params for Articles v.s. Books
+      # ===> These params differ between Books and Articles
       if bib_record.issn.present?
-        # If there's an ISSN, make an Article request
+        # If there's an ISSN, make an Article request (ArticleRequest.html)
         illiad_params['Form']        = '22'
         illiad_params.merge!(get_illiad_article_params(bib_record))
       else
-        # Otherwise, make a Book Chapter request
+        # Otherwise, make a Book Chapter request (BookChapterRequest.html)
         illiad_params['Form']        = '23'
         illiad_params.merge!(get_illiad_book_chapter_params(bib_record))
       end
