@@ -20,7 +20,9 @@ module Service
       # FIRST - process the campus triage form.
       campus = params['campus']
       # TC - Teachers College Library
-      return 'https://library.tc.columbia.edu/p/request-materials' if campus == 'tc'
+      # LIBSYS-5386 - update URL for TC ILL
+      # return 'https://library.tc.columbia.edu/p/request-materials' if campus == 'tc'
+      return 'https://library.columbia.edu/resolve/tc-ill' if campus == 'tc'
 
       # Otherwise, proceed with a redirect to OCLC ILLiad
 

@@ -37,13 +37,14 @@ RSpec.describe 'ILL Scan' do
     expect(response).to redirect_to('https://ezproxy.cul.columbia.edu/login?url=https://columbia.illiad.oclc.org/illiad/zcu/illiad.dll?Action=10&CitedIn=CLIO_OPAC-ILL&ESPNumber=3777209&Form=23&ISSN=&ItemInfo2=123456789&ItemInfo4=REG&PhotoItemAuthor=Sokorski%2C+W%C5%82odzimierz&PhotoItemEdition=Wyd.+1.&PhotoItemPlace=Warszawa&PhotoItemPublisher=Pan%CC%81stwowy+Instytut+Wydawniczy&PhotoJournalTitle=Piotr&PhotoJournalYear=1976.&notes=http%3A%2F%2Fclio.columbia.edu%2Fcatalog%2F123')
   end
 
-  it 'redirects TC-campus patrons to TC website' do
+  it 'redirects TC-campus patrons to TC ILL Request form' do
     sign_in FactoryBot.create(:happyuser)
 
     params = { id: '123', campus: 'tc' }
     post ill_scan_index_path, params: params
 
-    expect(response).to redirect_to('https://library.tc.columbia.edu/p/request-materials')
+    # expect(response).to redirect_to('https://library.tc.columbia.edu/p/request-materials')
+    expect(response).to redirect_to('https://library.columbia.edu/resolve/tc-ill')
   end
 
   it 'redirects blocked patron to failure page' do
