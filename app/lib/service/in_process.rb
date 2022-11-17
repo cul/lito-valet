@@ -6,7 +6,7 @@ module Service
       in_process_holdings = get_in_process_holdings(bib_record)
       return true unless in_process_holdings.empty?
 
-      self.error = 'This item is has no holdings On Order or In Process.
+      self.error = 'This item has no holdings On Order or In Process.
         <br><br>  Please
         <strong>
         <a href="http://library.columbia.edu/services/askalibrarian.html">
