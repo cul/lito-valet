@@ -168,15 +168,18 @@ module Recap
     # end
 
     def self.request_item(params, conn = nil)
+      # Build SCSB-specific params from Valet application params
+      request_item_params = build_request_item_params(params)
+
       # Do we want to check params to see if what we need is in there?
-      Rails.logger.debug "- request_item(#{params.inspect})"
+      Rails.logger.debug "- request_item(#{request_item_params.inspect})"
 
       conn ||= open_connection
       raise "request_item() bad connection [#{conn.inspect}]" unless conn
 
       get_scsb_rest_args
       path = @scsb_args[:request_item_path]
-      response = conn.post path, params.to_json
+      response = conn.post path, request_item_params.to_json
 
       if response.status != 200
         # A SCSB-side error might look something like this:
@@ -199,5 +202,44 @@ module Recap
       # Just return the full hash, let the caller pull out what they want
       response_hash
     end
+    
+    # SCSB requests only need a specific set of values
+    def self.build_request_item_params(params)
+      request_item_params = Hash.new()
+      
+      # Simple strings fields that we want copied from Valet into SCSB request params,
+      # some apply only to EDD, some apply to physical delivery
+      @simple_fields = [
+        "author",
+        "bibId",    # LIBSYS-5508 - maybe should be cleaned up?
+        "callNumber",
+        "chapterTitle",
+        "deliveryLocation",
+        "emailAddress",
+        "endPage",
+        # "id",    # LIBSYS-5508 - unnecessary, and may be breaking requests
+        "issue",
+        "itemBarcodes",
+        "itemOwningInstitution",
+        "patronBarcode",
+        "requestNotes",
+        "requestType",
+        "requestingInstitution",
+        "startPage",
+        "titleIdentifier",
+        # "trackingId",     # NYPL-specific ?
+        # "username",       # Unnecessary
+        "volume",
+      ]
+      @simple_fields.each do |field|
+        # Skip empty fields
+        next unless params[field]
+
+        request_item_params[field] = params[field] || ''
+      end
+      
+      request_item_params
+    end
+    
   end
 end
