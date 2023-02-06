@@ -32,6 +32,10 @@ module Service
       query = reshare_build_query(bib_record)
       return false unless query
 
+      # Build ReShare-speific authentication parameters - WIP
+      # auth_params = "&req_id=" + current_user.login + "&res.org=ISIL%3AUS-NNC"
+      # return reshare_base_url + '/Search/Results?' + query + auth_params
+
       # raise
       return reshare_base_url + '/Search/Results?' + query
 
