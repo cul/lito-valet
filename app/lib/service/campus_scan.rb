@@ -28,7 +28,7 @@ module Service
 
       # illiad_base_url = @service_config[:illiad_base_url]
       illiad_base_url = APP_CONFIG[:illiad_base_url]
-      illiad_params = get_illiad_params_explicit(bib_record)
+      illiad_params = get_illiad_params_explicit(bib_record, current_user)
 
       illiad_full_url = get_illiad_full_url(illiad_base_url, illiad_params)
       
@@ -54,7 +54,7 @@ module Service
     # Gather all of the params that we'll pass to be pre-filled into he ILLiad form.
     # "_explicit" meaning that Valet passes in values for Action and Form.
     # Versus passing in OpenURL args and letting ILLiad pick which Form to use.
-    def get_illiad_params_explicit(bib_record)
+    def get_illiad_params_explicit(bib_record, current_user)
       illiad_params = {}
       
       # ===> These params are the same for Books and Articles
@@ -67,6 +67,10 @@ module Service
       
       # Action=10 tells Illiad that we'll pass the Form ID to use
       illiad_params['Action']        = '10'
+
+      # LIBSYS-5373 - add Patron Group / Active Barcode to Campus Scan
+      illiad_params['ItemInfo2']     = current_user.barcode
+      illiad_params['ItemInfo4']     = current_user.patron_groups.join(',')
 
       # illiad_params['sid']        = 'CLIO OPAC'   # I suspect this is no longer used?
       
