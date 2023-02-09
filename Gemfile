@@ -9,7 +9,8 @@ gem 'sqlite3'
 # Use SCSS for stylesheets
 # gem 'sass-rails'
 # sass-rails 6.x uses sassc, which won't build on our CentOS 6 VMs
-gem 'sass-rails', '~> 5.0'
+# gem 'sass-rails', '~> 5.0'
+gem 'sass-rails'
 
 # Use Uglifier as compressor for JavaScript assets
 gem 'uglifier'
@@ -114,11 +115,15 @@ gem 'library_stdnums'
 
 # Use Twitter Bootstrap for styling
 #  pin to old version, newer needs sassc, which needs libc, which needs CentOS > 6
-gem 'bootstrap-sass', '~> 3.3.0'
+# gem 'bootstrap-sass', '~> 3.3.0'
+gem 'bootstrap-sass'
 
 # Talk to SCSB REST API
 # gem 'rest-client'
 gem 'faraday'
+# Silence "already initialized constant" warnings
+#   reference:  https://github.com/ruby/net-imap/issues/16
+gem 'net-http'
 
 # Talk to HTTP servers
 gem 'httpclient'
