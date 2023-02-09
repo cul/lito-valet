@@ -2,54 +2,55 @@
 
 RSpec.describe 'Borrow Direct' do
 
+  # Some constants used throughout this file
+  reshare_base_url   = 'https://columbia-borrowdirect.reshare.indexdata.com'
+  reshare_search_url = reshare_base_url + '/Search/Results'
 
-  it 'redirects to relais with ISBN' do
+
+  it 'redirects to ReShare with ISBN' do
     sign_in FactoryBot.create(:happyuser)
 
     # hardcode expected URL
-    relais_url = 'https://bd.relaisd2d.com/?' \
-                 'LS=COLUMBIA&PI=123456789&' \
-                 'query=isbn%3D9780374275631'
+    reshare_url = reshare_search_url + '?type=ISN&lookfor=9780374275631'
+
     get borrow_direct_path('9041682')
-    expect(response).to redirect_to(relais_url)
+    expect(response).to redirect_to(reshare_url)
   end
 
-  it 'redirects to relais with ISSN' do
+  it 'redirects to ReShare with ISSN' do
     sign_in FactoryBot.create(:happyuser)
 
     # hardcode expected URL
-    relais_url = 'https://bd.relaisd2d.com/?' \
-                 'LS=COLUMBIA&PI=123456789&' \
-                 'query=issn%3D0070-4717'
+    reshare_url = reshare_search_url + '?type=ISN&lookfor=0070-4717'
+
     get borrow_direct_path('4485990')
-    expect(response).to redirect_to(relais_url)
+    expect(response).to redirect_to(reshare_url)
   end
 
-  it 'redirects to relais with title/author' do
+  it 'redirects to ReShare with title/author' do
     sign_in FactoryBot.create(:happyuser)
 
     # hardcode expected URL
-    relais_url = 'https://bd.relaisd2d.com/?' \
-                 'LS=COLUMBIA&PI=123456789&' \
-                 'query=ti%3D%22Piotr%22' \
-                 '%20and%20au%3D%22Sokorski%2C%20W%C5%82odzimierz%22'
+    reshare_url = reshare_search_url + 
+                  '?type0[]=Title&lookfor0[]="Piotr"' \
+                  '&type0[]=Author&lookfor0[]="Sokorski%2C+W%C5%82odzimierz"' \
+                  '&join=AND'
+
     get borrow_direct_path('123')
-    expect(response).to redirect_to(relais_url)
+    expect(response).to redirect_to(reshare_url)
   end
 
-  it 'redirects to relais for SCSB ReCAP Partner item' do
+  it 'redirects to ReShare for SCSB ReCAP Partner item' do
     sign_in FactoryBot.create(:happyuser)
 
     # hardcode expected URL
-    relais_url = 'https://bd.relaisd2d.com/?' \
-                 'LS=COLUMBIA&PI=123456789&' \
-                 'query=' \
-                 'ti%3D%22A%20national%20public%20labor' \
-                 '%20relations%20policy%20for%20tomorrow%22' \
-                 '%20and%20' \
-                 'au%3D%22Emery%2C%20James%20A.%22'
+    reshare_url = reshare_search_url + 
+                 '?type0[]=Title&lookfor0[]="A+national+public+labor+relations+policy+for+tomorrow"' \
+                 '&type0[]=Author&lookfor0[]="Emery%2C+James+A."' \
+                 '&join=AND'
+
     get borrow_direct_path('SCSB-1441991')
-    expect(response).to redirect_to(relais_url)
+    expect(response).to redirect_to(reshare_url)
   end
 
   it 'bounces unauth user to sign-in page' do
@@ -77,11 +78,11 @@ RSpec.describe 'Borrow Direct' do
   it 'without bib id, redirects authorized users to ILLiad' do
     sign_in FactoryBot.create(:happyuser)
 
-    relais_url = 'https://bd.relaisd2d.com/?' \
-                 'LS=COLUMBIA&PI=123456789'
+    # For ReShare, the non-search URL is just the base URL
+    reshare_url = reshare_base_url
     
     get '/borrow_direct'
-    expect(response).to redirect_to(relais_url)
+    expect(response).to redirect_to(reshare_url)
   end
 
   it 'without bib id, redirects unauthorized users to ineligible URL' do
