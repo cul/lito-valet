@@ -34,7 +34,6 @@ Rails.application.routes.draw do
   # - incoming links to /docdel/123 map to #show, with bibkey 123,
   # - #show method builds a form based on bibkey 123 which posts to #create,
   # - #create, the form-handler - logs, emails, bounces, etc.
-  # resources :borrowdirect,
   resources :campus_paging,
             :campus_paging_pilot,
             :fli_paging,

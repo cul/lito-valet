@@ -1,2 +1,0 @@
-# class IllRequest < ApplicationRecord
-# end
