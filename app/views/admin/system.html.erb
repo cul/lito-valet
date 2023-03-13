@@ -2,10 +2,27 @@
 
 <h2>System Details</h2>
 
-<% system_details = ['VALET_VERSION', 'RUBY_VERSION', 'Rails.version', 'Rails.env',
-   'request.protocol', 'request.fullpath', 'request.url', 'request.remote_addr',
-   'Process.pid', 'Process.uid', 'Etc.getpwuid(Process.uid).name',
-   'time_ago_in_words(BOOTED_AT)'] %>
+<% database_configuration = Rails.configuration.database_configuration[Rails.env] %>
+
+<% system_details = [
+  'VALET_VERSION', 
+  'RUBY_VERSION', 
+  'Rails.version', 
+  'Rails.env',
+  'request.protocol', 
+  'request.fullpath', 
+  'request.url', 
+  'request.remote_addr',
+  'Socket.gethostname',
+  'Process.pid', 
+  'Process.uid', 
+  'Etc.getpwuid(Process.uid).name',
+  'time_ago_in_words(BOOTED_AT)',
+  'database_configuration["adapter"]',
+  'database_configuration["host"]',
+  'database_configuration["database"]',
+  'database_configuration["username"]' 
+  ] %>
 
 <table class='table table-bordered table-hover table-condensed'>
   <% system_details.each do |i| %>
