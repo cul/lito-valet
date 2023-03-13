@@ -70,7 +70,7 @@ table.valet_request tr td {
 
 .danger-block {
   @extend .alert;
-  @extend .alert-danger;
+  @extend .alert-danger !optional;
   margin-left: 50px;
   margin-right: 50px;
   margin-top: 20px;
