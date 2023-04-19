@@ -5,7 +5,7 @@
 # Alma
 server 'lito-rails-dev1.cul.columbia.edu', user: 'litoserv', roles: %w(app db web)
 set :deploy_to, '/opt/passenger/valet_dev'
-set :rvm_ruby_version, 'valet'
+set :rvm_ruby_version, 'valet_dev'
 
 # If for some reason we're not on campus or on VPN,
 # we can deploy via a jumphost, as follows:
