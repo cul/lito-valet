@@ -14,7 +14,8 @@ standard_delivery_locations:
   - LE
   - ML
   - MR
-  - MZ
+  # LIBSYS-5898 - Remove Reid Hall as delivery option
+  # - MZ
   - CA
   - SW
 
