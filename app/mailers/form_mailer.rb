@@ -29,6 +29,29 @@ class FormMailer < ApplicationMailer
   end
 
   ###
+  ### STARRSTOR - staff request email and patron confirm email
+  ###
+
+  # Email request to staff
+  def starrstor_request
+    @params = params
+    to      = params[:staff_email]
+    from    = "Starr Remote Request Service <#{params[:staff_email]}>"
+    title   = params[:bib_record].title
+    subject = "New StarrStor request [#{title}]"
+    mail(to: to, from: from, subject: subject)
+  end
+
+  # Email confirmation to Patron
+  def starrstor_confirm
+    to = params[:patron_email]
+    from = "Starr Remote Request Service <#{params[:staff_email]}>"
+    title = params[:bib_record].title
+    subject = "StarrStor Request Confirmation [#{title}]"
+    mail(to: to, from: from, subject: subject)
+  end
+
+  ###
   ### PRECAT - single mail to both staff and patron
   ###
   def precat

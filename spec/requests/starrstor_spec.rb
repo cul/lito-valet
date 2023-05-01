@@ -1,0 +1,61 @@
+
+
+RSpec.describe 'StarrStor Request Service' do
+
+  it 'StarrStor request renders form' do
+    sign_in FactoryBot.create(:happyuser)
+    get starrstor_path('12892723')
+    expect(response.body).not_to include('no StarrStor holdings')
+    expect(response.body).not_to include('error')
+    expect(response.body).to include('StarrStor Request')
+  end
+
+  it 'StarrStor form submission renders confirm and sends email' do
+    user = FactoryBot.create(:happyuser)
+    sign_in user
+    params = { id: '12892723', itemBarcodes: ['0073113476'] }
+    post starrstor_index_path, params: params
+
+    # confirm page
+    expect(response.body).to include('StarrStor Confirmation')
+
+    # two emails - confirm to user, request to staff
+    staff_email, confirm_email = ActionMailer::Base.deliveries.last(2)
+    # staff email
+    expect(staff_email.from).to include(APP_CONFIG[:starrstor][:staff_email])
+    expect(staff_email.to).to include(APP_CONFIG[:starrstor][:staff_email])
+    expect(staff_email.subject).to include('New StarrStor request')
+    expect(staff_email.body).to include('BARCODE: 0073113476')
+    expect(staff_email.body).to include('following has been requested from StarrStor')
+    # confirm email
+    expect(confirm_email.from).to include(APP_CONFIG[:starrstor][:staff_email])
+    expect(confirm_email.to).to include(user[:email])
+    expect(confirm_email.subject).to include('StarrStor Request Confirmation')
+    expect(staff_email.body).to include('BARCODE: 0073113476')
+    expect(confirm_email.body).to include('You have requested the following from StarrStor')
+  end
+
+  it 'rejects StarrStor requests for non-StarrStor items' do
+    sign_in FactoryBot.create(:happyuser)
+    get starrstor_path('123')
+    expect(response.body).to include('record has no StarrStor holdings')
+  end
+
+  it 'rejects StarrStor requests for Partner ReCAP items' do
+    sign_in FactoryBot.create(:happyuser)
+    get starrstor_path('SCSB-1441991')
+    expect(response.body).to include('record has no StarrStor holdings')
+  end
+
+  it 'bounces unauth user to sign-in page' do
+    get starrstor_path('123')
+    expect(response.body).to redirect_to('http://www.example.com/sign_in')
+  end
+
+  it 'renders error page for non-existant item' do
+    sign_in FactoryBot.create(:happyuser)
+    # CLIO has no bib id 60
+    get starrstor_path('60')
+    expect(response.body).to include('Cannot find bib record')
+  end
+end

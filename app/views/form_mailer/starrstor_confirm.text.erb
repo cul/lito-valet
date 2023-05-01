@@ -1,0 +1,12 @@
+You have requested the following from StarrStor:
+
+TITLE : <%= @params[:bib_record].title %>
+CALL NO : <%= @params[:bib_record].call_number %>
+BARCODE: <%= (@params[:barcodes] || []).join(', ') %>
+
+Requests submitted before 12:00pm Mon-Fri will be filled in one business
+day; all requests filled in two business days.
+
+You will be contacted by email (to <%= @params[:patron_email] %>) when the item is available.
+
+Thank you for using StarrStor, Starr Library remote collections.

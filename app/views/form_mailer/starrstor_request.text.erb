@@ -1,0 +1,12 @@
+
+The following has been requested from StarrStor:
+
+TITLE : <%= @params[:bib_record].title %>
+CALL NO : <%= @params[:bib_record].call_number %>
+BARCODE: <%= (@params[:barcodes] || []).join(', ') %>
+
+PATRON UNI:  <%= @params[:patron_uni] %>
+PATRON EMAIL:  <%= @params[:patron_email] %>
+
+
+

@@ -1,0 +1,25 @@
+
+<!-- views/forms/starrstor.html.erb -->
+
+<h4>StarrStor Request</h4>
+
+<%= form_with url: starrstor_index_path do |form| %>
+
+  <!-- what we'll need to make the request -->
+  <%= form.hidden_field(:id, value: bib_record.id) %>
+
+  <!-- display basic bib data -->
+  <%= render 'bib', bib_record: bib_record %>
+
+  <br>
+
+  <!-- what to collect from the patron -->
+  <% starrstor_holdings.each do |holding| %>
+    <%= render 'holding', bib_record: bib_record, holding: holding, filter_barcode: filter_barcode %>
+  <% end %>
+
+  <br>
+  
+  <%= form.submit('Submit Request') %>
+
+<% end %>

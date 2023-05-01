@@ -47,6 +47,7 @@ Rails.application.routes.draw do
             :notonshelf,
             :bearstor,
             :avery_onsite,
+            :starrstor,
             # Faux services to aid in testing and demonstration
             :outage_redirect_example,
             :outage_message_example,
