@@ -22,7 +22,6 @@ module Service
 
       # But -- we need it for this service.
       # Because we want to list holdings from all valid locations,
-      # and want to OMIT holdings from any non-avery-onsite location
 
       fli_holdings = bib_record.holdings.select do |holding|
         @service_config[:locations].include?( holding[:location_code] )

@@ -18,7 +18,7 @@ module Service
         self.error = "This record has no BearStor holdings.
         <br><br>
         Only items stored in Barnard's remote storage facility
-        may be requested via BeatStor."
+        may be requested via BearStor."
         return false
       end
 
@@ -62,23 +62,6 @@ module Service
       # mail confirm to patron
       FormMailer.with(mail_params).bearstor_confirm.deliver_now
     end
-
-    # def get_confirm_params(params, bib_record, current_user)
-    #   #   # redirect patron browser to confirm webpage
-    #   #   render 'bearstor_confirm', locals: bearstor_params
-    #   confirm_locals = {
-    #     bib_record: bib_record,
-    #     barcodes:  params[:itemBarcodes],
-    #     patron_uni: current_user.uid,
-    #     patron_email: current_user.email,
-    #     staff_email: @service_config[:staff_email]
-    #   }
-    #   confirm_params = {
-    #     template: '/forms/bearstor_confirm',
-    #     locals:   confirm_locals
-    #   }
-    #   confirm_params
-    # end
 
     def get_confirmation_locals(params, bib_record, current_user)
       confirm_locals = {
