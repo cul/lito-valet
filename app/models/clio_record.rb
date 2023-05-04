@@ -385,6 +385,20 @@ class ClioRecord
   # For Offsite items, return SCSB availability
   #   (Not the Voyager availability of the matching Voyager item)
   def get_item_availability(holding, item)
+    # Clancy houses BearStor (bar,stor) and StarrStor (East Asian temporary)
+    if is_clancy_location_code?(holding[:location_code])
+      # Clancy uses the CaiaSoft inventory management system
+      caiasoft_itemstatus = Clancy::CaiaSoft::get_itemstatus(item[:barcode])
+      status_string = caiasoft_itemstatus[:status] || ''
+      if status_string == 'Item In at Rest'
+        return 'Available'
+      else
+        item[:use_restriction] = status_string
+        return status_string
+      end
+      
+    end
+    
     # is_offsite = LOCATIONS['offsite_locations'].include? holding[:location_code]
     # if is_offsite
     if is_offsite_location_code?(holding[:location_code])
@@ -521,6 +535,15 @@ class ClioRecord
     return false
   end
 
+  # Is this material available in a CaiaSoft-managed repository?
+  def is_clancy_location_code?(location_code = shift)
+    return unless location_code and location_code.instance_of?(String)
+
+    return true if APP_CONFIG['clancy_locations'].include?(location_code)
+
+    return false
+  end
+  
 end
 
 
