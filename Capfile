@@ -29,3 +29,12 @@ install_plugin Capistrano::SCM::Git
 
 # Load custom tasks from `lib/capistrano/tasks` if you have any defined
 Dir.glob('lib/capistrano/tasks/*.rake').each { |r| import r }
+
+# Use local time for datestamped Capitrano deploy directories
+# https://github.com/capistrano/capistrano/issues/1878
+task :fix_timestamp do
+  env.instance_variable_set(:@timestamp, Time.now)
+end
+after :"load:defaults", :fix_timestamp
+
+
