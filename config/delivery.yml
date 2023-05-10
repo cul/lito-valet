@@ -7,7 +7,8 @@ standard_delivery_locations:
   - BS
   - CH
   - BU
-  - EA
+  # LIBSYS-5896 - Starr Closure
+  # - EA
   - HS
   - CJ
   - GS
@@ -102,16 +103,17 @@ off,che:
 off,docs:
   default:  LE
 
-off,eal:
-  default:  EA
-
-off,ean:
-  default:  EA
-  available:
-    -  EA
-
-off,eax:
-  default:  EA
+# LIBSYS-5896 - Starr Closure
+# off,eal:
+#   default:  EA
+#
+# off,ean:
+#   default:  EA
+#   available:
+#     -  EA
+#
+# off,eax:
+#   default:  EA
 
 off,eng:
   default:  CA
