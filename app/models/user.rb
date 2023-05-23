@@ -368,19 +368,21 @@ class User < ApplicationRecord
     @patron_id = val
   end
 
-  def over_recall_notice_count
-    @over_recall_notice_count ||= oracle_connection.get_over_recall_notice_count(patron_id)
-  end
-  def over_recall_notice_count=(val)
-    @over_recall_notice_count = val
-  end
+  # --- never called ---
+  # def over_recall_notice_count
+  #   @over_recall_notice_count ||= oracle_connection.get_over_recall_notice_count(patron_id)
+  # end
+  # def over_recall_notice_count=(val)
+  #   @over_recall_notice_count = val
+  # end
   
-  def patron_barcode_record
-    @patron_barcode_record ||= oracle_connection.get_patron_barcode_record(patron_id)
-  end
-  def patron_barcode_record=(val)
-    @patron_barcode_record = val
-  end
+  # --- never called ---
+  # def patron_barcode_record
+  #   @patron_barcode_record ||= oracle_connection.get_patron_barcode_record(patron_id)
+  # end
+  # def patron_barcode_record=(val)
+  #   @patron_barcode_record = val
+  # end
 
   # No - we're no longer using this in this way
   # def patron_group
@@ -390,44 +392,49 @@ class User < ApplicationRecord
   #   @patron_barcode_record['PATRON_GROUP_CODE'] = val
   # end
 
-  def patron_stats
-    @patron_stats || oracle_connection.get_patron_stats(patron_id)
-  end
-  def patron_stats=(val)
-    @patron_stats = val
-  end
+  # --- never called ---
+  # def patron_stats
+  #   @patron_stats || oracle_connection.get_patron_stats(patron_id)
+  # end
+  # def patron_stats=(val)
+  #   @patron_stats = val
+  # end
 
   
 
   # TESTS
 
-  def patron_expired?
-    expired = patron_record['EXPIRE_DATE'] < Time.now
-    Rails.logger.info "patron expired! (#{uid})" if expired
-    return expired
-  end
+  # --- never called ---
+  # def patron_expired?
+  #   expired = patron_record['EXPIRE_DATE'] < Time.now
+  #   Rails.logger.info "patron expired! (#{uid})" if expired
+  #   return expired
+  # end
   
-  def patron_blocked?
-    # LIBSYS-2888 - temporarily bump blocked-fees limit from $99 to $9,999
-    # blocked = patron_record['TOTAL_FEES_DUE'] > 9999
-    blocked = patron_record['TOTAL_FEES_DUE'] > 999900
-    Rails.logger.info "patron blocked! (#{uid})" if blocked
-    return blocked
-  end
-  
-  def patron_has_recalls?
-    # LIBSYS-2888 - temporarily allow BD while having outstanding recalls
-    return false
+  # --- never called ---
+  # def patron_blocked?
+  #   # LIBSYS-2888 - temporarily bump blocked-fees limit from $99 to $9,999
+  #   # blocked = patron_record['TOTAL_FEES_DUE'] > 9999
+  #   blocked = patron_record['TOTAL_FEES_DUE'] > 999900
+  #   Rails.logger.info "patron blocked! (#{uid})" if blocked
+  #   return blocked
+  # end
 
-    recalls = over_recall_notice_count > 0
-    Rails.logger.info "patron has recalls! (#{uid})" if recalls
-    return recalls
-  end
+  # --- never called ---
+  # def patron_has_recalls?
+  #   # LIBSYS-2888 - temporarily allow BD while having outstanding recalls
+  #   return false
+  #
+  #   recalls = over_recall_notice_count > 0
+  #   Rails.logger.info "patron has recalls! (#{uid})" if recalls
+  #   return recalls
+  # end
   
-  def patron_2cul?
-    is_2cul = patron_stats.include?('2CU')
-    Rails.logger.info "patron is 2cul (#{uid})" if is_2cul
-    return is_2cul
-  end
+  # --- never called ---
+  # def patron_2cul?
+  #   is_2cul = patron_stats.include?('2CU')
+  #   Rails.logger.info "patron is 2cul (#{uid})" if is_2cul
+  #   return is_2cul
+  # end
   
 end

@@ -29,11 +29,11 @@ FactoryBot.define do
       "EXPIRE_DATE"=>'2050-01-01 01:01:01 -0500',
       "TOTAL_FEES_DUE"=>0
     }}
-    patron_barcode_record {{
-      "PATRON_BARCODE"=>"123456789",
-      "BARCODE_STATUS"=>1
-    }}
-    over_recall_notice_count { 0 }
+    # patron_barcode_record {{
+    #   "PATRON_BARCODE"=>"123456789",
+    #   "BARCODE_STATUS"=>1
+    # }}
+    # over_recall_notice_count { 0 }
 
     # factory :expireduser do
     #   patron_record {{

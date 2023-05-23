@@ -21,14 +21,18 @@ RSpec.describe 'StarrStor Request Service' do
 
     # two emails - confirm to user, request to staff
     staff_email, confirm_email = ActionMailer::Base.deliveries.last(2)
+
+    # N.B., for StarrStor, we hard-code the "From" address, because it's 
+    # different from the staff-email (which includes Clancy/CaiaSoft staff)
+
     # staff email
-    expect(staff_email.from).to include(APP_CONFIG[:starrstor][:staff_email])
+    expect(staff_email.from).to include('starrstor@library.columbia.edu')
     expect(staff_email.to).to include(APP_CONFIG[:starrstor][:staff_email])
     expect(staff_email.subject).to include('New StarrStor request')
     expect(staff_email.body).to include('BARCODE: 0073113476')
     expect(staff_email.body).to include('following has been requested from StarrStor')
     # confirm email
-    expect(confirm_email.from).to include(APP_CONFIG[:starrstor][:staff_email])
+    expect(staff_email.from).to include('starrstor@library.columbia.edu')
     expect(confirm_email.to).to include(user[:email])
     expect(confirm_email.subject).to include('StarrStor Request Confirmation')
     expect(staff_email.body).to include('BARCODE: 0073113476')

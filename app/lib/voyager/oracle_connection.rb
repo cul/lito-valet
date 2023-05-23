@@ -65,33 +65,34 @@ module Voyager
       patron_id
     end
 
-    def get_patron_barcode_record(patron_id)
-      Rails.logger.debug "- get_patron_barcode_record(patron_id=#{patron_id})"
-      return nil unless patron_id.present?
-      
-      # If we've already fetched the patron record, return it
-      return @patron_barcode_record if @patron_barcode_record.present?
-
-      query = <<-HERE
-          select patron_barcode, 
-                 patron_group_code,
-                 barcode_status
-          from   patron_barcode,
-                 patron_group
-          where  patron_id = ~patron_id~
-          and    barcode_status = '1' 
-          and    patron_barcode.patron_group_id = patron_group.patron_group_id
-      HERE
-
-      full_query = fill_in_query_placeholders(query, patron_id: patron_id)
-      raw_results = execute_select_command(full_query)
-      if raw_results.size.zero?
-        Rails.logger.warn "  no record found in patron_barcode table for patron_id #{patron_id}!"
-        return nil
-      end
-      @patron_barcode_record = raw_results.first
-      return @patron_barcode_record
-    end
+    # --- never called ---
+    # def get_patron_barcode_record(patron_id)
+    #   Rails.logger.debug "- get_patron_barcode_record(patron_id=#{patron_id})"
+    #   return nil unless patron_id.present?
+    #
+    #   # If we've already fetched the patron record, return it
+    #   return @patron_barcode_record if @patron_barcode_record.present?
+    #
+    #   query = <<-HERE
+    #       select patron_barcode,
+    #              patron_group_code,
+    #              barcode_status
+    #       from   patron_barcode,
+    #              patron_group
+    #       where  patron_id = ~patron_id~
+    #       and    barcode_status = '1'
+    #       and    patron_barcode.patron_group_id = patron_group.patron_group_id
+    #   HERE
+    #
+    #   full_query = fill_in_query_placeholders(query, patron_id: patron_id)
+    #   raw_results = execute_select_command(full_query)
+    #   if raw_results.size.zero?
+    #     Rails.logger.warn "  no record found in patron_barcode table for patron_id #{patron_id}!"
+    #     return nil
+    #   end
+    #   @patron_barcode_record = raw_results.first
+    #   return @patron_barcode_record
+    # end
 
     # def retrieve_patron_expire_date(uni)
     #   Rails.logger.debug "- retrieve_patron_expire_date(uni=#{uni})"
@@ -116,23 +117,24 @@ module Voyager
     #   total_fees_due
     # end
 
-    def get_over_recall_notice_count(patron_id)
-      return nil unless patron_id.present?
-
-      query = <<-HERE
-          select   over_recall_notice_count
-          from     columbiadb.circ_transactions
-          where    patron_id = ~patron_id~
-          and      over_recall_notice_count > 0
-      HERE
-
-      full_query = fill_in_query_placeholders(query, patron_id: patron_id)
-      raw_results = execute_select_command(full_query)
-      return 0 if raw_results.size.zero?
-
-      @circ_transactions_record = raw_results.first
-      return @circ_transactions_record['OVER_RECALL_NOTICE_COUNT']
-    end
+    # --- never called ---
+    # def get_over_recall_notice_count(patron_id)
+    #   return nil unless patron_id.present?
+    #
+    #   query = <<-HERE
+    #       select   over_recall_notice_count
+    #       from     columbiadb.circ_transactions
+    #       where    patron_id = ~patron_id~
+    #       and      over_recall_notice_count > 0
+    #   HERE
+    #
+    #   full_query = fill_in_query_placeholders(query, patron_id: patron_id)
+    #   raw_results = execute_select_command(full_query)
+    #   return 0 if raw_results.size.zero?
+    #
+    #   @circ_transactions_record = raw_results.first
+    #   return @circ_transactions_record['OVER_RECALL_NOTICE_COUNT']
+    # end
 
 
     def retrieve_patron_email(patron_id)
@@ -187,22 +189,23 @@ module Voyager
       patron_barcode
     end
 
-    def get_patron_stats(patron_id = nil)
-      return [] unless patron_id
-      
-      query = <<-HERE
-        select   patron_stat_code
-        from     patron_stat_code,
-                 patron_stats
-        where    patron_stat_code.patron_stat_id = patron_stats.patron_stat_id
-        and      patron_stats.patron_id = ~patron_id~
-      HERE
-
-      full_query = fill_in_query_placeholders(query, patron_id: patron_id)
-      raw_results = execute_select_command(full_query)
-      return [] if raw_results.size.zero?
-      raw_results.map { |row| row['PATRON_STAT_CODE'] }
-    end
+    # --- never called ---
+    # def get_patron_stats(patron_id = nil)
+    #   return [] unless patron_id
+    #
+    #   query = <<-HERE
+    #     select   patron_stat_code
+    #     from     patron_stat_code,
+    #              patron_stats
+    #     where    patron_stat_code.patron_stat_id = patron_stats.patron_stat_id
+    #     and      patron_stats.patron_id = ~patron_id~
+    #   HERE
+    #
+    #   full_query = fill_in_query_placeholders(query, patron_id: patron_id)
+    #   raw_results = execute_select_command(full_query)
+    #   return [] if raw_results.size.zero?
+    #   raw_results.map { |row| row['PATRON_STAT_CODE'] }
+    # end
     #
     # We don't need this method in Offsite Request processing
     #
