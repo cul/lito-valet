@@ -189,6 +189,38 @@ module Voyager
       patron_barcode
     end
 
+
+    # LIBSYS-5996 - StarrStor - include inactive barcodes in staff request emails
+    def retrieve_inactive_barcodes(active_barcode)
+      Rails.logger.debug "- retrieve_inactive_barcodes(active_barcode=#{active_barcode})"
+      return nil unless active_barcode.present?
+
+      query = <<-HERE
+        select item_barcode.item_barcode
+        from   item_barcode
+        where  item_barcode.barcode_status = 2
+        and    item_barcode.item_id in 
+        ( 
+          select  item_barcode.item_id 
+          from    item_barcode 
+          where   item_barcode.item_barcode = ~active_barcode~
+        )
+      HERE
+
+      full_query = fill_in_query_placeholders(query, active_barcode: active_barcode)
+      raw_results = execute_select_command(full_query)
+      
+      inactive_barcodes = Array.new()
+      raw_results.each do |row|
+        inactive_barcodes.push(row['ITEM_BARCODE'])
+      end
+
+      Rails.logger.debug "  found #{inactive_barcodes.size} inactive_barcodes: #{inactive_barcodes}"
+      inactive_barcodes
+    end
+    
+    
+
     # --- never called ---
     # def get_patron_stats(patron_id = nil)
     #   return [] unless patron_id
@@ -280,7 +312,6 @@ module Voyager
 
     def execute_select_command(query)
       cursor = @connection.parse(query)
-
       results = []
       cursor.exec
 

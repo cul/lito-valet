@@ -62,4 +62,14 @@ RSpec.describe 'StarrStor Request Service' do
     get starrstor_path('60')
     expect(response.body).to include('Cannot find bib record')
   end
+
+  # LIBSYS-5996 - StarrStor - include inactive barcodes in staff request emails
+  # Bib used for example: https://clio.columbia.edu/catalog/76
+  it 'retrieves inactive barcodes for an active barcode' do
+    oracle_connection ||= Voyager::OracleConnection.new
+    inactive_barcodes = oracle_connection.retrieve_inactive_barcodes('CU16572637')
+    expect(inactive_barcodes).to have_attributes(size: 1)
+    expect(inactive_barcodes.first).to eq('0315337170')
+  end
+
 end
