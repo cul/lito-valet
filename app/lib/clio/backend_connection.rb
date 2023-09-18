@@ -80,6 +80,7 @@ module Clio
     # }
     # WANTED simplified flattened lookup table:
     #   { item_id: availability, item_id: availability, ...}
+    # where 'availability' is a simple string, 'Available' or 'Unavailable'
     def self.get_bib_availability(id)
       availability_hash = {}
       circ_status = get_circ_status(id)

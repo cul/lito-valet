@@ -382,11 +382,25 @@ class ClioRecord
   end
 
   # Return the availability for the passed item.
-  # For Offsite items, return SCSB availability
-  #   (Not the Voyager availability of the matching Voyager item)
   def get_item_availability(holding, item)
+
+    # For Offsite items, always return SCSB availability
+    #   (Not the Voyager availability of the matching Voyager item)
+    if is_offsite_location_code?(holding[:location_code])
+      self.fetch_scsb_availabilty unless @scsb_availability
+      return @scsb_availability[ item[:barcode] ] if @scsb_availability.has_key?(item[:barcode])
+    end
+
+    # fetch Voyager availability for all holdings/items of this bib...
+    self.fetch_voyager_availability unless @voyager_availability
+    # ...and then pull out the availability for just the item of interest
+    voyager_item_status = @voyager_availability[ item[:item_id] ]
+  
     # Clancy houses BearStor (bar,stor) and StarrStor (East Asian temporary)
-    if is_clancy_location_code?(holding[:location_code])
+    # If Voyager says the item is Available, double-check with Clancy/CaiaSoft,
+    # It may be missing from the shelf.
+    if voyager_item_status.eql?('Available') &&
+           is_clancy_location_code?(holding[:location_code])
       # Clancy uses the CaiaSoft inventory management system
       caiasoft_itemstatus = Clancy::CaiaSoft::get_itemstatus(item[:barcode])
       status_string = caiasoft_itemstatus[:status] || ''
@@ -396,19 +410,11 @@ class ClioRecord
         item[:use_restriction] = status_string
         return status_string
       end
-      
     end
+
+    # If NOT Clancy/CaiaSoft, return Voyager status
+    return voyager_item_status
     
-    # is_offsite = LOCATIONS['offsite_locations'].include? holding[:location_code]
-    # if is_offsite
-    if is_offsite_location_code?(holding[:location_code])
-      self.fetch_scsb_availabilty unless @scsb_availability
-      return @scsb_availability[ item[:barcode] ] if @scsb_availability.has_key?(item[:barcode])
-    else
-      # If we didn't find an offsite availability for this item, check Voyager availability
-      self.fetch_voyager_availability unless @voyager_availability
-      return @voyager_availability[ item[:item_id] ]
-    end    
   end
 
   # Fetch availability for each barcode from SCSB
@@ -438,6 +444,7 @@ class ClioRecord
   # Fetch availability for each barcode from Voyager (via clio-backend)
   # @voyager_availability format:
   #   { item_id: availability, item_id: availability, ...}
+  # where 'availability' is a simple string, 'Available' or 'Unavailable'
   def fetch_voyager_availability
     @voyager_availability ||= Clio::BackendConnection.get_bib_availability(id) || {}
   end
