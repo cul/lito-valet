@@ -59,11 +59,16 @@ module Service
     
         # We'll need to know this later
         holding[:in_process_flag] = true if
-            ( call_number.match(/process/i) || acq_info.match(/process/i) )
+            ( call_number.match(/process/i) || 
+              acq_info.match(/process/i) ||
+              acq_info.match(/received/i) )
 
         found_holdings << holding if 
-            call_number.match(/order/i)  || call_number.match(/process/i) || 
-            acq_info.match(/order/i) || acq_info.match(/process/i)
+            call_number.match(/order/i) || 
+            call_number.match(/process/i) || 
+            acq_info.match(/order/i) || 
+            acq_info.match(/process/i) ||
+            acq_info.match(/received/i)
       end
 
       found_holdings
