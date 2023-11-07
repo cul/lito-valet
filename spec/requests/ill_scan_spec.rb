@@ -44,7 +44,7 @@ RSpec.describe 'ILL Scan' do
     post ill_scan_index_path, params: params
 
     # expect(response).to redirect_to('https://library.tc.columbia.edu/p/request-materials')
-    expect(response).to redirect_to('https://library.columbia.edu/resolve/tc-ill')
+    expect(response).to redirect_to('https://resolver.library.columbia.edu/tc-ill')
   end
 
   it 'redirects blocked patron to failure page' do

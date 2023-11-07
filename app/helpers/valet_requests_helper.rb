@@ -1,8 +1,4 @@
 module ValetRequestsHelper
-  # shortcuts used in several methods
-  WWW  = 'http://www.columbia.edu'.freeze
-  CGI  = 'http://www.columbia.edu/cgi-bin'.freeze
-  LWEB = 'http://library.columbia.edu'.freeze
 
   def toc_link(clio_record = nil, barcode = nil)
     return '' unless clio_record.present? &&
@@ -16,25 +12,25 @@ module ValetRequestsHelper
 
   def my_library_account_link
     label = 'My Borrowing Account'
-    url   = "#{CGI}/cul/resolve?lweb0087"
+    url   = 'https://resolver.library.columbia.edu/lweb0087'
     link_to label, url, target: '_blank'
   end
 
   def borrowing_info_link
     label = 'More Information'
-    url   = "#{LWEB}/services/borrowing.html"
+    url   = 'https://library.columbia.edu/using-libraries/borrowing.html'
     link_to label, url, target: '_blank'
   end
 
   def to_library_info_link
     label = 'more info...'
-    url = "#{LWEB}/find/request/off-site.html"
+    url = 'https://library.columbia.edu/services/request/off-site.html'
     link_to label, url, target: '_blank', class: 'info-link'
   end
 
   def electronic_info_link
     label = 'more info...'
-    url = "#{LWEB}/find/request/off-site.html"
+    url = 'https://library.columbia.edu/services/request/off-site.html'
     link_to label, url, target: '_blank', class: 'info-link'
   end
 

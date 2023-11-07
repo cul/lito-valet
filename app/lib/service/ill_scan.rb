@@ -22,7 +22,7 @@ module Service
       # TC - Teachers College Library
       # LIBSYS-5386 - update URL for TC ILL
       # return 'https://library.tc.columbia.edu/p/request-materials' if campus == 'tc'
-      return 'https://library.columbia.edu/resolve/tc-ill' if campus == 'tc'
+      return 'https://resolver.library.columbia.edu/tc-ill' if campus == 'tc'
 
       # Otherwise, proceed with a redirect to OCLC ILLiad
 
