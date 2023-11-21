@@ -27,7 +27,6 @@ listed which map to controller: 'forms'
   resources :paging,
             :ill,
             :docdel,
-            :intercampus,
             :in_process,
             :precat,
             :itemfeedback,

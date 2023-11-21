@@ -40,7 +40,7 @@ Rails.application.routes.draw do
             :campus_scan,
             :borrow_direct,
             :ill_scan,
-            :intercampus,
+            # :intercampus,
             :in_process,
             :precat,
             :item_feedback,
