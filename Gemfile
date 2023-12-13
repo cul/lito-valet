@@ -94,6 +94,10 @@ gem 'devise'
 # gem 'cul_omniauth', git: 'https://github.com/cul/cul_omniauth', branch: 'cas-5.3'
 gem 'cul_omniauth', git: 'https://github.com/cul/cul_omniauth', branch: 'rails-6'
 
+# Psych 4 introduced breaking changes regarding aliases
+# https://stackoverflow.com/a/71192990/1343906
+gem 'psych', '~> 3.0'
+
 
 # Fetch ldap details - first name, last name, etc.
 gem 'net-ldap'
