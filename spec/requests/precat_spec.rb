@@ -1,16 +1,20 @@
 
+# These tests run against bibs with status 'precat'
+# These 'precat' bibs become cataloged over time, and then
+# we need to hunt down a new precat bib to test against.
+# (Should be updated to use a fixture.)
 
 RSpec.describe 'Precat Request Service' do
   it 'precat request renders form' do
     sign_in FactoryBot.create(:happyuser)
-    get precat_path('11519424')
+    get precat_path('6361088')
     expect(response.body).to include('Precataloging Item Request')
   end
 
   it 'precat form submission renders confirm and sends email' do
     user = FactoryBot.create(:happyuser)
     sign_in user
-    params = { id: '11519424', note: 'testing' }
+    params = { id: '6361088', note: 'testing' }
     post precat_index_path, params: params
 
     # confirm page
