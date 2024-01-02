@@ -1,7 +1,6 @@
 source 'https://rubygems.org'
 
-# Bundle edge Rails instead: gem 'rails', github: 'rails/rails'
-gem 'rails', '~> 6.1.0'
+gem 'rails', '~> 6.0'
 
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
@@ -93,11 +92,6 @@ gem 'devise'
 # gem 'cul_omniauth', path: '/Users/marquis/src/cul_omniauth'
 # gem 'cul_omniauth', git: 'https://github.com/cul/cul_omniauth', branch: 'cas-5.3'
 gem 'cul_omniauth', git: 'https://github.com/cul/cul_omniauth', branch: 'rails-6'
-
-# Psych 4 introduced breaking changes regarding aliases
-# https://stackoverflow.com/a/71192990/1343906
-gem 'psych', '~> 3.0'
-
 
 # Fetch ldap details - first name, last name, etc.
 gem 'net-ldap'
