@@ -35,8 +35,10 @@ gem 'jbuilder'
 # Use ActiveModel has_secure_password
 # gem 'bcrypt'
 
+# Which server do we want to use?
 # Use Unicorn as the app server
 # gem 'unicorn'
+gem 'webrick'
 
 # Use Capistrano for deployment
 # gem 'capistrano-rails', group: :development
