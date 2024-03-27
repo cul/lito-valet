@@ -24,8 +24,15 @@ module Clancy
 
       get_caiasoft_config
       url ||= @caiasoft_config[:api_url]
+
+      # reduce api timeouts - if the endpoint is up, it'll respond quickly.
+      request_params = { 
+        open_timeout: 10, # opening a connection
+        timeout: 10       # waiting for response
+      }
+
       Rails.logger.debug "- opening new connection to #{url}"
-      @conn = Faraday.new(url: url)
+      @conn = Faraday.new(url: url, request: request_params)
       raise "Faraday.new(#{url}) failed!" unless @conn
 
       @conn.headers['Content-Type'] = 'application/json'

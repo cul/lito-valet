@@ -22,10 +22,15 @@ module Clio
         return {}
       end
 
-      conn = Faraday.new(backend_config['url'], request: {
-                           open_timeout: 10, # opening a connection
-                           timeout: 10 # waiting for response
-                         })
+      # reduce api timeouts - if the endpoint is up, it'll respond quickly.
+      request_params = { 
+        open_timeout: 10, # opening a connection
+        timeout: 10       # waiting for response
+      }
+
+      conn = Faraday.new(backend_config['url'], request: request_params)
+      raise "Faraday.new(#{url}) failed!" unless conn
+      
       conn
     end
 
