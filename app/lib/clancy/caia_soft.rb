@@ -73,6 +73,7 @@ module Clancy
 
         # parse returned array of item-info hashes into simple barcode->status hash
         caiasoft_itemstatus = JSON.parse(response.body).with_indifferent_access
+        Rails.logger.debug "- CaiaSoft.get_itemstatus(#{barcode}) response: #{caiasoft_itemstatus}"
 
         caiasoft_itemstatus
       end

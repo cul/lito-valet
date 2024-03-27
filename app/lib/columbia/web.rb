@@ -54,6 +54,7 @@ module Columbia
 
     def self.get_bib_toc_links(bib = nil, conn = nil)
       raise 'Columbia::Web.get_bib_toc_links() got nil bib' if bib.blank?
+      Rails.logger.debug "- Columbia::Web.get_bib_toc_links(#{bib})"
 
       conn ||= open_connection
       unless conn
@@ -74,6 +75,7 @@ module Columbia
       barcodeList.each do |barcode|
         tocLinkHash[barcode] = "#{HOST}#{TOCURL}?#{barcode}"
       end
+      Rails.logger.debug "- Columbia::Web.get_bib_toc_links(#{bib}) result: #{tocLinkHash}"
 
       tocLinkHash
     end
