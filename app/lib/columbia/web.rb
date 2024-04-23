@@ -12,8 +12,11 @@ module Columbia
     # toc = Columbia::Web.get_toc_link(barcode, conn)
 
     HOST = 'http://www.columbia.edu'.freeze
-    # TOCURL = '/cgi-bin/cul/toc.pl'.freeze    # No longer used
+    TOCURL = '/cgi-bin/cul/toc.pl'.freeze
     TOCLISTURL = '/cgi-bin/cul/toclist.pl'.freeze
+    # Test the connection-timeout logic with:
+    # TOCURL = '/cgi-bin/cul/sleep.pl'.freeze
+    # TOCLISTURL = '/cgi-bin/cul/sleep.pl'.freeze
 
     def self.open_connection
       # reduce api timeouts - if the endpoint is up, it'll respond quickly.
@@ -63,7 +66,12 @@ module Columbia
       end
 
       tocpath = "#{TOCLISTURL}?bib=#{bib}"
-      response = conn.get(tocpath)
+      begin
+        response = conn.get(tocpath)
+      rescue => ex
+        Rails.logger.error "Columbia::Web::get_bib_toc_links(#{bib}) conn.get(#{TOCLISTURL}) #{ex}"
+        return nil
+      end
 
       if response.status != 200
         Rails.logger.error "conn.get(#{TOCLISTURL}) got status #{response.status}"

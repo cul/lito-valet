@@ -26,8 +26,8 @@ module Recap
       
       # reduce api timeouts - if the endpoint is up, it'll respond quickly.
       request_params = { 
-        open_timeout: 10, # opening a connection
-        timeout: 10       # waiting for response
+        open_timeout: 15, # opening a connection
+        timeout: 15       # waiting for response
       }
       @conn = Faraday.new(url: url, request: request_params)
       raise "Faraday.new(#{url}) failed!" unless @conn
@@ -167,6 +167,7 @@ module Recap
     #   return patron_information_hash
     # end
 
+
     def self.request_item(params, conn = nil)
       # Build SCSB-specific params from Valet application params
       request_item_params = build_request_item_params(params)
@@ -179,7 +180,14 @@ module Recap
 
       get_scsb_rest_args
       path = @scsb_args[:request_item_path]
-      response = conn.post path, request_item_params.to_json
+
+      # response = conn.post path, request_item_params.to_json
+      begin
+        response = conn.post path, request_item_params.to_json
+      rescue => ex
+        Rails.logger.error "Recap::ScsbRest::request_item(#{params}) conn.post(#{path}) #{ex}"
+        return nil
+      end
 
       if response.status != 200
         # A SCSB-side error might look something like this:
