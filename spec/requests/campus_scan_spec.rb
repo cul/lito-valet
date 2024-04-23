@@ -43,7 +43,8 @@ RSpec.describe 'Campus Scan' do
     params = { id: '123', campus: 'tc' }
     post campus_scan_index_path, params: params
 
-    expect(response).to redirect_to('https://library.tc.columbia.edu/p/request-materials')
+    # expect(response).to redirect_to('https://library.tc.columbia.edu/p/request-materials')
+    expect(response).to redirect_to('https://library.tc.columbia.edu/services')
   end
 
   it 'redirects blocked patron to failure page' do

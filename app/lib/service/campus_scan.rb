@@ -20,7 +20,8 @@ module Service
       # FIRST - process the campus triage form.
       campus = params['campus']
       # TC - Teachers College Library
-      return 'https://library.tc.columbia.edu/p/request-materials' if campus == 'tc'
+      # return 'https://library.tc.columbia.edu/p/request-materials' if campus == 'tc'
+      return 'https://library.tc.columbia.edu/services' if campus == 'tc'
 
       # Otherwise, proceed with a redirect to OCLC ILLiad
       # MCC - Medical Center Campus, a.k.a., HSL
