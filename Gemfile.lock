@@ -126,7 +126,7 @@ GEM
       railties (>= 4.1.0)
       responders
       warden (~> 1.2.3)
-    devise-guests (0.8.2)
+    devise-guests (0.8.3)
       devise
     diff-lcs (1.5.1)
     erubi (1.12.0)
@@ -147,7 +147,7 @@ GEM
     httpclient (2.8.3)
     i18n (1.14.4)
       concurrent-ruby (~> 1.0)
-    jbuilder (2.11.5)
+    jbuilder (2.12.0)
       actionview (>= 5.0.0)
       activesupport (>= 5.0.0)
     jquery-datatables-rails (3.4.0)
@@ -296,7 +296,7 @@ GEM
       sprockets (>= 3.0.0)
     sqlite3 (1.7.3)
       mini_portile2 (~> 2.8.0)
-    sshkit (1.22.1)
+    sshkit (1.22.2)
       base64
       mutex_m
       net-scp (>= 1.1.2)
