@@ -86,11 +86,16 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 end
 
-Rails.application.config.middleware.use ExceptionNotification::Rack,
-                                        #   ignore_exceptions: ['ActionView::TemplateError'] + ExceptionNotifier.ignored_exceptions,
-                                        #   ignore_crawlers: %w(Googlebot bingbot archive.org_bot Blogtrottr Sogou Baidu Yandex),
-                                        email: {
-                                          email_prefix: "[#{Rails.env.titleize}] ",
-                                          sender_address: %("notifier" <no-reply@libraries.cul.columbia.edu>),
-                                          exception_recipients: %w(clio-dev@libraries.cul.columbia.edu)
-                                        }
+# Turn off Exception Notification emails. They were useful at first, but now are just being ignored.
+
+# Rails.application.config.middleware.use ExceptionNotification::Rack,
+#   ignore_exceptions: ['ActionView::TemplateError', 'ActionController::InvalidAuthenticityToken'] + ExceptionNotifier.ignored_exceptions,
+#   #   ignore_crawlers: %w(Googlebot bingbot archive.org_bot Blogtrottr Sogou Baidu Yandex),
+#   email: {
+#     email_prefix: "[#{Rails.env.titleize}] ",
+#     sender_address: %("notifier" <no-reply@libraries.cul.columbia.edu>),
+#     exception_recipients: %w(clio-dev@libraries.cul.columbia.edu)
+#   }
+
+
+
