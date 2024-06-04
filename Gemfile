@@ -2,6 +2,9 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 6.0'
 
+# Valet is built using Sprockets - need gem until migration to Webpacker 
+gem "sprockets-rails"
+
 # Use sqlite3 as the database for Active Record
 gem 'sqlite3'
 
@@ -114,8 +117,6 @@ gem 'rexml'
 gem 'library_stdnums'
 
 # Use Twitter Bootstrap for styling
-#  pin to old version, newer needs sassc, which needs libc, which needs CentOS > 6
-# gem 'bootstrap-sass', '~> 3.3.0'
 gem 'bootstrap-sass'
 
 # Talk to SCSB REST API
@@ -131,14 +132,16 @@ gem 'httpclient'
 # Use MySQL for deployed server environments
 gem 'mysql2'
 
-# Talk to SCSB ActiveMQ via STOMP
-gem 'stomp'
+# We don't talk ActiveMQ yet
+# # Talk to SCSB ActiveMQ via STOMP
+# gem 'stomp'
 
 # DataTables
 gem 'jquery-datatables-rails'
 
-# Send notifications when application errors occur
-gem 'exception_notification'
+# No longer used
+# # Send notifications when application errors occur
+# gem 'exception_notification'
 
 # Parse User Agent into browser name, version
 gem 'browser'
@@ -147,8 +150,6 @@ gem 'browser'
 gem 'lcsort'
 
 # dependency of many other gems
-# need to pin to 1.10, due to old libc on CentOS 6
-# gem 'nokogiri', '~> 1.10.0'
 gem 'nokogiri'
 
 # now fixed.
