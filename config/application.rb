@@ -11,7 +11,10 @@ VALET_VERSION = IO.read('VERSION').strip
 module Valet
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 5.0
+    config.load_defaults 6.1
+
+    # Only needed up to 6.x / in 7.x and beyond, autoloader is always Zeitwerk
+    config.autoloader = :zeitwerk
 
     include Cul::Omniauth::FileConfigurable
 
