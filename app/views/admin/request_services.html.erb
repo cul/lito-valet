@@ -1,0 +1,42 @@
+
+
+<h2>Valet Request Service Details</h2>
+
+<h4>Request Service Configurations</h4>
+
+<br>
+
+<table class='table table-bordered table-striped table-hover table-condensed'>
+
+  <thead>
+    <th>&nbsp;</th>
+    <th>label</th>
+    <!-- <th>authenticate</th> -->
+    <th>affiliation restrictions</th>
+    <th>item&nbsp;location restrictions</th>
+    <th>ineligible_url</th>
+  </thead>
+
+  <tbody>
+
+  <% @request_service_list.each do |service_name| %>
+    <%service_config = APP_CONFIG[service_name]%>
+    
+    <tr>
+      <th>  <%=service_name%>      </th>
+      <td>  <%=service_config[:label]%>      </td>
+      <!-- <td>  <%=service_config[:authenticate]%>      </td> -->
+      <td style="white-space:nowrap;">  <%= Array(service_config[:permitted_affils]).join('<br>').html_safe%>   </td>
+      <% full_location_list = Array(service_config[:locations]) + Array(service_config[:location_code])%>
+      <td>  <%= full_location_list.join('<br>').html_safe%>   </td>
+      <td>  <%=service_config[:ineligible_url]%>      </td>
+    </tr>  
+  <%end%>
+
+  </tbody>
+
+</table>
+  
+  
+  
+  

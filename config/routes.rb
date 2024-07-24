@@ -15,8 +15,9 @@ Rails.application.routes.draw do
     get 'sign_out', to: 'users/sessions#destroy', as: :destroy_user_session
   end
 
-  # special admin page
+  # special admin pages
   get 'admin/system'
+  get 'admin/request_services'
 
   # all requests generate logs
   resources :logs do

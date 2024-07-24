@@ -7,6 +7,22 @@ class AdminController < ApplicationController
     return redirect_to root_path unless current_user.admin?
   end
 
+  def request_services
+    # Allow all CUL staff to view the configuration rules for Valet request services
+    redirect_to root_path unless current_user && current_user.culstaff?
+
+    # Don't hard-code a list of services here, discover them by looking through APP_CONFIG
+    @request_service_list = Array.new
+    APP_CONFIG.keys.each do |key_name|
+      # no true scotsman
+      next unless APP_CONFIG[key_name].is_a? Hash
+      next unless APP_CONFIG[key_name].has_key?('label') && APP_CONFIG[key_name].has_key?('authenticate')
+
+      @request_service_list.push key_name
+    end
+  end
+
+
   def logs
     return redirect_to root_path unless current_user.valet_admin?
 
