@@ -5,9 +5,6 @@ gem 'rails', '~> 6.0'
 # Valet is built using Sprockets - need gem until migration to Webpacker 
 gem "sprockets-rails"
 
-# Use sqlite3 as the database for Active Record
-gem 'sqlite3'
-
 # Use SCSS for stylesheets
 # gem 'sass-rails'
 # sass-rails 6.x uses sassc, which won't build on our CentOS 6 VMs
@@ -50,6 +47,11 @@ gem 'webrick'
 gem 'bootsnap', require: false
 
 group :development, :test do
+  # Use sqlite3 as the database for Active Record - only during localhost development
+  # gem 'sqlite3'
+  # sqlite 2.0.x is giving us problems - pin to 1.x for now
+  gem 'sqlite3', '~> 1.0'
+
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
 

@@ -292,7 +292,7 @@ GEM
       actionpack (>= 5.2)
       activesupport (>= 5.2)
       sprockets (>= 3.0.0)
-    sqlite3 (2.0.2)
+    sqlite3 (1.7.3)
       mini_portile2 (~> 2.8.0)
     sshkit (1.22.2)
       base64
@@ -359,7 +359,7 @@ DEPENDENCIES
   ruby-oci8
   sass-rails
   sprockets-rails
-  sqlite3
+  sqlite3 (~> 1.0)
   uglifier
   webrick
 
