@@ -6,25 +6,25 @@ class FormMailer < ApplicationMailer
   default from: 'noreply@library.columbia.edu'
 
   ###
-  ### BEARSTOR - staff request email and patron confirm email
+  ### BARNARD REMOTE - staff request email and patron confirm email
   ###
 
   # Email request to staff
-  def bearstor_request
+  def barnard_remote_request
     @params = params
     to      = params[:staff_email]
     from    = "Barnard Remote Request Service <#{params[:staff_email]}>"
     title   = params[:bib_record].title
-    subject = "New BearStor request [#{title}]"
+    subject = "New Barnard Remote Request [#{title}]"
     mail(to: to, from: from, subject: subject)
   end
 
   # Email confirmation to Patron
-  def bearstor_confirm
+  def barnard_remote_confirm
     to = params[:patron_email]
     from = "Barnard Remote Request Service <#{params[:staff_email]}>"
     title = params[:bib_record].title
-    subject = "BearStor Request Confirmation [#{title}]"
+    subject = "Barnard Remote Request Confirmation [#{title}]"
     mail(to: to, from: from, subject: subject)
   end
 

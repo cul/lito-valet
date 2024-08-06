@@ -5,7 +5,7 @@ Creating a new Valet service
 
 Valet has gone through a few different code arrangements.
 
-BearStor is the model for the most current arrangement.
+Barnard-Remote uses the most current arrangement.
 
 
 Update app_config.yml
@@ -31,7 +31,7 @@ listed which map to controller: 'forms'
             :precat,
             :itemfeedback,
             :notonshelf,
-            :bearstor,
+            :barnard_remote,
             controller: 'forms',
             only: [:show, :create]
 

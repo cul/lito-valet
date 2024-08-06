@@ -46,6 +46,7 @@ Rails.application.routes.draw do
             :precat,
             :item_feedback,
             :notonshelf,
+            :barnard_remote,
             :bearstor,
             :avery_onsite,
             :starrstor,

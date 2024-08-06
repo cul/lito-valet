@@ -396,7 +396,7 @@ class ClioRecord
     # ...and then pull out the availability for just the item of interest
     voyager_item_status = @voyager_availability[ item[:item_id] ]
   
-    # Clancy houses BearStor (bar,stor) and StarrStor (East Asian temporary)
+    # Clancy houses Barnard Remote(bar,stor) and StarrStor (East Asian temporary)
     # If Voyager says the item is Available, double-check with Clancy/CaiaSoft,
     # It may be missing from the shelf.
     if voyager_item_status.eql?('Available') &&

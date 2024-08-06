@@ -1,9 +1,9 @@
 
-<!-- views/forms/bearstor.html.erb -->
+<!-- views/forms/barnard_remote.html.erb -->
 
 <h4>Barnard Remote Request</h4>
 
-<%= form_with url: bearstor_index_path do |form| %>
+<%= form_with url: barnard_remote_index_path do |form| %>
 
   <!-- what we'll need to make the request -->
   <%= form.hidden_field(:id, value: bib_record.id) %>
@@ -14,7 +14,7 @@
   <br>
 
   <!-- what to collect from the patron -->
-  <% bearstor_holdings.each do |holding| %>
+  <% barnard_remote_holdings.each do |holding| %>
     <%= render 'holding', bib_record: bib_record, holding: holding, filter_barcode: filter_barcode %>
   <% end %>
 

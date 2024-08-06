@@ -135,7 +135,7 @@ module Service
         # barcodes:  params[:itemBarcodes],
         # patron_uni: current_user.uid,
         # patron_email: current_user.email,
-        # staff_email: APP_CONFIG[:bearstor][:staff_email]
+        # staff_email: APP_CONFIG[:SERVICE][:staff_email]
       }
       confirm_locals
     end

@@ -43,6 +43,11 @@ PJ:
   default:  AR
   available:
     - AR
+# LIBSYS-7026 - Princeton Marquand Art Library PV items - also only deliverable to Avery
+PV:
+  default:  AR
+  available:
+    - AR
 
 
 # configuration for each offsite location code
