@@ -14,7 +14,8 @@ standard_delivery_locations:
   - GS
   - LE
   # LIBSYS-6805 - Remove Math Library from Offsite delivery options
-  # - ML
+  # LIBSYS-7098 - Re-enable Math Library as Offsite delivery location
+  - ML
   - MR
   # LIBSYS-5898 - Remove Reid Hall as delivery option
   # - MZ
@@ -160,8 +161,9 @@ off,les:
     -  LE
 
 # LIBSYS-6805 - Remove Math Library from Offsite delivery options
-# off,mat:
-#   default:  ML
+# LIBSYS-7098 - Re-enable Math Library as Offsite delivery location
+off,mat:
+  default:  ML
 
 off,mrr:
   default:  CF
