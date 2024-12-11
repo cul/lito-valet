@@ -117,7 +117,8 @@ class FormsController < ApplicationController
   # Recover our service from the original path,
   # store in session
   def determine_service
-    original = request.original_fullpath
+    # original = request.original_fullpath   # fullpath includes CGI params
+    original = request.path
     return unless original && original.starts_with?('/')
     # '/docdel/123'  ==>  [ '', 'docdel', '123' ]
     service = original.split('/')[1]
