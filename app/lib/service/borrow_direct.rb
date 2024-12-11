@@ -32,7 +32,6 @@ module Service
       # Build a query URL against ReShare
       reshare_base_url = APP_CONFIG[:reshare_base_url]
       return false unless reshare_base_url
-      
       # Cleanup params
       params.transform_keys!(&:downcase)
       params.delete('controller')
@@ -53,8 +52,8 @@ module Service
 
       # (3) Parse OpenURL, redirect to BorrowDirect fielded search
       if bib_record.nil? and not params.empty?
-        query = reshare_build_query_from_openurl(bib_record)
-        Rails.logger.debug "borrow_direct(2): bib search #{query}"
+        query = reshare_build_query_from_openurl(params)
+        Rails.logger.debug "borrow_direct(3): openurl search #{query}"
       end
 
       # If we failed to build a query...
@@ -110,7 +109,7 @@ module Service
       # (do we need to look in any other OpenURL fields?)
       best_author = params['author']
       if best_author.present?
-        query += '&type0[]=Author&lookfor0[]="' + CGI.escape(bib_record.author)
+        query += '&type0[]=Author&lookfor0[]="' + CGI.escape(best_author)
         query += '"&join=AND'
       end
       
