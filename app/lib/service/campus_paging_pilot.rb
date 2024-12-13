@@ -39,31 +39,34 @@ module Service
     
     
     def get_illiad_params_explicit(bib_record, current_user)
-      illiad_params = {}
+      illiad_params = Oclc::Illiad.get_default_params(current_user, bib_record)
       
       # Explicitly tell Illiad which form to use
-      illiad_params['Action']        = '10'
+      # illiad_params['Action']        = '10'
       illiad_params['Form']          = '20'
       illiad_params['Value']         = 'GenericRequestPDD'
-      
-      # Basic params to pass along bibliographic details
-      # Illiad param keys need to match the Illiad form field names
-      illiad_params['LoanTitle']     = bib_record.title
-      illiad_params['LoanAuthor']    = bib_record.author
-      illiad_params['ISSN']          = bib_record.isbn.first
-      illiad_params['CallNumber']    = bib_record.call_number
-      illiad_params['ESPNumber']     = bib_record.oclc_number
-      illiad_params['ItemNumber']    = (bib_record.barcodes.size == 1 ? bib_record.barcodes.first : '')
-      illiad_params['LoanEdition']   = bib_record.edition
-      illiad_params['LoanPlace']     = bib_record.pub_place
-      illiad_params['LoanPublisher'] = bib_record.pub_name
-      illiad_params['LoanDate']      = bib_record.pub_date
       # illiad_params['CitedIn']       = 'https://clio.columbia.edu/catalog/' + bib_record.id
       illiad_params['CitedIn']       = 'CLIO_OPAC-PAGING'
       
-      # LIBSYS-3206 - add Patron Group / Active Barcode
-      illiad_params['ItemInfo2']     = current_user.barcode
-      illiad_params['ItemInfo4']     = current_user.patron_groups.join(',')
+      # # Basic params to pass along bibliographic details
+      # # Illiad param keys need to match the Illiad form field names
+      # illiad_params['LoanTitle']     = bib_record.title
+      # illiad_params['LoanAuthor']    = bib_record.author
+      # illiad_params['ISSN']          = bib_record.isbn.first
+      # illiad_params['CallNumber']    = bib_record.call_number
+      # illiad_params['ESPNumber']     = bib_record.oclc_number
+      # illiad_params['ItemNumber']    = (bib_record.barcodes.size == 1 ? bib_record.barcodes.first : '')
+      # illiad_params['LoanEdition']   = bib_record.edition
+      # illiad_params['LoanPlace']     = bib_record.pub_place
+      # illiad_params['LoanPublisher'] = bib_record.pub_name
+      # illiad_params['LoanDate']      = bib_record.pub_date
+
+      extra_paging_params = Oclc::Illiad.get_paging_params(bib_record)
+      illiad_params.merge!(extra_paging_params)
+      
+      # # LIBSYS-3206 - add Patron Group / Active Barcode
+      # illiad_params['ItemInfo2']     = current_user.barcode
+      # illiad_params['ItemInfo4']     = current_user.patron_groups.join(',')
 
       Oclc::Illiad.clean_hash_values(illiad_params)
 

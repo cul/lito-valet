@@ -23,6 +23,7 @@ RSpec.describe 'FLI Paging' do
       'LoanPlace=New+York',
       'LoanPublisher=Oxford+University+Press',
       'LoanTitle=Scenes+of+subjection+%3A+terror%2C+slavery%2C+and+self-making+in+nineteenth-century+America',
+      'Notes=http%3A%2F%2Fclio.columbia.edu%2Fcatalog%2F2049141',
       'Value=GenericRequestPDD',
     ]
 
