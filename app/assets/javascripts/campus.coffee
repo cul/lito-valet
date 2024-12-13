@@ -1,4 +1,4 @@
-@validateCampusScanForm = () ->
+@validateCampusForm = () ->
 
   # At least one campus must be checked
   if $('input:radio[name="campus"]').is(':checked') == false
