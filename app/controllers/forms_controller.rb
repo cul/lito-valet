@@ -105,6 +105,9 @@ class FormsController < ApplicationController
     return error('Unable to determine service!') unless service_name
     load_service_config(service_name)
     
+    # If load_service_config() was unable to load @service_config
+    return if @service_config.nil? or @service_config.empty?
+    
     # If this service is in an outage state, take no further initialization steps!
     return if @service_config[:outage]
 
@@ -128,7 +131,7 @@ class FormsController < ApplicationController
   def load_service_config(service_name)
     Rails.logger.debug "load_service_config() for #{service_name}..."
     @service_config = APP_CONFIG[service_name]
-    return error("Can't find configuration for: #{service_name}") unless @service_config.present?
+    return error("Can't find service configuration for: #{service_name}") unless @service_config.present?
 
     # store the service name within the service config hash
     @service_config[:service_name] = service_name
@@ -222,6 +225,7 @@ class FormsController < ApplicationController
   #    if broken() return error("Broken!")
   # instead of multi-line if/end
   def error(message)
+    Rails.logger.debug "ERROR: FormsController.error('#{message}')"
     flash.now[:error] = message
     service_error = begin
                       @service.error
