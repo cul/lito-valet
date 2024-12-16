@@ -36,7 +36,7 @@ Rails.application.routes.draw do
   # - #show method builds a form based on bibkey 123 which posts to #create,
   # - #create, the form-handler - logs, emails, bounces, etc.
   resources :campus_paging,
-            :campus_paging_pilot,
+            # :campus_paging_pilot,
             :fli_paging,
             :campus_scan,
             :borrow_direct,
@@ -48,7 +48,7 @@ Rails.application.routes.draw do
             :notonshelf,
             :barnard_remote,
             :bearstor,
-            :avery_onsite,
+            # :avery_onsite,
             :starrstor,
             # Faux services to aid in testing and demonstration
             :outage_redirect_example,
