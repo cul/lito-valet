@@ -42,7 +42,7 @@ module Service
       illiad_base_url = APP_CONFIG[:illiad_base_url]
       illiad_params = get_illiad_params_explicit(bib_record, current_user)
 
-      illiad_full_url = get_illiad_full_url(illiad_base_url, illiad_params)
+      illiad_full_url = Oclc::Illiad.build_full_url(illiad_base_url, illiad_params)
       
       return illiad_full_url
     end
@@ -50,16 +50,16 @@ module Service
 
     private
 
-    def get_illiad_full_url(illiad_base_url, illiad_params)
-      illiad_url_with_params = illiad_base_url + '?' + illiad_params.to_query
-      
-      # Patrons always access Illiad through our CUL EZproxy
-      ezproxy_url = APP_CONFIG[:ezproxy_login_url]
-
-      illiad_full_url = ezproxy_url + '?url=' + illiad_url_with_params
-      
-      return illiad_full_url
-    end
+    # def get_illiad_full_url(illiad_base_url, illiad_params)
+    #   illiad_url_with_params = illiad_base_url + '?' + illiad_params.to_query
+    #
+    #   # Patrons always access Illiad through our CUL EZproxy
+    #   ezproxy_url = APP_CONFIG[:ezproxy_login_url]
+    #
+    #   illiad_full_url = ezproxy_url + '?url=' + illiad_url_with_params
+    #
+    #   return illiad_full_url
+    # end
     
     
     def get_illiad_params_explicit(bib_record, current_user)

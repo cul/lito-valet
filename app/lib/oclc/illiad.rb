@@ -94,6 +94,18 @@ module Oclc
       return hash
     end
 
+
+    def self.build_full_url(illiad_url, illiad_params)
+      illiad_url_with_params = illiad_url + '?' + illiad_params.to_query
+
+      # Patrons always access Illiad through our CUL EZproxy
+      ezproxy_url = APP_CONFIG[:ezproxy_login_url]
+
+      illiad_full_url = ezproxy_url + '?url=' + illiad_url_with_params
+
+      return illiad_full_url
+    end
+
     
   end
 end
