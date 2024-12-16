@@ -51,6 +51,8 @@ module Service
     def get_illiad_params_explicit(bib_record, current_user)
       illiad_params = Oclc::Illiad.get_default_params(current_user, bib_record)
       
+      # Action=10 tells Illiad that we'll pass the Form ID to use
+      illiad_params['Action']    = '10'
       # use "CitedIn" as a routing tag, so staff know the origin of the request
       illiad_params['CitedIn']      = 'CLIO_OPAC-ILL'
 

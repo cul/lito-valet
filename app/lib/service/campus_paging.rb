@@ -42,6 +42,8 @@ module Service
       illiad_params = Oclc::Illiad.get_default_params(current_user, bib_record)
       
       # Explicitly tell Illiad which form to use
+      # Action=10 tells Illiad that we'll pass the Form ID to use
+      illiad_params['Action']    = '10'
       illiad_params['Form']          = '20'
       illiad_params['Value']         = 'GenericRequestPDD'
       illiad_params['CitedIn']       = 'CLIO_OPAC-PAGING'

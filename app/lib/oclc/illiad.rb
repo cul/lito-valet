@@ -6,10 +6,6 @@ module Oclc
     def self.get_default_params(current_user, bib_record = nil)
       params = {}
 
-      # Action=10 tells Illiad that we'll pass the Form ID to use
-      # (Instead of relying on ILLiad to guess the correct form based on metadata)
-      params['Action']    = '10'
-
       # If we were called from a service that worked upon a bib record, then
       # Bib ID lands into hidden field "Notes" so patron cannot edit
       if bib_record.present? 
