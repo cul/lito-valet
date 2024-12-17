@@ -40,6 +40,7 @@ Rails.application.routes.draw do
             :fli_paging,
             :campus_scan,
             :borrow_direct,
+            :ill,
             :ill_scan,
             # :intercampus,
             :in_process,
@@ -60,13 +61,13 @@ Rails.application.routes.draw do
 
 
 
-  # === SIMPLE REDIRECT SERVICES ===
-  # These services take no arguments.
-  # They authenticate, log, and then redirect only.
-  # [n.b., these lines must come AFTER simple-bib services in routes.rb,
-  #  for precedence order for borrow_direct#show with and without an :id ]
+  # === OTHER SERVICES ===
+  # These services take no arguments, or take arguments other than 'id'.
+  # These lines must come AFTER simple-bib services in routes.rb,
+  # for precedence order to allow, e.g., borrow_direct#show with or without an :id
   get 'borrow_direct', action: :show, controller: 'forms'
   get 'illiad', action: :show, controller: 'forms'
+  get 'ill', action: :show, controller: 'forms'
 
 
 

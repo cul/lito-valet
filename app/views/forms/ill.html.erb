@@ -1,13 +1,33 @@
+<!-- views/forms/ill.html.erb -->
+
+<h4>ILL Request</h4>
+
+<!--
+In order to route your request to the appropriately
+we need to know your primary affiliation with the University.
+<br>
+-->
+Please select your affiliation:
 
 
 <%= form_with url: ill_index_path do |form| %>
 
-  <%= form.hidden_field(:id, value: bib_record.id) %>
+  <%
+  #  The ILL service may be called with an OpenURL or with a Bib ID.
+  #  We need to pass ALL params through the campus-triage form so 
+  #  they can get to the ILL service code.
+  %>
+
+
+  <% ill_params.each do |key, value| %>
+    <%= form.hidden_field(key, value: value) %>
+  <% end %>
+    
   <%= render 'campus', form: form %>
 
   <br>
   <br>
 
-  <%= form.submit('Continue') %>
+  <%= submit_tag('Continue', onclick: "return validateCampusForm()") %>
 
 <% end %>
