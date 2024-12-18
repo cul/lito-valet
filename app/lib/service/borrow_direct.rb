@@ -102,7 +102,7 @@ module Service
       
       # If we can't find an ISBN or ISSN, try a title/author search.
       # Title might be found in MANY possible OpenURL fields.
-      best_title = params['title'] || params['stitle'] || params['rft.title'] || params['rft.btitle'] || params['rft.stitle'] || params['rft.jtitle'] || params['loantitle'] || params['photoarticletitle']
+      best_title = params['title'] || params['stitle'] || params['rft.title'] || params['rft.btitle'] || params['rft.stitle'] || params['rft.jtitle'] || params['loantitle'] || params['photoarticletitle'] || ''
       query = 'type0[]=Title&lookfor0[]="' + CGI.escape(best_title) + '"'
 
       # If an Author is present, add that to the query
