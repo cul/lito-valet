@@ -21,7 +21,7 @@ class FormsController < ApplicationController
     return outage! if @service_config[:outage]
 
     # Is the user eligible to use this service?
-    if not @service.patron_eligible?(current_user)
+    if @service_config[:authenticate] and not @service.patron_eligible?(current_user)
       # There may be a service-specific message or URL
       return redirect_to(@service_config['ineligible_url']) if @service_config['ineligible_url']
       return error(@service_config['ineligible_message']) if @service_config['ineligible_message']
@@ -104,7 +104,7 @@ class FormsController < ApplicationController
     service_name = determine_service
     return error('Unable to determine service!') unless service_name
     load_service_config(service_name)
-    
+
     # If load_service_config() was unable to load @service_config
     return if @service_config.nil? or @service_config.empty?
     
