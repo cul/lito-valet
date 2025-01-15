@@ -58,12 +58,14 @@ RSpec.describe 'Borrow Direct' do
     expect(response.body).to redirect_to('http://www.example.com/sign_in')
   end
 
-  it 'renders error page for non-existant item' do
-    sign_in FactoryBot.create(:happyuser)
-    # CLIO has no bib id 60
-    get borrow_direct_path('60')
-    expect(response.body).to include('Cannot find bib record')
-  end
+  # BorrowDirect now accepts OpenURL params,
+  # and OpenURL params may include an "id" field which is something other than a CLIO Bib key.
+  # it 'renders error page for non-existant item' do
+  #   sign_in FactoryBot.create(:happyuser)
+  #   # CLIO has no bib id 60
+  #   get borrow_direct_path('60')
+  #   expect(response.body).to include('Cannot find bib record')
+  # end
 
   it 'redirects blocked patron to failure page' do
     sign_in FactoryBot.create(:blockeduser)
