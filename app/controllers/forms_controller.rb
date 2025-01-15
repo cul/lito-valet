@@ -37,11 +37,13 @@ class FormsController < ApplicationController
       return error("Service #{@service_config['label']} not passed a bib id") unless @service_config['bib_optional']
     end
     
-    # If the bib id was passed, then it needs to be a real, valid ID
+    # If the bib id was passed, then it needs to be a real, valid ID (unless "bib_optional" is set)
     if bib_id.present?
       bib_record = ClioRecord.new_from_bib_id(bib_id)
-      return error("Cannot find bib record for id #{bib_id}") if bib_record.blank?
-      return error("Bib ID #{bib_id} is not eligble for service #{@service_config['label']}") unless @service.bib_eligible?(bib_record)
+      if not @service_config['bib_optional']
+        return error("Cannot find bib record for id #{bib_id}") if bib_record.blank?
+        return error("Bib ID #{bib_id} is not eligble for service #{@service_config['label']}") unless @service.bib_eligible?(bib_record)
+      end
     end
         
     # process as form or as direct bounce

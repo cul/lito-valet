@@ -68,6 +68,7 @@ Rails.application.routes.draw do
   get 'borrow_direct', action: :show, controller: 'forms'
   get 'illiad', action: :show, controller: 'forms'
   get 'ill', action: :show, controller: 'forms'
+  get 'elink', action: :show, controller: 'forms'
 
 
 
