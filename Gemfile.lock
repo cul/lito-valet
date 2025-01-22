@@ -202,7 +202,7 @@ GEM
       net-protocol
     net-ssh (7.3.0)
     nio4r (2.7.4)
-    nokogiri (1.18.2)
+    nokogiri (1.17.2)
       mini_portile2 (~> 2.8.2)
       racc (~> 1.4)
     omniauth (1.9.2)
@@ -352,7 +352,7 @@ DEPENDENCIES
   mysql2
   net-http
   net-ldap
-  nokogiri
+  nokogiri (~> 1.17.0)
   rails (~> 6.0)
   rexml
   rsolr
