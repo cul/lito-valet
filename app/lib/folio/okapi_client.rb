@@ -1,3 +1,8 @@
+module Folio
+  class OkapiClient
+
+    attr_reader :conn  #, :folio_config
+
     def initialize(args = {})
       return @conn if @conn
 
@@ -44,3 +49,31 @@
 
       return folio_config
     end
+    
+    
+    def get_user_barcode(uni)
+      Rails.logger.debug "- Folio::OkapiClient.get_user_barcode(uni=#{uni})"
+      return nil unless uni.present?
+      
+      path = '/users?query=(username=="' + uni + '")'
+      Rails.logger.debug "- Folio::OkapiClient.get_user_barcode() path=#{path}"
+
+      folio_users_response = @conn.get(path)
+
+      first_user = folio_users_response["users"].first
+      Rails.logger.debug "- Folio::OkapiClient.get_user_barcode(#{uni}) first_user: #{first_user}"
+      barcode = first_user["barcode"]
+      return barcode
+
+    end
+
+
+
+  end
+
+
+
+end
+
+
+

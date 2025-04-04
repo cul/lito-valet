@@ -120,17 +120,18 @@ class User < ApplicationRecord
       end
     end
 
-    # Try to find email via Voyager
-    if @oracle_connection ||= Voyager::OracleConnection.new
-      if @patron_id ||= @oracle_connection.get_patron_id(uid)
-        if (voyager_email = @oracle_connection.retrieve_patron_email(@patron_id))
-          if voyager_email.length > 6 && voyager_email.match(/^.+@.+$/)
-            self.email = voyager_email
-            return self
-          end
-        end
-      end
-    end
+    # FOLIO - don't lookup user email in the ILS, rely on LDAP
+    # # Try to find email via Voyager
+    # if @oracle_connection ||= Voyager::OracleConnection.new
+    #   if @patron_id ||= @oracle_connection.get_patron_id(uid)
+    #     if (voyager_email = @oracle_connection.retrieve_patron_email(@patron_id))
+    #       if voyager_email.length > 6 && voyager_email.match(/^.+@.+$/)
+    #         self.email = voyager_email
+    #         return self
+    #       end
+    #     end
+    #   end
+    # end
 
     # No email!  Fill in guess.
     Rails.logger.error "ERROR: Cannot find email address via LDAP or Voyager for uid [#{uid}], assuming @columbia.edu"
@@ -354,29 +355,30 @@ class User < ApplicationRecord
 
   
   # GETTERS / SETTERS
-  
-  def oracle_connection
-    @oracle_connection ||= Voyager::OracleConnection.new
-  end
-  def oracle_connection=(val)
-    @oracle_connection = val
-  end
-  
-  def patron_record
-    # Rails.logger.debug "GETTER patron_record"
-    @patron_record ||= oracle_connection.get_patron_record(uid)
-  end
-  def patron_record=(val)
-    # Rails.logger.debug "SETTER patron_record=(val)"
-    @patron_record = val
-  end
-  
-  def patron_id
-    @patron_id ||= patron_record['PATRON_ID']
-  end
-  def patron_id=(val)
-    @patron_id = val
-  end
+
+  # FOLIO - don't need these, don't use these
+  # def oracle_connection
+  #   @oracle_connection ||= Voyager::OracleConnection.new
+  # end
+  # def oracle_connection=(val)
+  #   @oracle_connection = val
+  # end
+  #
+  # def patron_record
+  #   # Rails.logger.debug "GETTER patron_record"
+  #   @patron_record ||= oracle_connection.get_patron_record(uid)
+  # end
+  # def patron_record=(val)
+  #   # Rails.logger.debug "SETTER patron_record=(val)"
+  #   @patron_record = val
+  # end
+  #
+  # def patron_id
+  #   @patron_id ||= patron_record['PATRON_ID']
+  # end
+  # def patron_id=(val)
+  #   @patron_id = val
+  # end
 
   # --- never called ---
   # def over_recall_notice_count
