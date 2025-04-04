@@ -103,6 +103,9 @@ gem 'cul_omniauth', git: 'https://github.com/cul/cul_omniauth', branch: 'rails-6
 # Fetch ldap details - first name, last name, etc.
 gem 'net-ldap'
 
+# Talk to FOLIO, using Stanford's client library
+gem 'folio_client'
+
 # Talk to Voyager's Oracle DB, to e.g. fetch patron barcodes
 gem 'ruby-oci8'
 

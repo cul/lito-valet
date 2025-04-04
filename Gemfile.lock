@@ -129,6 +129,15 @@ GEM
     devise-guests (0.8.3)
       devise
     diff-lcs (1.5.1)
+    domain_name (0.6.20240107)
+    dry-core (1.1.0)
+      concurrent-ruby (~> 1.0)
+      logger
+      zeitwerk (~> 2.6)
+    dry-monads (1.8.3)
+      concurrent-ruby (~> 1.0)
+      dry-core (~> 1.1)
+      zeitwerk (~> 2.6)
     erubi (1.13.1)
     execjs (2.10.0)
     factory_bot (6.5.0)
@@ -137,12 +146,24 @@ GEM
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
+    faraday-cookie_jar (0.0.7)
+      faraday (>= 0.8.0)
+      http-cookie (~> 1.0.0)
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
     ffi (1.17.1)
+    folio_client (0.18.0)
+      activesupport (>= 4.2)
+      dry-monads
+      faraday
+      faraday-cookie_jar
+      marc
+      zeitwerk
     globalid (1.2.1)
       activesupport (>= 6.1)
     hashie (5.0.0)
+    http-cookie (1.0.8)
+      domain_name (~> 0.5)
     httpclient (2.8.3)
     i18n (1.14.6)
       concurrent-ruby (~> 1.0)
@@ -341,6 +362,7 @@ DEPENDENCIES
   devise
   factory_bot
   faraday
+  folio_client
   httpclient
   jbuilder
   jquery-datatables-rails
