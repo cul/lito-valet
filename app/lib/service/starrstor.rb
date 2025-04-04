@@ -52,19 +52,20 @@ module Service
     def send_emails(params, bib_record, current_user)
 
       # LIBSYS-5996 - StarrStor - include inactive barcodes in staff request emails
-      oracle_connection = current_user.oracle_connection
-      inactive_barcodes = Array.new
-      params[:itemBarcodes].each do |barcode|
-        inactive_barcodes = inactive_barcodes + oracle_connection.retrieve_inactive_barcodes(barcode)
-      end
-      if inactive_barcodes.size == 0
-        inactive_barcodes = [ 'n/a' ]
-      end
+      # FOLIO-132 - Remove support for StarrStor Inactive Barcodes
+      # oracle_connection = current_user.oracle_connection
+      # inactive_barcodes = Array.new
+      # params[:itemBarcodes].each do |barcode|
+      #   inactive_barcodes = inactive_barcodes + oracle_connection.retrieve_inactive_barcodes(barcode)
+      # end
+      # if inactive_barcodes.size == 0
+      #   inactive_barcodes = [ 'n/a' ]
+      # end
 
       mail_params = {
         bib_record: bib_record,
         barcodes:  params[:itemBarcodes],
-        inactive_barcodes: inactive_barcodes,
+        # inactive_barcodes: inactive_barcodes,
         patron_uni: current_user.uid,
         patron_email: current_user.email,
         staff_email: @service_config[:staff_email]
