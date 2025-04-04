@@ -106,8 +106,8 @@ gem 'net-ldap'
 # Talk to FOLIO, using Stanford's client library
 gem 'folio_client'
 
-# Talk to Voyager's Oracle DB, to e.g. fetch patron barcodes
-gem 'ruby-oci8'
+# # Talk to Voyager's Oracle DB, to e.g. fetch patron barcodes
+# gem 'ruby-oci8'
 
 # Talk to our source for catalog records, a Solr search index
 gem 'rsolr'
