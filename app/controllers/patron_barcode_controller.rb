@@ -48,15 +48,6 @@ class PatronBarcodeController < ApplicationController
     okapi_client ||= Folio::OkapiClient.new
     patron_barcode = okapi_client.get_user_barcode(uni)
     return patron_barcode
-
-    begin
-      okapi_client ||= Folio::OkapiClient.new
-      patron_barcode = okapi_client.get_user_barcode(uni)
-      return patron_barcode
-    rescue => ex
-      # TODO - process errors in some way - log, report to client, etc.
-      return nil
-    end
   end
 
   

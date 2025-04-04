@@ -22,7 +22,7 @@ class User < ApplicationRecord
   # Every user-object instantiation...
   after_initialize :set_personal_info_via_ldap
   after_initialize :set_email
-  after_initialize :set_barcode_via_oracle
+  after_initialize :set_barcode
 
   # we don't need this
   # after_initialize :get_scsb_patron_information
@@ -139,7 +139,13 @@ class User < ApplicationRecord
     self
   end
 
-  def set_barcode_via_oracle
+  def set_barcode
+    ils = APP_CONFIG[:ils] || 'voyager'
+    return set_barcode_voyager(uid) if ils == 'voyager'
+    return set_barcode_folio(uid) if ils == 'folio'
+  end
+
+  def set_barcode_voyager(uid)
     self.barcode = ''
 
     if uid
@@ -154,6 +160,13 @@ class User < ApplicationRecord
 
     self.barcode
   end
+  
+  def set_barcode_folio(uid)
+    okapi_client ||= Folio::OkapiClient.new
+    patron_barcode = okapi_client.get_user_barcode(uid)
+    self.barcode = patron_barcode
+  end
+  
 
   def login
     uid.split('@').first
