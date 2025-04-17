@@ -47,18 +47,24 @@ class ReservesController < ApplicationController
       redirect_to reserves_path, error: error_message
       return
     end
+
+    # Parse the complex nested FOLIO JSON course list into simple array of hashes
+    @simple_courses_list = parse_folio_courses_list(folio_courses_list)
     
     # If more than one course matched the course-number lookup, 
     # ask the user to disambiguate
     if folio_courses_list.size > 1
-      @simple_courses_list = parse_folio_courses_list(folio_courses_list)
       render 'course_selection'
       return
     end
     
+    # Only a single course matches the submitted course number
+    
+    # Store to an instance variable so that we can access course details in the view
+    @course = @simple_courses_list.first
     # If only a single FOLIO course was returned matching the submitted course number,
     # lookup the reserves for that course.
-    course_listing_id = folio_courses_list.first["courseListingId"]
+    course_listing_id = @course["course_listing_id"]
     folio_reserves_list = @okapi_client.get_reserves_list_by_course_listing_id(course_listing_id)
     
     # Simlify the complex FOLIO JSON response object into a simple list of elements for display
@@ -103,10 +109,11 @@ class ReservesController < ApplicationController
 
       simple_course = {}
       
-      simple_course["name"]            = folio_course["name"]
-      simple_course["instructor"]      = instructor_names
-      simple_course["course_number"]   = folio_course["courseNumber"]
-      simple_course["reserves_count"]  = reserves_count
+      simple_course["name"]               = folio_course["name"]
+      simple_course["instructor"]         = instructor_names
+      simple_course["course_number"]      = folio_course["courseNumber"]
+      simple_course["course_listing_id"]  = folio_course["courseListingId"]
+      simple_course["reserves_count"]     = reserves_count
       
       simple_courses_list << simple_course
     end

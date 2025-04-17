@@ -8,12 +8,15 @@
 #%>
 
 Course Reserves for: <%= @course_number %>
-
+<br>
+<br>
+<%= @course["name"] %>
+<br>
+Instructor <%= @course["instructor"] %>
 <br><br>
 
 This course has <%= @simple_reserves_list.size %> reserves.
 
-<br><br>
 
 <table class="table table-striped table-bordered table-condensed reserves-datatable">
   <thead>
