@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   root 'welcome#index'
   get 'welcome/index'
-  get 'welcome/logout'
+  get 'welcome/out'
 
   get '/timeout', to: 'welcome#timeout'
 
@@ -97,6 +97,16 @@ Rails.application.routes.draw do
   #
   resources :patron_barcode, only: [:index]
 
+
+  # === COURSE RESERVES ===
+  # our index page is a search page
+  resources :reserves, only: [:index]
+  # RESTFul path to reserves list for a specific course
+  get 'reserves/course/:course_number', to: 'reserves#course', as: 'course_reserves'
+  # redirector to handle form post of key/value 
+  post 'reserves/course_redirect', to: 'reserves#course_redirect', as: 'course_reserves_redirect'
+  
+  
 
 
   # === OLD CRUD BELOW ===

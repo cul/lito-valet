@@ -1,0 +1,43 @@
+<!-- views/reseves/course_selection.html.erb -->
+
+Course Number:
+<%= form_with url: course_reserves_redirect_path, method: :post do |form| %>
+  <%= form.text_field :course_number, value: @course_number %>
+<% end %>
+
+<br><br>
+
+This Course Number matched <%= @simple_courses_list.size %> courses.
+<% if @simple_courses_list.size == 50 %>
+<br>
+Only the first 50 matching courses are shown.  Refine your search to get more precise results.
+<% end %>
+
+<br><br>
+
+Select a course number to see the reserves for that course.
+
+<br><br>
+
+<table class="table table-striped table-bordered table-condensed reserves-datatable">
+  <thead>
+    <tr>
+      <th>name</th>
+      <th>instructor</th>
+      <th>course number</th>
+      <th># reserves</th>
+    </tr>
+  </thead>
+  
+
+<% @simple_courses_list.each do |course| %>
+  <tr>
+    <td><%= course["name"] %></td>
+    <td><%= course["instructor"] %></td>
+    <td><%= course_reserves_link(course) %></td>
+    <td><%= course["reserves_count"] %></td>
+  </tr>
+<% end %>
+
+</table>
+

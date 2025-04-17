@@ -1,14 +1,20 @@
+# 
+# FOLIO DOCUMENTATION
+#
+# Courses and Reserves:
+#   https://s3.amazonaws.com/foliodocs/api/mod-courses/r/courses.html
+# 
+
 module Folio
   class OkapiClient
 
-    attr_reader :conn  #, :folio_config
 
     def initialize(args = {})
       return @conn if @conn
 
       folio_config = get_folio_config()
       
-      # STANFORD CLIENT:
+      # STANFORD FOLIO OKAPI CLIENT:
       @conn = FolioClient.configure(
           url: folio_config['okapi_url'],
           login_params: { username: folio_config['okapi_username'], password: folio_config['okapi_password'] },
@@ -16,25 +22,6 @@ module Folio
       )
       
       return @conn
-      
-      # LOCAL WORK:
-      #
-      # okapi_url = folio_config[:okapi_url]
-      #
-      # # reduce api timeouts - if the endpoint is up, it'll respond quickly.
-      # request_params = {
-      #   open_timeout: 10, # opening a connection
-      #   timeout: 10       # waiting for response
-      # }
-      #
-      # Rails.logger.debug "- opening new connection to #{okapi_url}"
-      # @conn = Faraday.new(url: okapi_url, request: request_params)
-      # raise "Faraday.new(#{okapi_url}) failed!" unless @conn
-      #
-      # @conn.headers['Content-Type'] = 'application/json'
-      # @conn.headers['X-API-Key'] = folio_config[:api_key]
-      #
-      # return @conn
     end
 
 
@@ -58,17 +45,54 @@ module Folio
       path = '/users?query=(username=="' + uni + '")'
       Rails.logger.debug "- Folio::OkapiClient.get_user_barcode() path=#{path}"
 
-      folio_users_response = @conn.get(path)
+      folio_response = @conn.get(path)
 
-      first_user = folio_users_response["users"].first
+      first_user = folio_response["users"].first
       Rails.logger.debug "- Folio::OkapiClient.get_user_barcode(#{uni}) first_user: #{first_user}"
+
+      # # barcode lookup should FAIL for inactive users?
+      # Or, return whatever barcode we find, let later processes fail
+      # active = first_user["active"]
+      # return nil unless active
+      
       barcode = first_user["barcode"]
       return barcode
 
     end
+    
+    # Given a course-number (registrar number or string with wildcards),
+    # Make a courses query, return the FOLIO JSON course list
+    def get_courses_list_by_course_number(course_number)
+      Rails.logger.debug "- Folio::OkapiClient.get_courses_list_by_course_number(course_number=#{course_number})"
+      return nil unless course_number.present?
+      
+      path = '/coursereserves/courses?limit=50&query=(courseNumber=="' + course_number + '")'
+      Rails.logger.debug "- Folio::OkapiClient.get_courses_list_by_course_number() path=#{path}"
+      
+      folio_response = @conn.get(path)
+      
+      courses_list = folio_response["courses"]
+      
+      return courses_list
+    end
 
 
+    # Given a course-listing-id (the FOLIO UUID of the course listing object),
+    # Lookup the reserves by course-listing-id, return the FOLIO JSON reserves list
+    def get_reserves_list_by_course_listing_id(course_listing_id)
+      Rails.logger.debug "- Folio::OkapiClient.get_reserves_by_course_listing_id(course_listing_id=#{course_listing_id})"
+      return nil unless course_listing_id.present?
+      
+      path = '/coursereserves/courselistings/' + course_listing_id + '/reserves?limit=100'
+      Rails.logger.debug "- Folio::OkapiClient.get_reserves_by_course_listing_id() path=#{path}"
 
+      folio_response = @conn.get(path)
+      
+      reserves_list = folio_response["reserves"]
+
+      return reserves_list
+    end
+    
   end
 
 

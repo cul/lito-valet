@@ -30,6 +30,9 @@ class ApplicationController < ActionController::Base
   # Services can store lengthy error message text here
   # for display on the error page
   attr_accessor :error
+  
+  # Register custom flash types
+  add_flash_types :error
 
   # Overwriting the sign_out redirect path method
   def after_sign_out_path_for(_resource_or_scope)

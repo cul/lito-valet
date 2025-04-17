@@ -15,6 +15,9 @@ $body-bg:    #eef;
 // Application branding
 @import 'valet';
 
+// Specific styles for Course Reserves
+@import 'reserves';
+
 // DataTables
 @import 'dataTables/jquery.dataTables';
 

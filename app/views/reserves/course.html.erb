@@ -1,0 +1,34 @@
+<!-- views/reseves/course.html.erb -->
+
+<%#
+#
+#  THIS SHOULD BE A TERMINAL PAGE (FOLIO-126 / FOLIO-134 / FOLIO-141)
+#  THERE SHOULD BE NO LINKS FROM THIS PAGE TO A RESERVES SEARCH/BROWSE
+#
+#%>
+
+Course Reserves for: <%= @course_number %>
+
+<br><br>
+
+This course has <%= @simple_reserves_list.size %> reserves.
+
+<br><br>
+
+<table class="table table-striped table-bordered table-condensed reserves-datatable">
+  <thead>
+    <tr>
+      <th>title / author</th>
+      <th>call number</th>
+    </tr>
+  </thead>
+
+<% @simple_reserves_list.each do |simple_reserves_item| %>
+  <tr>
+    <td><%= simple_reserves_item["title"] %></td>
+    <td><%= reserve_item_link(simple_reserves_item) %></td>
+  </tr>
+<% end %>
+
+</table>
+

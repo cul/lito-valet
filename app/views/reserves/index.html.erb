@@ -1,0 +1,15 @@
+<!-- views/reseves/index.html.erb -->
+
+Enter a course number to search for reserves:
+
+<%= form_with url: course_reserves_redirect_path, method: :post do |form| %>
+
+  <%= form.label :course_number %>
+  <%= form.text_field :course_number %>
+
+  <br>
+  <br>
+
+  <%= form.submit 'Search'%>
+
+<% end %>

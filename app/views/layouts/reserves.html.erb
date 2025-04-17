@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<!-- views/layouts/reserves.html.erb -->
+
+<% content_for :title, "Course Reserves" %>
+<%= render '/layouts/head' %>
+
+<body class='reserves'>
+<%= render 'shared/topnavbar' %>
+
+<div class="container reserves">
+
+  <!-- VALET-26 - debrand (for now)
+  <%= render '/shared/logo' %>
+   -->
+
+  <!-- render ALL flash messages ABOVE page content -->
+  <%= render '/layouts/messages' %>
+
+  <br>
+  <%= yield %>
+
+  <br>
+  <br>
+
+</div>
+
+<!-- Any page-specific inline JavaScript  (content_for :javascript)-->
+<%= yield :javascript %>
+
+</body>
+</html>
+
