@@ -2,6 +2,11 @@ source 'https://rubygems.org'
 
 gem 'rails', '~> 6.0'
 
+# https://stackoverflow.com/questions/79360526/uninitialized-constant
+# uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger
+#   Remove this when we update Rails to 7.1
+gem 'concurrent-ruby', '1.3.4'
+
 # Valet is built using Sprockets - need gem until migration to Webpacker 
 gem "sprockets-rails"
 
