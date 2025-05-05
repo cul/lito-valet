@@ -48,7 +48,7 @@ Rails.application.routes.draw do
             :item_feedback,
             :notonshelf,
             :barnard_remote,
-            :bearstor,
+            # :bearstor, # 4/2025 - the renaming should be complete by now
             # :avery_onsite,
             :starrstor,
             # Faux services to aid in testing and demonstration
