@@ -8,6 +8,10 @@ module Service
 
     # DEFAULT METHOD IMPLEMENTATIONS
     # They may be overridden in service-specific modules.
+    def service_type?(_bib_record = nil)
+      service_type = @service_config[:type]
+      return service_type
+    end
 
     def patron_eligible?(_current_user = nil)
       Rails.logger.debug 'patron_eligible? - DEFAULT'

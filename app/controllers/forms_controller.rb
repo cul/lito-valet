@@ -47,7 +47,8 @@ class FormsController < ApplicationController
     end
         
     # process as form or as direct bounce
-    case @service_config['type']
+    # case @service_config['type']
+    case @service.service_type?(bib_record)
     when 'form'
       return build_form(bib_record)
     when 'bounce'
