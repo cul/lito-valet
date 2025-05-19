@@ -10,7 +10,7 @@ class ClioRecord
 
   def initialize(marc_record = nil)
     @marc_record = marc_record
-
+    
     # TODO: - do this better
     populate_holdings
     populate_owningInstitution
@@ -261,6 +261,21 @@ class ClioRecord
     issns.compact.map do |digits|
       digits[0..3] + '-' + digits[4..7]
     end
+  end
+  
+  # Finding-Aid links look like:
+  #   https://findingaids.library.columbia.edu/ead/nnc-rb/ldpd_4079355
+  # Return the first found, or if none found, return nil
+  def finding_aid_link
+    @marc_record.fields('856').each do |field|
+      url   = field['u']
+      # has to look like a finding aid...
+      next unless url.match(/findingaids.library/)
+      # cannot be a downloadable document...
+      next if url.match(/(pdf|doc|htm|html)$/)
+      return url
+    end
+    return nil
   end
 
   def populate_owningInstitution

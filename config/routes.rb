@@ -50,6 +50,7 @@ Rails.application.routes.draw do
             :barnard_remote,
             # :bearstor, # 4/2025 - the renaming should be complete by now
             # :avery_onsite,
+            :special_collections,
             :starrstor,
             # Faux services to aid in testing and demonstration
             :outage_redirect_example,
