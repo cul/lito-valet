@@ -10,7 +10,7 @@ RSpec.describe 'Item Feedback Service' do
   it 'item feedback form submission renders confirm and sends email' do
     user = FactoryBot.create(:happyuser)
     sign_in user
-    params = { id: '123', mfhd_id: '144', feedback: 'other', note: 'testing' }
+    params = { id: '123', mfhd_id: 'cb165c46-2f02-5cb1-bd42-cda004865b51', feedback: 'other', note: 'testing' }
     post item_feedback_index_path, params: params
 
     # confirm page

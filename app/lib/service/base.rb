@@ -43,7 +43,7 @@ module Service
     # If the service needs to do any form-param processing before all that,
     # they can override this method.
     def service_form_handler(_params)
-      nil
+      {}
     end
 
     # do nothing?

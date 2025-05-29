@@ -162,8 +162,7 @@ class User < ApplicationRecord
   end
   
   def set_barcode_folio(uid)
-    okapi_client ||= Folio::OkapiClient.new
-    patron_barcode = okapi_client.get_user_barcode(uid)
+    patron_barcode = Folio::Client.get_user_barcode(uid)
     self.barcode = patron_barcode
   end
   

@@ -35,10 +35,8 @@ class ReservesController < ApplicationController
     if course_number_query.length < 17
       course_number_query = '*' + course_number_query + '*'
     end
-    
-    @okapi_client ||= Folio::OkapiClient.new
-    
-    folio_courses_list = @okapi_client.get_courses_list_by_course_number(course_number_query)
+        
+    folio_courses_list = Folio::Client.get_courses_list_by_course_number(course_number_query)
     
     # If the course-number lookup for no matching course,
     # return to the index page
@@ -65,7 +63,7 @@ class ReservesController < ApplicationController
     # If only a single FOLIO course was returned matching the submitted course number,
     # lookup the reserves for that course.
     course_listing_id = @course["course_listing_id"]
-    folio_reserves_list = @okapi_client.get_reserves_list_by_course_listing_id(course_listing_id)
+    folio_reserves_list = Folio::Client.get_reserves_list_by_course_listing_id(course_listing_id)
     
     # Simlify the complex FOLIO JSON response object into a simple list of elements for display
     @simple_reserves_list = parse_folio_reserves_list(folio_reserves_list)
@@ -104,7 +102,7 @@ class ReservesController < ApplicationController
       # Clean up complex FOLIO data as needed
       instructor_names = parse_folio_instructor_objects( folio_course["courseListingObject"]["instructorObjects"] )
       # FOLIO reserves lists include multiple copies - we need to consolidate
-      folio_reserves_list = @okapi_client.get_reserves_list_by_course_listing_id(folio_course["courseListingId"])
+      folio_reserves_list = Folio::Client.get_reserves_list_by_course_listing_id(folio_course["courseListingId"])
       reserves_count = parse_folio_reserves_list(folio_reserves_list).size
 
       simple_course = {}

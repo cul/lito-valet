@@ -18,7 +18,7 @@ RSpec.describe 'Campus Paging' do
       'LoanDate=1976.',
       'LoanEdition=Wyd.+1.',
       'LoanPlace=Warszawa', 
-      'LoanPublisher=Pan%CC%81stwowy+Instytut+Wydawniczy',
+      'LoanPublisher=Pa%C5%84stwowy+Instytut+Wydawniczy',
       'LoanTitle=Piotr',
       'Notes=http%3A%2F%2Fclio.columbia.edu%2Fcatalog%2F123',
       'Value=GenericRequestPDD'

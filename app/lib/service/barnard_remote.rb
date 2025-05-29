@@ -12,8 +12,7 @@ module Service
     def bib_eligible?(bib_record = nil)
       # Only records with Barnard Remote holdings
       # which include an available item
-      availability ||= bib_record.fetch_voyager_availability
-
+      availability ||= bib_record.fetch_folio_availability
       barnard_remote_holdings = get_barnard_remote_holdings(bib_record)
       if barnard_remote_holdings.size.zero?
         self.error = "This record has no Barnard Remote holdings.
@@ -35,7 +34,7 @@ module Service
     end
 
     def setup_form_locals(params, bib_record, current_user)
-      availability ||= bib_record.fetch_voyager_availability
+      availability ||= bib_record.fetch_folio_availability
       barnard_remote_holdings = get_barnard_remote_holdings(bib_record)
       available_barnard_remote_items = get_available_items(barnard_remote_holdings, availability)
       filter_barcode = nil

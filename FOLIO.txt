@@ -1,0 +1,12 @@
+
+Random FOLIO notes
+
+Unicode Issues
+ - decomposed or precomposed?
+
+LoanPublisher=  Pa n%CC%81 stwowy+Instytut+Wydawniczy
+LoanPublisher=  Pa  %C5%84 stwowy+Instytut+Wydawniczy
+
+
+https://folio-org.atlassian.net/browse/MSEARCH-564
+https://folio-org.atlassian.net/browse/MSEARCH-690

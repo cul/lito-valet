@@ -52,6 +52,7 @@ Rails.application.routes.draw do
             # :avery_onsite,
             :special_collections,
             :starrstor,
+            :recall,
             # Faux services to aid in testing and demonstration
             :outage_redirect_example,
             :outage_message_example,
@@ -103,9 +104,11 @@ Rails.application.routes.draw do
   # our index page is a search page
   resources :reserves, only: [:index]
   # RESTFul path to reserves list for a specific course
-  get 'reserves/course/:course_number', to: 'reserves#course', as: 'course_reserves'
+  # get 'reserves/course/:course_number', to: 'reserves#course', as: 'course_reserves'
+  get 'course/:course_number', to: 'reserves#course', as: 'course_reserves'
   # redirector to handle form post of key/value 
-  post 'reserves/course_redirect', to: 'reserves#course_redirect', as: 'course_reserves_redirect'
+  # post 'reserves/course_redirect', to: 'reserves#course_redirect', as: 'course_reserves_redirect'
+  post 'course_redirect', to: 'reserves#course_redirect', as: 'course_reserves_redirect'
   
   
 

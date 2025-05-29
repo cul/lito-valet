@@ -20,7 +20,7 @@ module Service
       # We'll want to give lots of info details about the
       # precat holding and it's availability
       precat_holdings = get_precat_holdings(bib_record)
-      availability ||= bib_record.fetch_voyager_availability
+      availability ||= bib_record.fetch_folio_availability
       available_items = get_available_items(precat_holdings.first, availability)
       locals = {
         bib_record: bib_record,

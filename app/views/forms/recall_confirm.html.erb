@@ -1,0 +1,45 @@
+<!-- views/forms/recall_confirm.html.erb -->
+
+<h4>Recall Confirmation</h4>
+
+<br>
+
+You have requested a recall of the following:
+
+<br>
+<br>
+
+<strong>
+TITLE : 
+<%= title %>
+<br>
+CALL NO : 
+<%= call_number %>
+<br>
+BARCODE: 
+<%= barcode %>
+</strong>
+
+
+<br>
+<br>
+
+Your request status is:
+<br>
+<div class='offset-block'>
+  <div class='well'>
+    <span class="glyphicon glyphicon-exclamation-sign"></span>
+    &nbsp;
+    <%= status %>
+  </div>
+</div>
+
+You will be notified when this request is processed.
+
+<br>
+<br>
+
+Your Open Requests can be seen at 
+<a href="<%= my_borrowing_account_url %>" target='_blank'>CLIO My Borrowing Account</a>
+
+

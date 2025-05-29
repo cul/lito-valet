@@ -72,6 +72,7 @@ class FormsController < ApplicationController
     # Some services need to do some custom form processing.
     # If they do, stash any result of that processing into 'params'
     service_response = @service.service_form_handler(params)
+    return error("Failure processing request!") if service_response.nil?
     params['service_response'] = service_response if service_response
 
     # All should log, so that should happen here.

@@ -1,0 +1,72 @@
+
+<h4>Place a Recall</h4>
+
+<%= form_with url: recall_index_path do |form| %>
+
+  <%# what we'll need to make the request %>
+  <%= form.hidden_field(:id, value: bib_record.id) %>
+  <%= form.hidden_field(:uni, value: current_user.uid) %>
+
+  <%# display basic bib data %>
+  <%= render 'bib', bib_record: bib_record %>
+
+  <br>
+  Select a specific item for recall.
+  <br>
+  If any copy is acceptable, leave first copy selected.
+  <table class='valet_request table-hover'>
+
+    <%# the first listed item will be checked on form load %>
+    <% checked_state = true %>
+
+    <% bib_record.holdings.each do |holding| %>
+      <% holding[:items].each do |item| %>
+
+        <% item_id = item[:item_id ]%>
+        <% item_status = availability[item_id] %>
+
+        <%# We only want to allow selection from among the checked-out items %>
+        <% next unless item_status == 'Checked out' %>
+        
+        <tr>
+          <td>
+            <%  radio_button_id = "item_id_#{item[:item_id]}" %>
+            <%= form.radio_button(:item_id, item[:item_id], id: radio_button_id, checked: checked_state) %>
+            <%= label_tag(radio_button_id, item[:barcode]) %>
+           </td>
+          <td>
+            <%= holding[:location_display] %>
+            <%= item[:enum_chron] %>
+            <%= item[:temporary_location] %>
+            <%= item[:use_restriction] %>
+            <%= item[:use_restriction] %>
+          </td>
+          <td>
+            <%= item_status %>
+          </td>
+        <tr>
+          
+        <%# all subsequent items will not be checked %>
+        <% checked_state = false %>
+      <% end %>
+
+    <% end %>
+
+  </table>
+  
+
+  <br>
+
+  <%= form.submit('Submit Request') %>
+  
+  
+
+<% end %>
+
+<br>
+
+
+
+<br>
+
+</div>

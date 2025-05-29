@@ -400,21 +400,21 @@ class ClioRecord
   def get_item_availability(holding, item)
 
     # For Offsite items, always return SCSB availability
-    #   (Not the Voyager availability of the matching Voyager item)
+    #   (Not the FOLIO availability of the matching FOLIO item)
     if is_offsite_location_code?(holding[:location_code])
       self.fetch_scsb_availabilty unless @scsb_availability
       return @scsb_availability[ item[:barcode] ] if @scsb_availability.has_key?(item[:barcode])
     end
 
-    # fetch Voyager availability for all holdings/items of this bib...
-    self.fetch_voyager_availability unless @voyager_availability
+    # fetch FOLIO availability for all holdings/items of this bib...
+    self.fetch_folio_availability unless @folio_availability
     # ...and then pull out the availability for just the item of interest
-    voyager_item_status = @voyager_availability[ item[:item_id] ]
+    folio_item_status = @folio_availability[ item[:item_id] ]
   
     # Clancy houses Barnard Remote(bar,stor) and StarrStor (East Asian temporary)
-    # If Voyager says the item is Available, double-check with Clancy/CaiaSoft,
+    # If FOLIO says the item is Available, double-check with Clancy/CaiaSoft,
     # It may be missing from the shelf.
-    if voyager_item_status.eql?('Available') &&
+    if folio_item_status.eql?('Available') &&
            is_clancy_location_code?(holding[:location_code])
       # Clancy uses the CaiaSoft inventory management system
       caiasoft_itemstatus = Clancy::CaiaSoft::get_itemstatus(item[:barcode])
@@ -427,8 +427,8 @@ class ClioRecord
       end
     end
 
-    # If NOT Clancy/CaiaSoft, return Voyager status
-    return voyager_item_status
+    # If NOT Clancy/CaiaSoft, return FOLIO status
+    return folio_item_status
     
   end
 
@@ -456,12 +456,52 @@ class ClioRecord
     return @scsb_availability
   end
 
-  # Fetch availability for each barcode from Voyager (via clio-backend)
-  # @voyager_availability format:
-  #   { item_id: availability, item_id: availability, ...}
-  # where 'availability' is a simple string, 'Available' or 'Unavailable'
-  def fetch_voyager_availability
-    @voyager_availability ||= Clio::BackendConnection.get_bib_availability(id) || {}
+  # # Fetch availability for each barcode from Voyager (via clio-backend)
+  # # @voyager_availability format:
+  # #   { item_id: availability, item_id: availability, ...}
+  # # where 'availability' is a simple string, 'Available' or 'Unavailable'
+  # def fetch_voyager_availability
+  #   @voyager_availability ||= Clio::BackendConnection.get_bib_availability(id) || {}
+  # end
+
+  
+  def fetch_folio_availability
+    @folio_availability = {}
+    # Simple approach - for every item, lookup it's individual status
+    @holdings.each do |holding|
+      holding[:items].each do |item|
+        item_id = item[:item_id]
+        begin
+          item_folio_details = Folio::Client.get_item( item_id )
+          @folio_availability[item_id] = item_folio_details['status']['name']
+        rescue => ex
+          # Any error retrieving item availability?  Assume Unavailable.
+          @folio_availability[item_id] = 'Unavailable'
+        end
+      end
+    end
+    
+    return @folio_availability 
+    
+
+    # This assumed that there was some clever way to gather item-status for 
+    # a set of items - but RTAC is broken/deprecated, and we don't know of another
+    # API endpoint.
+    # # The FOLIO Instance ID is in the 999$i
+    # # BUT - we have bad data, with bogus occsional bogus 999 or even 999$i values.
+    # # Examine every 999$i that we find, to see if it looks like a UUID
+    # instance_uuid = nil
+    # @marc_record.each_by_tag('999')  do |field_999|
+    #   field_999.subfields.select { |sf| sf.code == 'i' }.each do |subfield|
+    #     uuid_regex = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/
+    #     if uuid_regex.match?(field_999['i'].downcase)
+    #       instance_uuid = field_999['i']
+    #     end
+    #   end
+    # end
+    # return {} unless instance_uuid
+    #
+    # @folio_availability ||= Folio::Client.get_availability(instance_uuid) || {}
   end
 
   # For each of the barcodes in this record (@barcodes),

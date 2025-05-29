@@ -41,14 +41,14 @@ RSpec.describe 'Offsite Request Service' do
 
     params = { bib_id: '5396605' }
     get holding_offsite_requests_path, params: params
-    params = { bib_id: '5396605', mfhd_id: '6224583' }
+    params = { bib_id: '5396605', mfhd_id: '2dc5acf7-4f48-54e5-96ad-df08990db387' }
     expect(response).to redirect_to(new_offsite_request_path(params: params))
   end
 
   it 'renders item-request form correctly' do
     sign_in FactoryBot.create(:happyuser)
 
-    params = { bib_id: '5396605', mfhd_id: '6224583' }
+    params = { bib_id: '5396605', mfhd_id: '2dc5acf7-4f48-54e5-96ad-df08990db387' }
     get new_offsite_request_path, params: params
     expect(response.body).to include('Please select one or more items')
     expect(response.body).to include('Item to Library')
@@ -59,7 +59,7 @@ RSpec.describe 'Offsite Request Service' do
     affils =  ['CUL_role-clio-REG', 'CUL_role-clio-REG-blocked'] 
     sign_in FactoryBot.create(:happyuser, affils: affils)
 
-    params = { bib_id: '5396605', mfhd_id: '6224583' }
+    params = { bib_id: '5396605', mfhd_id: '2dc5acf7-4f48-54e5-96ad-df08990db387' }
     get new_offsite_request_path, params: params
     expect(response.body).to include('Please select one or more items')
     expect(response.body).to include('Item to Library')

@@ -11,9 +11,10 @@ module Service
     def bib_eligible?(bib_record = nil)
       # Only records with starrstor holdings
       # which include an available item
-      availability ||= bib_record.fetch_voyager_availability
+      availability ||= bib_record.fetch_folio_availability
 
       starrstor_holdings = get_starrstor_holdings(bib_record)
+      # raise
       if starrstor_holdings.size.zero?
         self.error = "This record has no StarrStor holdings.
         <br><br>
@@ -34,7 +35,7 @@ module Service
     end
 
     def setup_form_locals(params, bib_record, current_user)
-      availability ||= bib_record.fetch_voyager_availability
+      availability ||= bib_record.fetch_folio_availability
       starrstor_holdings = get_starrstor_holdings(bib_record)
       available_starrstor_items = get_available_items(starrstor_holdings, availability)
       filter_barcode = nil

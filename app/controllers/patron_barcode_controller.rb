@@ -27,26 +27,23 @@ class PatronBarcodeController < ApplicationController
   end
 
   def lookup_patron_barcode(uni)
-    ils = APP_CONFIG[:ils] || 'voyager'
-    return lookup_patron_barcode_voyager(uni) if ils == 'voyager'
-    return lookup_patron_barcode_folio(uni) if ils == 'folio'
+    return lookup_patron_barcode_folio(uni)
   end
 
   
-  def lookup_patron_barcode_voyager(uni)
-    begin
-      oracle_connection ||= Voyager::OracleConnection.new
-      patron_id ||= oracle_connection.get_patron_id(uni)
-      patron_barcode = oracle_connection.retrieve_patron_barcode(patron_id)
-      return patron_barcode
-    rescue => ex
-      return nil
-    end
-  end
+  # def lookup_patron_barcode_voyager(uni)
+  #   begin
+  #     oracle_connection ||= Voyager::OracleConnection.new
+  #     patron_id ||= oracle_connection.get_patron_id(uni)
+  #     patron_barcode = oracle_connection.retrieve_patron_barcode(patron_id)
+  #     return patron_barcode
+  #   rescue => ex
+  #     return nil
+  #   end
+  # end
 
   def lookup_patron_barcode_folio(uni)
-    okapi_client ||= Folio::OkapiClient.new
-    patron_barcode = okapi_client.get_user_barcode(uni)
+    patron_barcode = Folio::Client.get_user_barcode(uni)
     return patron_barcode
   end
 
