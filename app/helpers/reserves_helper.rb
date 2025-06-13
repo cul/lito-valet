@@ -14,7 +14,11 @@ module ReservesHelper
   # On a list of course reserves, link the call-number to the CLIO page for that title
   def reserve_item_link(reserves_item)
     label = reserves_item["call_number"]
-    url   = "https://clio.columbia.edu/catalog/" + reserves_item["instance_hrid"]
+    if reserves_item['uri']
+      url = reserves_item['uri']
+    else
+      url   = "https://clio.columbia.edu/catalog/" + reserves_item["instance_hrid"]
+    end
     link_to label, url, target: '_blank'
   end
   

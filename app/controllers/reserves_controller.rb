@@ -64,7 +64,7 @@ class ReservesController < ApplicationController
     # lookup the reserves for that course.
     course_listing_id = @course["course_listing_id"]
     folio_reserves_list = Folio::Client.get_reserves_list_by_course_listing_id(course_listing_id)
-    
+
     # Simlify the complex FOLIO JSON response object into a simple list of elements for display
     @simple_reserves_list = parse_folio_reserves_list(folio_reserves_list)
   end
@@ -145,9 +145,10 @@ class ReservesController < ApplicationController
       
       simple_reserves_item = {}
       
-      simple_reserves_item["title"]          = folio_reserves_item["copiedItem"]["title"]
-      simple_reserves_item["call_number"]    = folio_reserves_item["copiedItem"]["callNumber"]
-      simple_reserves_item["instance_hrid"]  = folio_reserves_item["copiedItem"]["instanceHrid"]
+      simple_reserves_item["title"]         = folio_reserves_item["copiedItem"]["title"]
+      simple_reserves_item["call_number"]   = folio_reserves_item["copiedItem"]["callNumber"]
+      simple_reserves_item["instance_hrid"] = folio_reserves_item["copiedItem"]["instanceHrid"]
+      simple_reserves_item["uri"]           = folio_reserves_item["copiedItem"].fetch("uri", "")
       
       simple_reserves_list << simple_reserves_item
     end
