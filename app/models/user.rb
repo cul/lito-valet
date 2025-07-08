@@ -237,10 +237,16 @@ class User < ApplicationRecord
     affils.each do |affil|
       # LIBSYS-3206 bogus affil, not actually a patron group
       next if affil.match(/CUL_role-clio-PhD/)
-      # All legit patron groups are 3-4 all-caps patterns
+
+      # Voyager - All legit patron groups are 3-4 all-caps patterns
       if affilmatch = affil.match(/CUL_role-clio-([A-Z]+)/)
         patron_groups.push(affilmatch[1])
       end
+      # FOLIO - 
+      if affilmatch = affil.match(/LIB_clio-/)
+        patron_groups.push(affilmatch[1])
+      end
+
     end
 
     return patron_groups
@@ -252,10 +258,10 @@ class User < ApplicationRecord
     # Offsite eligibility set via app_config
     config = APP_CONFIG['offsite'] || {}
 
-    # But hardcode a default, in case nothing is set in app_config
-    if config['permitted_affils'].blank? && config['permitted_affil_regex'].blank?
-      config['permitted_affil_regex'] = ['CUL_role-clio']
-    end
+    # # But hardcode a default, in case nothing is set in app_config
+    # if config['permitted_affils'].blank? && config['permitted_affil_regex'].blank?
+    #   config['permitted_affil_regex'] = ['CUL_role-clio']
+    # end
 
     eligible?(config, affils)
   end
@@ -300,13 +306,15 @@ class User < ApplicationRecord
 
     denied_affils         = config['denied_affils']         || []
     permitted_affils      = config['permitted_affils']      || []
-    permitted_affil_regex = config['permitted_affil_regex'] || []
+    # permitted_affil_regex = config['permitted_affil_regex'] || []
 
-    [denied_affils, permitted_affils, permitted_affil_regex].each do |f|
+    # [denied_affils, permitted_affils, permitted_affil_regex].each do |f|
+    [denied_affils, permitted_affils].each do |f|
       raise "#{f} must be an array!" unless f.is_a? Array
     end
 
-    unless permitted_affils.present? || permitted_affil_regex.present?
+    # unless permitted_affils.present? || permitted_affil_regex.present?
+    unless permitted_affils.present?
       Rails.log.error 'Cannot find ANY permitted_affils - no access allowed!'
       return false
     end
@@ -322,13 +330,13 @@ class User < ApplicationRecord
           affils.include?(good_affil)
       return true if affils.include?(good_affil)
     end
-    permitted_affil_regex.each do |good_regex|
-      affils.each do |affil|
-        Rails.logger.debug "affil #{affil} matches regexp #{good_regex}" if
-            affil =~ /#{good_regex}/
-        return true if affil =~ /#{good_regex}/
-      end
-    end
+    # permitted_affil_regex.each do |good_regex|
+    #   affils.each do |affil|
+    #     Rails.logger.debug "affil #{affil} matches regexp #{good_regex}" if
+    #         affil =~ /#{good_regex}/
+    #     return true if affil =~ /#{good_regex}/
+    #   end
+    # end
 
     # Default, if not explicitly permitted, return elible == false
     false

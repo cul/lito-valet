@@ -20,13 +20,20 @@ class FormsController < ApplicationController
     # short-circuit immediately if the service is in an outage state
     return outage! if @service_config[:outage]
 
-    # Is the user eligible to use this service?
-    if @service_config[:authenticate] and not @service.patron_eligible?(current_user)
-      # There may be a service-specific message or URL
-      return redirect_to(@service_config['ineligible_url']) if @service_config['ineligible_url']
-      return error(@service_config['ineligible_message']) if @service_config['ineligible_message']
-      # Otherwise, use the default.
-      return error("Current user is not elible for service #{@service_config['label']}") 
+    # If this service requires authentication, then also check that the user is eligible
+    if @service_config[:authenticate]
+      # - Lookup any FOLIO blocks (fines, recalls, etc.)
+      blocks = Folio::Client.get_blocks_by_uni(current_user.uid)
+      # - Lookup service-specific eligibility
+      service_eligibility = @service.patron_eligible?(current_user)
+      # - Either condition prohibits the user from using this request service
+      if blocks.present? or (service_eligibility == false)
+        # There may be a service-specific message or URL
+        return redirect_to(@service_config['ineligible_url']) if @service_config['ineligible_url']
+        return error(@service_config['ineligible_message']) if @service_config['ineligible_message']
+        # Otherwise, use the default.
+        return error("Current user is not elible for service #{@service_config['label']}") 
+      end
     end
 
     # validate bib record

@@ -10,7 +10,7 @@ RSpec.describe 'Item Feedback Service' do
   it 'item feedback form submission renders confirm and sends email' do
     user = FactoryBot.create(:happyuser)
     sign_in user
-    params = { id: '123', mfhd_id: 'cb165c46-2f02-5cb1-bd42-cda004865b51', feedback: 'other', note: 'testing' }
+    params = { id: '123', mfhd_id: 'f8e01ca3-5d38-5f6a-89d0-cbe4c4716e89', feedback: 'other', note: 'testing' }
     post item_feedback_index_path, params: params
 
     # confirm page
@@ -27,7 +27,7 @@ RSpec.describe 'Item Feedback Service' do
 
   it 'rejects item feedback requests for non-Voyager items' do
     sign_in FactoryBot.create(:happyuser)
-    get item_feedback_path('SCSB-9216314')
+    get item_feedback_path('SCSB-1978013')
     expect(response.body).to include('item is not owned by Columbia')
   end
 

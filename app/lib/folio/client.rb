@@ -79,21 +79,24 @@ module Folio
       Rails.logger.debug "- Folio::Client.get_user_barcode(uni=#{uni})"
       return nil unless uni.present?
       
-      path = '/users?query=(username=="' + uni + '")'
-      Rails.logger.debug "- Folio::Client.get_user_barcode() path=#{path}"
-
-      @folio_client ||= folio_client
-      folio_response = @folio_client.get(path)
-
-      first_user = folio_response["users"].first
-      Rails.logger.debug "- Folio::Client.get_user_barcode(#{uni}) first_user: #{first_user}"
+      folio_user = get_user_by_uni(uni)
+      return nil unless folio_user
+      
+      # path = '/users?query=(username=="' + uni + '")'
+      # Rails.logger.debug "- Folio::Client.get_user_barcode() path=#{path}"
+      #
+      # @folio_client ||= folio_client
+      # folio_response = @folio_client.get(path)
+      #
+      # first_user = folio_response["users"].first
+      # Rails.logger.debug "- Folio::Client.get_user_barcode(#{uni}) first_user: #{first_user}"
 
       # # barcode lookup should FAIL for inactive users?
       # Or, return whatever barcode we find, let later processes fail
       # active = first_user["active"]
       # return nil unless active
       
-      barcode = first_user["barcode"]
+      barcode = folio_user["barcode"]
       return barcode
 
     end
@@ -199,7 +202,53 @@ module Folio
       return folio_response
     end
 
+    def self.get_blocks_by_uni(uni)
+      return nil unless uni
+      
+      folio_user = get_user_by_uni(uni)
+      return nil unless folio_user
 
+      return get_blocks_by_user_id( folio_user["id"] )
+    end
+    
+
+    # FOLIO has two kinds of blocks - automated and manual
+    #  {{baseUrl}}/automated-patron-blocks/04354620-5852-54e7-93e5-67b8d374528c
+    #  {{baseUrl}}/manualblocks?limit=10000&query=(userId==74b140b4-636a-5476-8312-e0d1d4eaaad5)
+    # Fetch both, parse each appropriately, sort/uniq the list, return list of string messages
+    def self.get_blocks_by_user_id(user_id)
+      return nil unless user_id
+      
+      @folio_client ||= folio_client
+
+      all_blocks = []
+
+      # Automated
+      json_response = @folio_client.get("/automated-patron-blocks/#{user_id}")
+      automated_blocks = json_response["automatedPatronBlocks"]
+      automated_blocks.each do |block|
+        block_message = block["message"]
+        all_blocks << block_message unless all_blocks.include?(block_message)
+      end
+
+      # Manual
+      query = '(userId == ' + user_id + ')'
+      json_response = @folio_client.get("/manualblocks?query=#{query}&limit=500")
+      manual_blocks = json_response["manualblocks"]
+      manual_blocks.each do |block|
+        block_message = block["patronMessage"]
+        all_blocks << block_message unless all_blocks.include?(block_message)
+      end
+
+      return all_blocks
+    end
+    
+    
+    
+    
+    
+    
+    
 
     # This was built on RTAC
     # BUT -- Okapi single-item RTAC is DEPRECATED !!!
