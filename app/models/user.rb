@@ -243,7 +243,7 @@ class User < ApplicationRecord
         patron_groups.push(affilmatch[1])
       end
       # FOLIO - 
-      if affilmatch = affil.match(/LIB_clio-/)
+      if affilmatch = affil.match(/LIB_clio-([A-Za-z0-9]+)/)
         patron_groups.push(affilmatch[1])
       end
 
