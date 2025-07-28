@@ -145,7 +145,16 @@ class ReservesController < ApplicationController
       
       simple_reserves_item = {}
       
-      simple_reserves_item["title"]         = folio_reserves_item["copiedItem"]["title"]
+      # The FOLIO Reserves "copiedItem" title looks like:  Hamlet / Shakespeare
+      title, slash, author = folio_reserves_item["copiedItem"]["title"].rpartition(' / ')
+      if slash.present?
+        simple_reserves_item["title"]         = title
+        simple_reserves_item["author"]        = author
+      else
+        simple_reserves_item["title"]         = folio_reserves_item["copiedItem"]["title"]
+        simple_reserves_item["author"]        = ''
+      end
+      
       simple_reserves_item["call_number"]   = folio_reserves_item["copiedItem"]["callNumber"]
       simple_reserves_item["instance_hrid"] = folio_reserves_item["copiedItem"]["instanceHrid"]
       simple_reserves_item["uri"]           = folio_reserves_item["copiedItem"].fetch("uri", "")
