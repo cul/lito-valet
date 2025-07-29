@@ -5,6 +5,8 @@ class ReservesController < ApplicationController
 
   # Our index is a simple static course reserves search page
   def index
+    # Only CUL Staff can reach the top-level reserves search page
+    redirect_to root_path unless current_user && current_user.culstaff?
   end
 
   # Catch posted key/value query params, redirect as positional path params

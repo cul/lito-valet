@@ -364,11 +364,13 @@ class User < ApplicationRecord
 
   # A more complete way to manage access to any library staff
   def culstaff?
+    return true if self.has_affil('LIB_allstaff')
     return true if self.has_affil('CUL_allstaff')
     return true if self.has_affil('CUL_culis')
-    # Let our partners in BC and TC use staff-only features
+    # Let our partners in BC, TC, HSL, etc. use staff-only features
     return true if self.has_affil('CUL_bcpartners')
     return true if self.has_affil('CUL_tcpartners')
+    return true if self.has_affil('CUL_hslpartners')
     return false
   end
 
