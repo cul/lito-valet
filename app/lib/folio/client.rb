@@ -107,7 +107,7 @@ module Folio
       Rails.logger.debug "- Folio::Client.get_courses_list_by_course_number(course_number=#{course_number})"
       return nil unless course_number.present?
       
-      path = '/coursereserves/courses?limit=50&query=(courseNumber=="' + course_number + '")'
+      path = '/coursereserves/courses?limit=100&query=(courseNumber=="' + course_number + '")'
       Rails.logger.debug "- Folio::Client.get_courses_list_by_course_number() path=#{path}"
       
       @folio_client ||= folio_client
@@ -125,7 +125,7 @@ module Folio
       Rails.logger.debug "- Folio::Client.get_reserves_by_course_listing_id(course_listing_id=#{course_listing_id})"
       return nil unless course_listing_id.present?
       
-      path = '/coursereserves/courselistings/' + course_listing_id + '/reserves?limit=100'
+      path = '/coursereserves/courselistings/' + course_listing_id + '/reserves?limit=1000'
       Rails.logger.debug "- Folio::Client.get_reserves_by_course_listing_id() path=#{path}"
 
       @folio_client ||= folio_client
@@ -233,7 +233,7 @@ module Folio
 
       # Manual
       query = '(userId == ' + user_id + ')'
-      json_response = @folio_client.get("/manualblocks?query=#{query}&limit=500")
+      json_response = @folio_client.get("/manualblocks?query=#{query}&limit=1000")
       manual_blocks = json_response["manualblocks"]
       manual_blocks.each do |block|
         block_message = block["patronMessage"]
