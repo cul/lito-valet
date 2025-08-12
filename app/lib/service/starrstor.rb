@@ -1,10 +1,19 @@
 module Service
   class Starrstor < Service::Base
+
     # Is the current patron allowed to use the
     # Starrstor offsite request paging service?
-    def patron_eligible?(_current_user = nil)
-      # For now, any authenticated user may use Starrstor
-      true
+    def patron_eligible?(current_user = nil)
+      # # For now, any authenticated user may use Starrstor
+      # true
+      # NEXT-1973 - begin checking user affiliations
+      return false unless current_user && current_user.affils
+
+      permitted_affils = @service_config[:permitted_affils] || []
+      permitted_affils.each do |affil|
+        return true if current_user.affils.include?(affil)
+      end
+      return false
     end
 
     # May this bib be requested from Starrstor?
