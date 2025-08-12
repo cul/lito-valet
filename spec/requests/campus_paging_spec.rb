@@ -12,7 +12,7 @@ RSpec.describe 'Campus Paging' do
       'Form=20', 
       'ISSN=',
       'ItemInfo2=123456789',
-      'ItemInfo4=REG',
+      'ItemInfo4=Undergraduate',
       'ItemNumber=0109179160', 
       'LoanAuthor=Sokorski%2C+W%C5%82odzimierz',
       'LoanDate=1976.',

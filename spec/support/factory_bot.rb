@@ -13,7 +13,7 @@ FactoryBot.define do
     last_name  { 'Doe' }
     email { 'jdoe@columbia.edu' }
     barcode { '123456789' }
-    affils { ['CUL_role-clio-REG'] }
+    affils { ['LIB_clio-Undergraduate'] }
 
     # The same user - but now blocked
     factory :blockeduser do

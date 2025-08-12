@@ -2,7 +2,7 @@ RSpec.describe 'FLI Paging' do
 
   it 'redirects SAC patron to ezproxy/illiad' do
     user = FactoryBot.create(:happyuser)
-    user.affils = ['CUL_role-clio-SAC'] 
+    user.affils = ['LIB_clio-EnhancedUndergraduate'] 
     sign_in user
 
     get fli_paging_path('2049141')
@@ -15,7 +15,7 @@ RSpec.describe 'FLI Paging' do
       'Form=20',
       'ISSN=9780195089837',
       'ItemInfo2=123456789',
-      'ItemInfo4=SAC',
+      'ItemInfo4=EnhancedUndergraduate',
       'ItemNumber=',
       'LoanAuthor=Hartman%2C+Saidiya+V.',
       'LoanDate=1997.',
@@ -50,7 +50,7 @@ RSpec.describe 'FLI Paging' do
 
   it 'fails for non-FLI material' do
     user = FactoryBot.create(:happyuser)
-    user.affils = ['CUL_role-clio-SAC'] 
+    user.affils = ['LIB_clio-EnhancedUndergraduate'] 
     sign_in user
     get fli_paging_path('123')
     expect(response.body).to include('This record has no FLI Partnership holdings')
