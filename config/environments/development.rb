@@ -62,4 +62,10 @@ Rails.application.configure do
   # Whitelist alternate names for localhost development
   config.hosts << 'cliobeta.columbia.edu'
 
+  # I need timestamps on console logging during development
+  config.logger = ActiveSupport::Logger.new(STDOUT)
+  config.logger.formatter = proc do |severity, datetime, progname, msg|
+    "#{datetime.strftime('%Y-%m-%d %H:%M:%S')} #{severity} -- : #{msg}\n"
+  end
+
 end
