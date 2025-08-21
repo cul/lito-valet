@@ -21,6 +21,23 @@ module ReservesHelper
     link_to label, url, target: '_blank'
   end
   
+  def get_contributor(reserves_item)
+    return '' unless reserves_item.present?
+
+    item_author = reserves_item.fetch('author', '')
+    return item_author unless reserves_item.key?('instance_uuid')
+
+    instance = Folio::Client.get_instance_by_id(reserves_item['instance_uuid'])
+    return item_author unless instance.present? and instance.key?('contributors')
+
+    instance["contributors"].each do |contributor|
+      next unless contributor.key?('name') and contributor['name'].present?
+      return contributor["name"] if contributor["primary"] == true
+    end
+    
+    # No instance-level primary contributor?  Then return author from item-level data
+    return item_author
+  end
   
 end
 

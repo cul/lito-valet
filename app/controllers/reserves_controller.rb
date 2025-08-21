@@ -137,16 +137,16 @@ class ReservesController < ApplicationController
     simple_reserves_list = []
     
     folio_reserves_list.each do |folio_reserves_item|
-
+      
       # When there are multiple copies of a title in the catalog, 
       # FOLIO will return that item multiple times in the API response.
       # Don't re-add an item if we alredy have it.
-      next if simple_reserves_list.any? do |simple_reserves_item|  
+      next if simple_reserves_list.any? do |simple_reserves_item|
         simple_reserves_item["instance_hrid"] == folio_reserves_item["copiedItem"]["instanceHrid"]
       end
       
       simple_reserves_item = {}
-      
+
       # The FOLIO Reserves "copiedItem" title looks like:  Hamlet / Shakespeare
       title, slash, author = folio_reserves_item["copiedItem"]["title"].rpartition(' / ')
       if slash.present?
@@ -160,12 +160,41 @@ class ReservesController < ApplicationController
       simple_reserves_item["call_number"]   = folio_reserves_item["copiedItem"]["callNumber"]
       simple_reserves_item["instance_hrid"] = folio_reserves_item["copiedItem"]["instanceHrid"]
       simple_reserves_item["uri"]           = folio_reserves_item["copiedItem"].fetch("uri", "")
-      
+
+      # Reserves Staff want the Contributor from Inventory,
+      # instead of the author portion of the FOLIO Reserves "Item Title"
+
+      # Lookup by UUID or by HRID?  
+      # They both add SIGNIFICANT delay.  Defer contributor lookup until last possible moment.
+      # instance_id = folio_reserves_item["copiedItem"]["instanceId"]
+      # instance = Folio::Client.get_instance_by_id(instance_id)
+      # instance_hrid = folio_reserves_item["copiedItem"]["instanceHrid"]
+      # instance = Folio::Client.get_instance_by_hrid(instance_hrid)
+      # instance_contributors = format_instance_contributors(instance)
+      # if instance_contributors.present?
+      #   simple_reserves_item["author"] = instance_contributors
+      # end
+      # simple_reserves_item["instance_contributors"] = format_instance_contributors(instance)
+      # simple_reserves_item["instance_contributors"] = "none"
+
+      # Add the Instance UUID, so that we can lookup Instance Contributor later
+      simple_reserves_item["instance_uuid"] = folio_reserves_item["copiedItem"]["instanceId"]
+
       simple_reserves_list << simple_reserves_item
     end
     
     return simple_reserves_list
   end
   
+  # # Look over all the 'Contributors' to a FOLIO record,
+  # # come up with something useful for the reserves page.
+  # # Try this:  Just return the "name" field of the Primary contributor
+  # def format_instance_contributors(instance)
+  #   return '' unless instance.present?
+  #   instance["contributors"].each do |contributor|
+  #     return contributor["name"] if contributor["primary"] == true
+  #   end
+  #   return ""
+  # end
 
 end

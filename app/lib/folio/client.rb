@@ -122,11 +122,11 @@ module Folio
     # Given a course-listing-id (the FOLIO UUID of the course listing object),
     # Lookup the reserves by course-listing-id, return the FOLIO JSON reserves list
     def self.get_reserves_list_by_course_listing_id(course_listing_id)
-      Rails.logger.debug "- Folio::Client.get_reserves_by_course_listing_id(course_listing_id=#{course_listing_id})"
+      # Rails.logger.debug "- Folio::Client.get_reserves_list_by_course_listing_id(course_listing_id=#{course_listing_id})"
       return nil unless course_listing_id.present?
       
       path = '/coursereserves/courselistings/' + course_listing_id + '/reserves?limit=1000'
-      Rails.logger.debug "- Folio::Client.get_reserves_by_course_listing_id() path=#{path}"
+      Rails.logger.debug "- Folio::Client.get_reserves_list_by_course_listing_id() path=#{path}"
 
       @folio_client ||= folio_client
       folio_response = @folio_client.get(path)
@@ -157,6 +157,20 @@ module Folio
         return {}
       end
     end
+
+    # Retrieve a single FOLIO Instance JSON record by its UUID
+    #   {{baseUrl}}/inventory/instances/{id}
+    def self.get_instance_by_id(id)
+      path = "/inventory/instances/#{id}"
+      @folio_client ||= folio_client
+      folio_response = @folio_client.get(path)
+      if folio_response.present?
+        return folio_response
+      else
+        return {}
+      end
+    end
+
 
     # Retrieve a single FOLIO User JSON record for a given Columbia uni
     #   {{baseUrl}}/users?query=(username=="sam119" )&limit=1
@@ -243,6 +257,14 @@ module Folio
       return all_blocks
     end
     
+    
+    # # /contributor-types/{contributorTypeId}
+    # def self.get_contributor_type(contributor_type_id)
+    #   path = "/contributor-types/#{contributor_type_id}"
+    #   @folio_client ||= folio_client
+    #   folio_response = @folio_client.get(path)
+    #   return folio_response
+    # end
     
     
     
