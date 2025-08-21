@@ -23,20 +23,41 @@ module ReservesHelper
   
   def get_contributor(reserves_item)
     return '' unless reserves_item.present?
-
-    item_author = reserves_item.fetch('author', '')
-    return item_author unless reserves_item.key?('instance_uuid')
-
-    instance = Folio::Client.get_instance_by_id(reserves_item['instance_uuid'])
-    return item_author unless instance.present? and instance.key?('contributors')
-
-    instance["contributors"].each do |contributor|
-      next unless contributor.key?('name') and contributor['name'].present?
-      return contributor["name"] if contributor["primary"] == true
-    end
     
-    # No instance-level primary contributor?  Then return author from item-level data
+    # Reserves Contributors were copied over when the reserves item was created
+    contributors = reserves_item.fetch('contributors', '')
+    return contributors if contributors.present?
+
+    # But if no contributors were found, 
+    # use the part of the reserves item title after the slash
+    item_author = reserves_item.fetch('author', '')
     return item_author
+
+    # STOP HERE - We don't need instance-level data
+
+    # # Do we need to retrieve full instance details? 
+    # return item_author unless reserves_item.key?('instance_uuid')
+    # instance = Folio::Client.get_instance_by_id(reserves_item['instance_uuid'])
+    # return item_author unless instance.present? and instance.key?('contributors')
+    #
+    # # We will look for either a single primary contributor,
+    # # or - if none are primary - we will list all of them.
+    # primary_contributor = nil
+    # contributor_list = []
+    # instance["contributors"].each do |contributor|
+    #   next unless contributor.key?('name') and contributor['name'].present?
+    #
+    #   if contributor["primary"] == true
+    #     primary_contributor = contributor["name"]
+    #   else
+    #     contributor_list << contributor["name"]
+    #   end
+    # end
+    #
+    # return primary_contributor if primary_contributor.present?
+    # return contributor_list.join("; ") if contributor_list.length > 0
+    # # No instance-level contributor found?  Then return author from item-level data
+    # return item_author
   end
   
 end

@@ -156,10 +156,18 @@ class ReservesController < ApplicationController
         simple_reserves_item["title"]         = folio_reserves_item["copiedItem"]["title"]
         simple_reserves_item["author"]        = ''
       end
+
+      # The Contributors from the copied item is often more complete than 'author'
+      contributors_list = folio_reserves_item["copiedItem"].fetch("contributors", [])
+      simple_reserves_item["contributors"]    = format_contributors(contributors_list)
       
+      # Other fields needed to build the patron display
       simple_reserves_item["call_number"]   = folio_reserves_item["copiedItem"]["callNumber"]
-      simple_reserves_item["instance_hrid"] = folio_reserves_item["copiedItem"]["instanceHrid"]
       simple_reserves_item["uri"]           = folio_reserves_item["copiedItem"].fetch("uri", "")
+
+      # # Add the Instance IDs, in case we need to lookup complete instance-level details
+      # simple_reserves_item["instance_uuid"] = folio_reserves_item["copiedItem"]["instanceId"]
+      # simple_reserves_item["instance_hrid"] = folio_reserves_item["copiedItem"]["instanceHrid"]
 
       # Reserves Staff want the Contributor from Inventory,
       # instead of the author portion of the FOLIO Reserves "Item Title"
@@ -177,24 +185,39 @@ class ReservesController < ApplicationController
       # simple_reserves_item["instance_contributors"] = format_instance_contributors(instance)
       # simple_reserves_item["instance_contributors"] = "none"
 
-      # Add the Instance UUID, so that we can lookup Instance Contributor later
-      simple_reserves_item["instance_uuid"] = folio_reserves_item["copiedItem"]["instanceId"]
-
       simple_reserves_list << simple_reserves_item
     end
     
     return simple_reserves_list
   end
+
   
-  # # Look over all the 'Contributors' to a FOLIO record,
-  # # come up with something useful for the reserves page.
-  # # Try this:  Just return the "name" field of the Primary contributor
-  # def format_instance_contributors(instance)
-  #   return '' unless instance.present?
-  #   instance["contributors"].each do |contributor|
-  #     return contributor["name"] if contributor["primary"] == true
-  #   end
-  #   return ""
-  # end
+  def format_contributors(contributors_list)
+    return '' unless contributors_list.present? and contributors_list.length > 0
+
+    # We will look for either a single primary contributor,
+    # or - if none are primary - we will list all of them. 
+    primary_contributor = nil
+    contributor_list = []
+    contributors_list.each do |contributor|
+      next unless contributor.key?('name') and contributor['name'].present?
+
+      if contributor.fetch('primary', false) == true
+        primary_contributor = contributor["name"] 
+      else
+        contributor_list << contributor["name"] 
+      end
+    end
+    
+    return primary_contributor if primary_contributor.present?
+    return contributor_list.join("; ") if contributor_list.length > 0
+
+    # No contributor found?
+    return ''
+  end
+
+
 
 end
+
+
