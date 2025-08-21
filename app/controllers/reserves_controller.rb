@@ -165,9 +165,9 @@ class ReservesController < ApplicationController
       simple_reserves_item["call_number"]   = folio_reserves_item["copiedItem"]["callNumber"]
       simple_reserves_item["uri"]           = folio_reserves_item["copiedItem"].fetch("uri", "")
 
-      # # Add the Instance IDs, in case we need to lookup complete instance-level details
+      # Add the Instance IDs
       # simple_reserves_item["instance_uuid"] = folio_reserves_item["copiedItem"]["instanceId"]
-      # simple_reserves_item["instance_hrid"] = folio_reserves_item["copiedItem"]["instanceHrid"]
+      simple_reserves_item["instance_hrid"] = folio_reserves_item["copiedItem"]["instanceHrid"]
 
       # Reserves Staff want the Contributor from Inventory,
       # instead of the author portion of the FOLIO Reserves "Item Title"
