@@ -270,7 +270,8 @@ class ClioRecord
     @marc_record.fields('856').each do |field|
       url   = field['u']
       # has to look like a finding aid...
-      next unless url.match(/findingaids.library/)
+      next unless url.match(/findingaids.library.columbia.edu/) or 
+                  url.match(/findingaids.cul.columbia.edu/)
       # cannot be a downloadable document...
       next if url.match(/(pdf|doc|htm|html)$/)
       return url

@@ -1,0 +1,50 @@
+
+<!-- views/forms/special_collections.html.erb -->
+
+<h4>Special Collections Request</h4>
+
+<%= form_with url: special_collections_path do |form| %>
+
+  <!-- what we'll need to make the request -->
+  <%= form.hidden_field(:id, value: bib_record.id) %>
+
+  <!-- display basic bib data -->
+  <%= render 'bib', bib_record: bib_record %>
+
+  <br>
+  
+  <p>
+    Select the part or volume to request. 
+    <br>
+    If additional parts or volumes are needed submit additional requests.
+  </p>
+
+  
+
+  <table class='valet_request table-hover'>
+  <thead>
+    <th class="text-center">container</th>
+    <th class="text-center">barcode</th>
+  </th>
+
+  <% container_list.each do |container| %>
+    <tr>
+      <td>
+        <% # raise %>
+        <%  radio_button_id = "item_id_#{container[:item_id]}" %>
+        <%= form.radio_button(:item_id, container[:item_id], id: radio_button_id, checked: false) %>
+        <%= label_tag(radio_button_id, container[:label]) %>
+       </td>
+      <td>
+        <%= container[:barcode] %>
+      </td>
+    <tr>
+  <% end %>
+
+  </table>
+
+  <br>
+  
+  <%= form.submit('Submit Request') %>
+
+<% end %>
