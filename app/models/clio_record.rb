@@ -606,6 +606,80 @@ class ClioRecord
 
     return false
   end
+
+  # ---------------------------
+  # Special Collections Support
+  # ---------------------------
+
+  def get_aeon_dates_from_bib()
+    field_008 = @marc_record['008']
+    return nil unless field_008
+
+    data       = field_008.value
+    start_year = data[7, 4]
+    end_year   = data[11, 4]
+
+    return nil unless start_year && start_year.match?(/[0-9u]{4}/)
+
+    return start_year unless end_year && end_year.match?(/[0-9u]{4}/) && end_year != '9999'
+
+    "#{start_year} #{end_year}"
+  end    
+
+
+  # 506 - Restrictions on Access Note
+  def get_aeon_access_restrictions_from_bib()
+    return '' unless @marc_record && @marc_record['506']
+    subfieldA = @marc_record['506']['a'] || ''
+
+    @marc_record.fields('506').each do |field|
+      next unless (restriction = field['a'])
+      return 'UNPROCESSED' if restriction.match?(/unprocessed/i)
+    end
+  end    
+
+  def get_aeon_format_from_bib()
+    leader_code = @marc_record.leader[6, 2]
+
+    format_category, position_008 = 
+      case leader_code
+        when /a[macd]/  then ["Book", 23]
+        when /a[sib]/   then ["Continuing Resource", 23]
+        when /^[ht]/    then ["Book", 23]
+        when /^m/       then ["Computer File", 23]
+        when /^[gkor]/  then ["Visual Material", 29]
+        when /^[cd]/    then ["Score", 23]
+        when /^[ij]/    then ["Recording", 23]
+        when /^[ef]/    then ["Map", 29]
+        when /^[bp]/    then ["Mixed", 23]
+        else [nil, nil]
+       end
+
+    return format_category unless position_008 && (field_008 = @marc_record['008'])
+
+    code = field_008.value[position_008]
+    format_code = FORMAT_008_CODES[code]
+
+    if format_code
+      "#{format_category}; #{format_code}"
+    else
+      format_category
+    end
+  end
+
+  FORMAT_008_CODES = {
+    'a' => "Microfilm",
+    'b' => "Microfiche",
+    'c' => "Microopaque",
+    'd' => "Large print",
+    'f' => "Braille",
+    'o' => "Online",
+    'q' => "Direct electronic",
+    'r' => "Print reproduction",
+    's' => "Electronic"
+  }.freeze
+  
+  
   
 end
 

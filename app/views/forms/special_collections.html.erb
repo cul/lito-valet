@@ -31,8 +31,8 @@
     <tr>
       <td>
         <% # raise %>
-        <%  radio_button_id = "item_id_#{container[:item_id]}" %>
-        <%= form.radio_button(:item_id, container[:item_id], id: radio_button_id, checked: false) %>
+        <%  radio_button_id = "container_id_#{container[:container_id]}" %>
+        <%= form.radio_button(:container_id, container[:container_id], id: radio_button_id, checked: false) %>
         <%= label_tag(radio_button_id, container[:label]) %>
        </td>
       <td>
