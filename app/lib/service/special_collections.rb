@@ -115,11 +115,13 @@ module Service
         # (and container_id will the Holding UUID)
         if holding[:items].blank? or request_entire_holding
           container = {}
+          # container id, display label
           container[:container_id]      = holding[:mfhd_id]
+          container[:label]             = holding[:display_call_number]
+          # holding details
           container[:location_code]     = holding[:location_code]
           container[:site]              = sites_hash[ holding[:location_code] ]
           container[:call_number]       = holding[:display_call_number]
-          container[:label]             = holding[:display_call_number]
           container_list << container
           
         # HOLDINGS WITH ITEMS - EACH ITEM IS A CONTAINER
@@ -128,14 +130,16 @@ module Service
         else
           holding[:items].each do |item|
             container = {}
+            # container id, display label
+            container[:container_id]    = item[:item_id]
+            container[:label] = [ holding[:display_call_number], item[:enum_chron] ].join(' ')
             # holding details
             container[:location_code]   = holding[:location_code]
+            container[:site]            = sites_hash[ holding[:location_code] ]
             container[:call_number]     = holding[:display_call_number]
             # item details
-            container[:container_id]    = item[:item_id]
             container[:enum_chron]      = item[:enum_chron]
             container[:barcode]         = item[:barcode]
-            container[:label] = [ holding[:display_call_number], item[:enum_chron] ].join(' ')
             container_list << container
           end
         end
