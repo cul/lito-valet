@@ -678,7 +678,25 @@ class ClioRecord
     'r' => "Print reproduction",
     's' => "Electronic"
   }.freeze
-  
+
+  # Untested code.  I asked for an example bib to test this,  
+  # and was told that support for this field was unnecessary.  
+  #
+  # def get_aeon_series_from_bib()
+  #   # Try 490$a first
+  #   if (field = @marc_record['490']) && (subfield_a = field['a'])
+  #     return subfield_a
+  #   end
+  #
+  #   # Fallback to 800, 810, 811, 830
+  #   %w[800 810 811 830].each do |tag|
+  #     if (field = @marc_record[tag])
+  #       return field.as_string('abcdenpqtv')
+  #     end
+  #   end
+  #
+  #   nil
+  # end
   
   
 end
