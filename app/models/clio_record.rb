@@ -405,6 +405,9 @@ class ClioRecord
     if is_offsite_location_code?(holding[:location_code])
       self.fetch_scsb_availabilty unless @scsb_availability
       return @scsb_availability[ item[:barcode] ] if @scsb_availability.has_key?(item[:barcode])
+      # No SCSB availability for an offsite item?  
+      # Something's wrong - either not yet accessioned at ReCAP or another problem.
+      return ''
     end
 
     # fetch FOLIO availability for all holdings/items of this bib...
