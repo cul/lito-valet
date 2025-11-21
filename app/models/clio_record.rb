@@ -352,6 +352,7 @@ class ClioRecord
         use_restriction:    item_field['h'],
         temporary_location: item_field['l'],
         barcode:            item_field['p'],
+        blind_barcode:      item_field['x'],
         enum_chron:         item_field['3']
         # customer_code:      item_field['z']
       }
