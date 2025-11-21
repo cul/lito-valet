@@ -358,6 +358,10 @@ class ClioRecord
       }
       # Store this item hash in the apppropriate Holding
       mfhd_id = item_field['0']
+
+      # should not happen - but just in case...
+      next unless holdings.key?(mfhd_id)
+
       holdings[mfhd_id][:items] << item
       # Assume a single customer code per holding.
       if item_field['z'].present?
