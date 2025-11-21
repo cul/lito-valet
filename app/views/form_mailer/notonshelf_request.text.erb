@@ -1,0 +1,20 @@
+
+-------
+Item Not on Shelf -- Search Request
+-------
+
+SEARCH REQUEST sent to: <%= @params[:staff_email] %>
+
+AUTHOR: <%= @params[:bib_record].author %>
+TITLE: <%= @params[:bib_record].title %>
+BIBID: <%= @params[:bib_record].id %>
+OPAC-URL: https://clio.columbia.edu/<%= @params[:bib_record].id %>
+LOCATION: <%= @params[:location_display] %>
+LOCATION CODE: <%= @params[:location_code] %>
+CALL NO: <%= @params[:bib_record].call_number %>
+NOTE: <%= @params[:note] %>
+PATRON UNI: <%= @params[:patron_uni] %>
+PATRON EMAIL: <%= @params[:patron_email] %>
+
+
+

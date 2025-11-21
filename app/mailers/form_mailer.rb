@@ -146,6 +146,21 @@ class FormMailer < ApplicationMailer
     mail(to: to, from: from, subject: subject)
   end
 
+  ###
+  ### NOT-ON-SHELF - staff request email
+  ###
+
+  # Email request to both staff and patron
+  def notonshelf_request
+    @params = params
+    to      = params[:staff_email]
+    from    = "Barnard Remote Request Service <#{params[:staff_email]}>"
+    title   = params[:bib_record].title
+    timestamp = Time.now.strftime("%Y-%m-%d-%H.%M.%S")
+    subject = "Search_Request:#{timestamp}"
+    mail(to: to, from: from, subject: subject)
+  end
+
 end
 
 

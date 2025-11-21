@@ -1,0 +1,66 @@
+
+<!-- views/forms/notonshelf.html.erb -->
+
+<h4>Item Not On Shelf? Submit a Search Request</h4>
+
+<%= form_with url: notonshelf_index_path do |form| %>
+
+  <!-- what we'll need to make the request -->
+  <%= form.hidden_field(:id, value: bib_record.id) %>
+
+  <!-- display basic bib data -->
+  <%= render 'bib', bib_record: bib_record %>
+
+  <br>
+  
+  <% if bib_record.holdings.size > 1 %>
+    <div class='instructional_title'>
+      Select a Copy:
+    </div>
+
+    <% # tracking hash to skip over redundant holdings %>
+    <% already_seen = {} %>
+
+    <% holdings.each do |holding| %>
+      <% radio_button_id = "mfhd_id_#{holding[:mfhd_id]}" %>
+      <% radio_button_label = holding[:location_display] + " - " + holding[:display_call_number]%>
+
+      <% # tracking hash to skip over redundant holdings %>
+      <% next if already_seen[radio_button_label]%>
+      <% already_seen[radio_button_label] = true%>
+
+      <%= form.radio_button(:mfhd_id, holding[:mfhd_id], id: radio_button_id) %>
+      <%= label_tag(radio_button_id, radio_button_label) %>
+      <br>
+    <% end %>
+  <% end %>
+
+  <br>
+
+  <!-- what to collect from the patron -->
+  <div class='instructional_title'>
+    Volume/Issue or Note:
+  </div>
+  <%= text_area_tag(:note, '', rows: '3', class: 'form-control', disabled: false) %>
+  
+  <br>
+  
+  <%= form.submit('Submit') %>
+
+<% end %>
+
+
+<br> 
+
+<ul>
+<li>Requests submitted by 5pm will be responded to no later than 5pm the next business day (Monday-Friday)
+</li>
+<li>An email notification will be sent to: <strong><%= current_user.email %></strong> whether the item is found or not.
+</li>
+<li>The Libraries reserve the right to limit the number of requests per day that will be filled for a person, depending on the number of overall requests received and available staff.
+</li>
+</ul>
+If you have questions about your request, please call or email the library to which the request was submitted.
+
+
+

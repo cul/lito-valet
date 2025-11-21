@@ -1,0 +1,41 @@
+
+<!-- views/forms/notonshelf_confirm.html.erb -->
+
+<h4>Item Not On Shelf? Submit a Search Request</h4>
+
+<br>
+A search request for the following item has been submitted to 
+<strong><%= staff_email %></strong>. 
+
+
+<br>
+<br>
+<strong>
+AUTHOR: <%= bib_record.author %>
+<br>
+TITLE: <%= bib_record.title %>
+<br>
+BIBID: <%= bib_record.id %>
+<br>
+OPAC-URL: https://clio.columbia.edu/<%= bib_record.id %>
+<br>
+LOCATION: <%= location_display %>
+<br>
+LOCATION CODE: <%= location_code %>
+<br>
+CALL NO: <%= bib_record.call_number %>
+<br>
+NOTE: <%= note %>
+</strong>
+
+
+
+<br>
+<br>
+<br>
+You can now close this browser window.
+<br>
+<br>
+<div id='close_popup_button'></div>
+<%= javascript_tag 'close_popup_button();' %>
+
