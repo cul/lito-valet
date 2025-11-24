@@ -37,6 +37,11 @@ module Service
 
       # which holding (location) has the missing book?
       holding = bib_record.holdings.select { |h| h[:mfhd_id] == params['mfhd_id'] }.first
+      
+      # fetch the staff alias specific to the location  
+      staff_email = get_email_alias_for_location( holding[:location_code])
+      # BUT - don't send to actual staff when we're not in production
+      staff_email = 'noreply@libraries.cul.columbia.edu' if Rails.env != 'valet_prod'
 
       confirm_locals = {
         bib_record: bib_record,
