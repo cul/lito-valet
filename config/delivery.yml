@@ -80,8 +80,9 @@ scsbpul:
 
 off,ave:
   default:  AR
-  available:
-    -  AR
+  # LIBSYS-8004 - use standard delivery locations for off,fax and off,ave 
+  # available:
+  #   -  AR
 
 off,bio:
   default:  CA
@@ -129,8 +130,9 @@ off,eng:
 
 off,fax:
   default:  AR
-  available:
-    -  AR
+  # LIBSYS-8004 - use standard delivery locations for off,fax and off,ave 
+  # available:
+  #   -  AR
 
 off,glg:
   default:  CA
