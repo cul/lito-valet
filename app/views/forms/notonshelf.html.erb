@@ -29,7 +29,7 @@
 
     <% holdings.each do |holding| %>
       <% radio_button_id = "mfhd_id_#{holding[:mfhd_id]}" %>
-      <% radio_button_label = holding[:location_display] + " - " + holding[:display_call_number]%>
+      <% radio_button_label = holding[:location_display].to_s + " - " + holding[:display_call_number].to_s %>
 
       <% # tracking hash to skip over redundant holdings %>
       <% next if already_seen[radio_button_label]%>
