@@ -12,7 +12,13 @@
   <%= render 'bib', bib_record: bib_record %>
 
   <br>
+
+  <!-- single holding?  put holding id in a hidden field -->
+  <% if bib_record.holdings.size == 1 %>
+    <%= form.hidden_field(:mfhd_id, value: holdings[0][:mfhd_id]) %>
+  <% end %>
   
+  <!-- multiple holdings?  user selects which holding id -->
   <% if bib_record.holdings.size > 1 %>
     <div class='instructional_title'>
       Select a Copy:
@@ -45,7 +51,7 @@
   
   <br>
   
-  <%= form.submit('Submit') %>
+  <%= form.submit('Submit Search Request', onclick: 'return validateNotonshelfForm()') %>
 
 <% end %>
 

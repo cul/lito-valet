@@ -12,50 +12,43 @@ module Service
       locals
     end
 
-    # params looks like this:
-    # {"id"=>"5685777", "mfhd_id"=>"88596060-5a76-5255-9999-0ff9b88aa112", "note"=>"test"}
+    # The staff request email and the user confirmation page need
+    # exactly the same set of parameters
     def send_emails(params, bib_record, current_user)
-      
-      # which holding (location) has the missing book?
-      holding = bib_record.holdings.select { |h| h[:mfhd_id] == params['mfhd_id'] }.first
-      
-      mail_params = {
-        bib_record: bib_record,
-        patron_uni: current_user.uid,
-        patron_email: current_user.email,
-        location_display: holding[:location_display],
-        location_code: holding[:location_code],
-        staff_email: get_email_alias_for_location( holding[:location_code] ),
-        note: params['note']
-      }
-      # mail request to staff_email:
-      FormMailer.with(mail_params).notonshelf_request.deliver_now
+      not_on_shelf_params = build_not_on_shelf_params(params, bib_record, current_user)
+      FormMailer.with(not_on_shelf_params).notonshelf_request.deliver_now
     end
 
-    # The confirmation web page shows the same data as the email?
     def get_confirmation_locals(params, bib_record, current_user)
-
-      # which holding (location) has the missing book?
-      holding = bib_record.holdings.select { |h| h[:mfhd_id] == params['mfhd_id'] }.first
-      
-      # fetch the staff alias specific to the location  
-      staff_email = get_email_alias_for_location( holding[:location_code])
-      # BUT - don't send to actual staff when we're not in production
-      staff_email = 'noreply@libraries.cul.columbia.edu' if Rails.env != 'valet_prod'
-
-      confirm_locals = {
-        bib_record: bib_record,
-        patron_uni: current_user.uid,
-        patron_email: current_user.email,
-        location_display: holding[:location_display],
-        location_code: holding[:location_code],
-        staff_email: get_email_alias_for_location( holding[:location_code] ),
-        note: params['note']
-      }
-      confirm_locals
+      not_on_shelf_params = build_not_on_shelf_params(params, bib_record, current_user)
+      return not_on_shelf_params
     end
 
+    private
+    
+    # form params looks like this:
+    # {"id"=>"5685777", "mfhd_id"=>"88596060-5a76-5255-9999-0ff9b88aa112", "note"=>"test"}
+    # params for the request email and the confirm page need more fields:
+    def build_not_on_shelf_params(params, bib_record, current_user)
+      # find the specific holding record
+      holding = bib_record.holdings.find { |h| h[:mfhd_id] == params['mfhd_id'] }
 
+      # fetch staff email for location
+      staff_email = get_email_alias_for_location(holding[:location_code])
+
+      # override in non-production
+      staff_email = 'noreply@libraries.cul.columbia.edu' unless Rails.env == 'valet_prod'
+      
+      {
+        bib_record:        bib_record,
+        patron_uni:        current_user.uid,
+        patron_email:      current_user.email,
+        location_display:  holding[:location_display],
+        location_code:     holding[:location_code],
+        staff_email:       staff_email,
+        note:              params['note']
+      }
+    end
 
     def get_email_alias_for_location(location_code)
       rules = {

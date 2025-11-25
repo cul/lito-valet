@@ -24,8 +24,11 @@ LOCATION: <%= location_display %>
 LOCATION CODE: <%= location_code %>
 <br>
 CALL NO: <%= bib_record.call_number %>
+<% if note.present? %>
 <br>
-NOTE: <%= note %>
+NOTE: 
+<pre><%= note %></pre>
+<% end %>
 </strong>
 
 
