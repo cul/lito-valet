@@ -32,6 +32,14 @@ module Service
     def build_not_on_shelf_params(params, bib_record, current_user)
       # find the specific holding record
       holding = bib_record.holdings.find { |h| h[:mfhd_id] == params['mfhd_id'] }
+      
+      # for bibs without holdings, we still want to support a NOS request 
+      if holding.blank?
+        holding = {
+          location_display: '',
+          location_code: ''
+        }
+      end
 
       # fetch staff email for location
       staff_email = get_email_alias_for_location(holding[:location_code])
