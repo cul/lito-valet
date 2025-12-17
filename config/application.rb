@@ -8,12 +8,6 @@ Bundler.require(*Rails.groups)
 
 VALET_VERSION = IO.read('VERSION').strip
 
-class CustomFormatter < Logger::Formatter
-  def call(severity, timestamp, _progname, msg)
-    "#{timestamp.to_formatted_s(:db)} [#{severity}] #{String(msg).strip}\n"
-  end
-end
-
 module Valet
   class Application < Rails::Application
     # Initialize configuration defaults for originally generated Rails version.
@@ -35,14 +29,5 @@ module Valet
     # set ActiveRecord timestamps (e.g., 'created_at') to local time 
     config.time_zone = 'Eastern Time (US & Canada)'
     config.active_record.default_timezone = :local # Or :utc
- 
-    # use the custom log formatter class defined above
-    config.log_formatter = CustomFormatter.new
-
-    # create a new logger object using our custom logger
-    logger = ActiveSupport::Logger.new(STDOUT)
-    logger.formatter = config.log_formatter
-    config.logger = ActiveSupport::TaggedLogging.new(logger)
-
   end
 end
