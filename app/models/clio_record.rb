@@ -96,8 +96,8 @@ class ClioRecord
     end
   end
 
-  def voyager?
-    owningInstitution == 'CUL' && id.match(/^\d+$/)
+  def folio?
+    owningInstitution == 'CUL' && ( id.match(/^\d+$/) || id.match(/^in/) )
   end
 
   def title

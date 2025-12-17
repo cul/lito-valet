@@ -9,8 +9,8 @@ module Service
     }
 
     def bib_eligible?(bib_record = nil)
-      # Item Feedback is only mean for CUL-owned items cataloged in Voyager
-      return true if bib_record.voyager?
+      # Item Feedback is only mean for CUL-owned items cataloged in FOLIO
+      return true if bib_record.folio?
 
       self.error = 'This item is not owned by Columbia Libraries.
         <br><br>  Please
