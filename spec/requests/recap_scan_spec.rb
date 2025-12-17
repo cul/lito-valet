@@ -25,7 +25,7 @@ RSpec.describe 'ReCAP Scan' do
   it 'non-offsite bib gives error message' do
     sign_in FactoryBot.create(:happyuser)
     get recap_scan_path('123', '144')
-    expect(response.body).to include( 'Bib ID 123 is not eligble for service Offsite Scan' )
+    expect(response.body).to include( 'Bib ID 123 is not eligible for service Offsite Scan' )
   end
   
   it 'redirects blocked patron to failure page' do

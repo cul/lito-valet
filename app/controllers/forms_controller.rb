@@ -50,7 +50,7 @@ class FormsController < ApplicationController
       bib_record = ClioRecord.new_from_bib_id(bib_id)
       if not @service_config['bib_optional']
         return error("Cannot find bib record for id #{bib_id}") if bib_record.blank?
-        return error("Bib ID #{bib_id} is not eligble for service #{@service_config['label']}") unless @service.bib_eligible?(bib_record)
+        return error("Bib ID #{bib_id} is not eligible for service #{@service_config['label']}") unless @service.bib_eligible?(bib_record)
       end
     end
         
