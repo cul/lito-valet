@@ -26,6 +26,7 @@ class FormsController < ApplicationController
       blocks = Folio::Client.get_blocks_by_uni(current_user.uid)
       # - Lookup service-specific eligibility
       service_eligibility = @service.patron_eligible?(current_user)
+
       # - Either condition prohibits the user from using this request service
       if blocks.present? or (service_eligibility == false)
         # There may be a service-specific message or URL
@@ -112,6 +113,7 @@ class FormsController < ApplicationController
 
   # called in before_action
   def initialize_service
+    Rails.logger.debug("begin initialize_service()")
     service_name = determine_service
     return error('Unable to determine service!') unless service_name
     load_service_config(service_name)
@@ -124,6 +126,7 @@ class FormsController < ApplicationController
 
     authenticate_user! if @service_config[:authenticate]
     instantiate_service_object(service_name)
+    Rails.logger.debug("complete initialize_service()")
   end
 
   # Original path is something like:  /docdel/123
