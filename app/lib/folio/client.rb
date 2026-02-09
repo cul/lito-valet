@@ -94,7 +94,7 @@ module Folio
       # active = first_user["active"]
       # return nil unless active
 
-      barcode = folio_user["barcode"]
+      barcode = folio_user['barcode']
       return barcode
     end
 
@@ -110,7 +110,7 @@ module Folio
       @folio_client ||= folio_client
       folio_response = @folio_client.get(path)
 
-      courses_list = folio_response["courses"]
+      courses_list = folio_response['courses']
 
       return courses_list
     end
@@ -127,7 +127,7 @@ module Folio
       @folio_client ||= folio_client
       folio_response = @folio_client.get(path)
 
-      reserves_list = folio_response["reserves"]
+      reserves_list = folio_response['reserves']
 
       return reserves_list
     end
@@ -191,12 +191,12 @@ module Folio
       error_message = nil
 
       begin
-        folio_response = @folio_client.post("/circulation/requests", recall_params)
+        folio_response = @folio_client.post('/circulation/requests', recall_params)
       rescue FolioClient::ValidationError => ex
         message = ex.message.sub(/There was a validation problem with the request: /, '')
         json = JSON.parse(message)
-        if json and json["errors"]
-          error_message = json["errors"].first["message"]
+        if json and json['errors']
+          error_message = json['errors'].first['message']
         else
           error_message = ex.message
         end
@@ -217,7 +217,7 @@ module Folio
       folio_user = get_user_by_uni(uni)
       return nil unless folio_user
 
-      return get_blocks_by_user_id(folio_user["id"])
+      return get_blocks_by_user_id(folio_user['id'])
     end
 
     # FOLIO has two kinds of blocks - automated and manual
@@ -233,18 +233,18 @@ module Folio
 
       # Automated
       json_response = @folio_client.get("/automated-patron-blocks/#{user_id}")
-      automated_blocks = json_response["automatedPatronBlocks"]
+      automated_blocks = json_response['automatedPatronBlocks']
       automated_blocks.each do |block|
-        block_message = block["message"]
+        block_message = block['message']
         all_blocks << block_message unless all_blocks.include?(block_message)
       end
 
       # Manual
       query = '(userId == ' + user_id + ')'
       json_response = @folio_client.get("/manualblocks?query=#{query}&limit=1000")
-      manual_blocks = json_response["manualblocks"]
+      manual_blocks = json_response['manualblocks']
       manual_blocks.each do |block|
-        block_message = block["patronMessage"]
+        block_message = block['patronMessage']
         all_blocks << block_message unless all_blocks.include?(block_message)
       end
 

@@ -199,7 +199,7 @@ class User < ApplicationRecord
     Array(attribute_list).each do |attribute|
       value_list = @ldap_attributes[attribute]
       Array(value_list).each do |value|
-        return value unless value.blank?
+        return value if value.present?
       end
     end
     # fallback, return an empty string value

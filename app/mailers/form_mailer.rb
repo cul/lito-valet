@@ -36,7 +36,7 @@ class FormMailer < ApplicationMailer
     @params = params
     to      = params[:staff_email]
     # from    = "Starr Remote Request Service <#{params[:staff_email]}>"
-    from = "Starr Remote Request Service <starrstor@library.columbia.edu>"
+    from = 'Starr Remote Request Service <starrstor@library.columbia.edu>'
     title   = params[:bib_record].title
     subject = "New StarrStor request [#{title}]"
     mail(to: to, from: from, subject: subject)
@@ -46,7 +46,7 @@ class FormMailer < ApplicationMailer
   def starrstor_confirm
     to = params[:patron_email]
     # from = "Starr Remote Request Service <#{params[:staff_email]}>"
-    from = "Starr Remote Request Service <starrstor@library.columbia.edu>"
+    from = 'Starr Remote Request Service <starrstor@library.columbia.edu>'
     title = params[:bib_record].title
     subject = "StarrStor Request Confirmation [#{title}]"
     mail(to: to, from: from, subject: subject)
@@ -153,7 +153,7 @@ class FormMailer < ApplicationMailer
 
     from    = "Circulation <#{params[:staff_email]}>"
     title   = params[:bib_record].title
-    timestamp = Time.now.strftime("%Y-%m-%d %H:%M:%S")
+    timestamp = Time.now.strftime('%Y-%m-%d %H:%M:%S')
     subject = "Search_Request: #{timestamp}"
     mail(to: to, from: from, subject: subject)
   end

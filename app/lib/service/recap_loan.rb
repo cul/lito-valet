@@ -16,7 +16,7 @@ module Service
       bib_record.offsite_holdings.size > 0
     end
 
-    def get_form_name(params, bib_record, current_user)
+    def get_form_name(params, bib_record, _current_user)
       # We need to know the holding id to build the default form
       default_form_name = @service_config[:service_name]
 
@@ -33,7 +33,7 @@ module Service
 
     # this method needs to setup form locals for
     # EITHER holdings-selection form OR item-selection form
-    def setup_form_locals(params, bib_record, current_user)
+    def setup_form_locals(params, bib_record, _current_user)
       # identify the target holding for item-selection form
       # (or leave nil for holding-selection form)
       target_holding = nil
@@ -96,7 +96,7 @@ module Service
       extra_log_params
     end
 
-    def send_emails(params, bib_record, current_user)
+    def send_emails(params, _bib_record, _current_user)
       # Call recap_loan() method of /app/mailers/form_mailer.rb
       # Pass along all our params to be used in email subject and body template
       FormMailer.with(params).recap_loan_confirm.deliver_now
@@ -104,7 +104,7 @@ module Service
 
     # The ReCAP services will give the patrons a confirmation screen,
     # so they need to define a locals hash for the template
-    def get_confirmation_locals(params, bib_record, current_user)
+    def get_confirmation_locals(params, _bib_record, _current_user)
       confirm_locals = {
         params: params
         # bib_record: bib_record,

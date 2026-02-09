@@ -42,7 +42,7 @@ class ReservesController < ApplicationController
     # If the course-number lookup for no matching course,
     # return to the index page
     if folio_courses_list.size == 0
-      error_message = "No courses found matching: " + @course_number
+      error_message = 'No courses found matching: ' + @course_number
       redirect_to reserves_path, error: error_message
       return
     end
@@ -63,7 +63,7 @@ class ReservesController < ApplicationController
     @course = @simple_courses_list.first
     # If only a single FOLIO course was returned matching the submitted course number,
     # lookup the reserves for that course.
-    course_listing_id = @course["course_listing_id"]
+    course_listing_id = @course['course_listing_id']
     folio_reserves_list = Folio::Client.get_reserves_list_by_course_listing_id(course_listing_id)
 
     # Simlify the complex FOLIO JSON response object into a simple list of elements for display
@@ -99,18 +99,18 @@ class ReservesController < ApplicationController
 
     folio_courses_list.each do |folio_course|
       # Clean up complex FOLIO data as needed
-      instructor_names = parse_folio_instructor_objects(folio_course["courseListingObject"]["instructorObjects"])
+      instructor_names = parse_folio_instructor_objects(folio_course['courseListingObject']['instructorObjects'])
       # FOLIO reserves lists include multiple copies - we need to consolidate
-      folio_reserves_list = Folio::Client.get_reserves_list_by_course_listing_id(folio_course["courseListingId"])
+      folio_reserves_list = Folio::Client.get_reserves_list_by_course_listing_id(folio_course['courseListingId'])
       reserves_count = parse_folio_reserves_list(folio_reserves_list).size
 
       simple_course = {}
 
-      simple_course["name"]               = folio_course["name"]
-      simple_course["instructor"]         = instructor_names
-      simple_course["course_number"]      = folio_course["courseNumber"]
-      simple_course["course_listing_id"]  = folio_course["courseListingId"]
-      simple_course["reserves_count"]     = reserves_count
+      simple_course['name']               = folio_course['name']
+      simple_course['instructor']         = instructor_names
+      simple_course['course_number']      = folio_course['courseNumber']
+      simple_course['course_listing_id']  = folio_course['courseListingId']
+      simple_course['reserves_count']     = reserves_count
 
       simple_courses_list << simple_course
     end
@@ -137,32 +137,32 @@ class ReservesController < ApplicationController
       # FOLIO will return that item multiple times in the API response.
       # Don't re-add an item if we alredy have it.
       next if simple_reserves_list.any? do |simple_reserves_item|
-        simple_reserves_item["instance_hrid"] == folio_reserves_item["copiedItem"]["instanceHrid"]
+        simple_reserves_item['instance_hrid'] == folio_reserves_item['copiedItem']['instanceHrid']
       end
 
       simple_reserves_item = {}
 
       # The FOLIO Reserves "copiedItem" title looks like:  Hamlet / Shakespeare
-      title, slash, author = folio_reserves_item["copiedItem"]["title"].rpartition(' / ')
+      title, slash, author = folio_reserves_item['copiedItem']['title'].rpartition(' / ')
       if slash.present?
-        simple_reserves_item["title"]         = title
-        simple_reserves_item["author"]        = author
+        simple_reserves_item['title']         = title
+        simple_reserves_item['author']        = author
       else
-        simple_reserves_item["title"]         = folio_reserves_item["copiedItem"]["title"]
-        simple_reserves_item["author"]        = ''
+        simple_reserves_item['title']         = folio_reserves_item['copiedItem']['title']
+        simple_reserves_item['author']        = ''
       end
 
       # The Contributors from the copied item is often more complete than 'author'
-      contributors_list = folio_reserves_item["copiedItem"].fetch("contributors", [])
-      simple_reserves_item["contributors"] = format_contributors(contributors_list)
+      contributors_list = folio_reserves_item['copiedItem'].fetch('contributors', [])
+      simple_reserves_item['contributors'] = format_contributors(contributors_list)
 
       # Other fields needed to build the patron display
-      simple_reserves_item["call_number"]   = folio_reserves_item["copiedItem"]["callNumber"]
-      simple_reserves_item["uri"]           = folio_reserves_item["copiedItem"].fetch("uri", "")
+      simple_reserves_item['call_number']   = folio_reserves_item['copiedItem']['callNumber']
+      simple_reserves_item['uri']           = folio_reserves_item['copiedItem'].fetch('uri', '')
 
       # Add the Instance IDs
       # simple_reserves_item["instance_uuid"] = folio_reserves_item["copiedItem"]["instanceId"]
-      simple_reserves_item["instance_hrid"] = folio_reserves_item["copiedItem"]["instanceHrid"]
+      simple_reserves_item['instance_hrid'] = folio_reserves_item['copiedItem']['instanceHrid']
 
       # Reserves Staff want the Contributor from Inventory,
       # instead of the author portion of the FOLIO Reserves "Item Title"
@@ -197,14 +197,14 @@ class ReservesController < ApplicationController
       next unless contributor.key?('name') and contributor['name'].present?
 
       if contributor.fetch('primary', false) == true
-        primary_contributor = contributor["name"]
+        primary_contributor = contributor['name']
       else
-        contributor_list << contributor["name"]
+        contributor_list << contributor['name']
       end
     end
 
     return primary_contributor if primary_contributor.present?
-    return contributor_list.join("; ") if contributor_list.length > 0
+    return contributor_list.join('; ') if contributor_list.length > 0
 
     # No contributor found?
     return ''

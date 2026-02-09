@@ -64,7 +64,7 @@ module Service
       {}
     end
 
-    def send_emails(params, bib_record, current_user)
+    def send_emails(_params, _bib_record, _current_user)
       nil
     end
 

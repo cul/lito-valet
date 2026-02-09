@@ -218,26 +218,26 @@ module Recap
       # Simple strings fields that we want copied from Valet into SCSB request params,
       # some apply only to EDD, some apply to physical delivery
       @simple_fields = [
-        "author",
-        "bibId", # LIBSYS-5508 - maybe should be cleaned up?
-        "callNumber",
-        "chapterTitle",
-        "deliveryLocation",
-        "emailAddress",
-        "endPage",
+        'author',
+        'bibId', # LIBSYS-5508 - maybe should be cleaned up?
+        'callNumber',
+        'chapterTitle',
+        'deliveryLocation',
+        'emailAddress',
+        'endPage',
         # "id",    # LIBSYS-5508 - unnecessary, and may be breaking requests
-        "issue",
-        "itemBarcodes",
-        "itemOwningInstitution",
-        "patronBarcode",
-        "requestNotes",
-        "requestType",
-        "requestingInstitution",
-        "startPage",
-        "titleIdentifier",
+        'issue',
+        'itemBarcodes',
+        'itemOwningInstitution',
+        'patronBarcode',
+        'requestNotes',
+        'requestType',
+        'requestingInstitution',
+        'startPage',
+        'titleIdentifier',
         # "trackingId",     # NYPL-specific ?
         # "username",       # Unnecessary
-        "volume",
+        'volume',
       ]
       @simple_fields.each do |field|
         # Skip empty fields

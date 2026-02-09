@@ -32,7 +32,7 @@ module Service
       false
     end
 
-    def setup_form_locals(params, bib_record, current_user)
+    def setup_form_locals(_params, bib_record, _current_user)
       availability ||= bib_record.fetch_folio_availability
       barnard_remote_holdings = get_barnard_remote_holdings(bib_record)
       available_barnard_remote_items = get_available_items(barnard_remote_holdings, availability)

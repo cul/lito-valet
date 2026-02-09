@@ -11,7 +11,7 @@ module Service
       return false
     end
 
-    def build_service_url(params, bib_record, current_user)
+    def build_service_url(_params, bib_record, current_user)
       # Explicitly select the form, and explicitly set form field values
       illiad_base_url = APP_CONFIG[:illiad_base_url]
       illiad_params = get_illiad_params_explicit(bib_record, current_user)

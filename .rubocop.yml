@@ -1,7 +1,18 @@
 
-Metrics/LineLength:
+require:
+  - rubocop-rails
+
+Layout/LineLength:
   Max: 200
 
 Layout/HashAlignment:
   EnforcedColonStyle: table
+
+Rails/UnknownEnv:
+  Environments:
+    - development
+    - test
+    - valet_dev
+    - valet_test
+    - valet_prod
 

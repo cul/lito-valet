@@ -79,7 +79,7 @@ class FormsController < ApplicationController
     # Some services need to do some custom form processing.
     # If they do, stash any result of that processing into 'params'
     service_response = @service.service_form_handler(params)
-    return error("Failure processing request!") if service_response.nil?
+    return error('Failure processing request!') if service_response.nil?
 
     params['service_response'] = service_response if service_response
 
@@ -113,7 +113,7 @@ class FormsController < ApplicationController
 
   # called in before_action
   def initialize_service
-    Rails.logger.debug("begin initialize_service()")
+    Rails.logger.debug('begin initialize_service()')
     service_name = determine_service
     return error('Unable to determine service!') unless service_name
 
@@ -127,7 +127,7 @@ class FormsController < ApplicationController
 
     authenticate_user! if @service_config[:authenticate]
     instantiate_service_object(service_name)
-    Rails.logger.debug("complete initialize_service()")
+    Rails.logger.debug('complete initialize_service()')
   end
 
   # Original path is something like:  /docdel/123
@@ -254,7 +254,7 @@ class FormsController < ApplicationController
 
   # Outages may redirect, render custom forms, or custom messasges, or use a default form
   def outage!
-    Rails.logger.debug "outage!"
+    Rails.logger.debug 'outage!'
 
     # Redirect to outage URL, if configured
     return redirect_to(@service_config['outage_url']) if @service_config['outage_url']

@@ -49,7 +49,7 @@ module Service
     end
 
     # Build necessary data params to build a container list
-    def setup_form_locals(params, bib_record, current_user)
+    def setup_form_locals(_params, bib_record, _current_user)
       locals = {
         bib_record:     bib_record,
         container_list: get_container_list(bib_record)
@@ -59,7 +59,7 @@ module Service
     # Special Collections can act as a bounce or as a form
     # "bounce" will call this, without params, to get a redirect URL
     # "form" will call this with form params to get the redirect URL
-    def build_service_url(params, bib_record, current_user)
+    def build_service_url(params, bib_record, _current_user)
       # If a finding-aid exists, redirect to the finding aid
       if finding_aid_link = bib_record.finding_aid_link()
         Rails.logger.debug("#{bib_record.id} -- redirecting to finding aid link: #{finding_aid_link}")

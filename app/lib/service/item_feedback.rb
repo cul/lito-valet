@@ -23,7 +23,7 @@ module Service
     end
 
     # What information do we need to pass along for the initial form?
-    def setup_form_locals(params, bib_record, current_user)
+    def setup_form_locals(_params, bib_record, _current_user)
       locals = {
         bib_record:       bib_record,
         feedback_options: FEEDBACK

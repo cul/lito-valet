@@ -33,7 +33,7 @@ module Service
       return false
     end
 
-    def setup_form_locals(params, bib_record, current_user)
+    def setup_form_locals(_params, bib_record, _current_user)
       avery_onsite_holdings = bib_record.holdings.select do |holding|
         @service_config[:locations].include?(holding[:location_code])
       end

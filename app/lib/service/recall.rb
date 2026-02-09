@@ -79,7 +79,7 @@ module Service
 
       checked_out_count = 0
       item_statuses = bib_record.fetch_folio_availability()
-      checked_out_count = item_statuses.values.count { |status| status == "Checked out" }
+      checked_out_count = item_statuses.values.count { |status| status == 'Checked out' }
 
       if checked_out_count == 0
         self.error = "This record has no checked-out items.
@@ -103,7 +103,7 @@ module Service
     #      Not Needed After:  2025-11-15
     #
     # The form will need bib details, copy details, and pickup locations
-    def setup_form_locals(params, bib_record, current_user)
+    def setup_form_locals(_params, bib_record, _current_user)
       locals = {
         bib_record:   bib_record,
         availability: bib_record.fetch_folio_availability
@@ -134,23 +134,23 @@ module Service
     def service_form_handler(params)
       uni = params[:uni]
       user = Folio::Client.get_user_by_uni(uni)
-      user_id = user["id"]
+      user_id = user['id']
 
       # Use the bib ID to get the FOLIO Instance details
       bib_id = params[:id]
       instance = Folio::Client.get_instance_by_hrid(bib_id)
-      instance_id = instance["id"]
+      instance_id = instance['id']
 
       # Use the FOLIO Item UUID to get Item details, including Holding ID
       item_id = params[:item_id]
       item = Folio::Client.get_item(item_id)
       holdings_id = item['holdingsRecordId']
 
-      today = Time.now.strftime("%Y-%m-%d")
+      today = Time.now.strftime('%Y-%m-%d')
 
       recall_params = {
-        "requestLevel":          "Item",
-        "requestType":           "Recall",
+        "requestLevel":          'Item',
+        "requestType":           'Recall',
 
         "instanceId":            instance_id,
         "holdingsRecordId":      holdings_id,
@@ -158,9 +158,9 @@ module Service
 
         "requesterId":           user_id,
 
-        "fulfillmentPreference": "Hold Shelf",
+        "fulfillmentPreference": 'Hold Shelf',
         # Hardcoded to Butler for today....
-        "pickupServicePointId":  "cb457737-6d17-4046-8c98-315cd9b70f9f",
+        "pickupServicePointId":  'cb457737-6d17-4046-8c98-315cd9b70f9f',
 
         "requestDate":           today
       }
@@ -188,7 +188,7 @@ module Service
     # The confirmation page is what users are redirected to
     # after submitting the form.
     # What data elements do we want to display?
-    def get_confirmation_locals(params, bib_record, current_user)
+    def get_confirmation_locals(params, _bib_record, _current_user)
       # pull out the direct FOLIO response,
       # the confirm page will just echo some of this data back to the user
       service_response = params['service_response']

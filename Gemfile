@@ -8,7 +8,7 @@ gem 'rails', '~> 6.0'
 gem 'concurrent-ruby', '1.3.4'
 
 # Valet is built using Sprockets - need gem until migration to Webpacker
-gem "sprockets-rails"
+gem 'sprockets-rails'
 
 # Use SCSS for stylesheets
 # gem 'sass-rails'

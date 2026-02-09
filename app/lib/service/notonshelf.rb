@@ -1,6 +1,6 @@
 module Service
   class Notonshelf < Service::Base
-    def setup_form_locals(params, bib_record, current_user)
+    def setup_form_locals(_params, bib_record, _current_user)
       sorted_holdings = bib_record.holdings.sort_by { |h| h[:location_display].to_s }
       availability ||= bib_record.fetch_folio_availability
 
@@ -59,73 +59,73 @@ module Service
 
     def get_email_alias_for_location(location_code)
       rules = {
-        /^bar,mil/ => "butler_circulation@libraries.cul.columbia.edu",
+        /^bar,mil/ => 'butler_circulation@libraries.cul.columbia.edu',
 
         /^(bwc|bar|bdc|bdg)/ =>
-          "barnard_circulation@libraries.cul.columbia.edu",
+          'barnard_circulation@libraries.cul.columbia.edu',
 
         /^ref/ =>
-          "reference_circulation@libraries.cul.columbia.edu",
+          'reference_circulation@libraries.cul.columbia.edu',
 
         /^(asx|docs|dsc|leh|les|lsp|lsw|map|off,docs|off,les)/ =>
-          "lehman_circulation@libraries.cul.columbia.edu",
+          'lehman_circulation@libraries.cul.columbia.edu',
 
         /^bio/ =>
-          "biology_circulation@libraries.cul.columbia.edu",
+          'biology_circulation@libraries.cul.columbia.edu',
 
         /^(bsc|bsr|bus)/ =>
-          "business_circulation@libraries.cul.columbia.edu",
+          'business_circulation@libraries.cul.columbia.edu',
 
         /^che/ =>
-          "chemistry_circulation@libraries.cul.columbia.edu",
+          'chemistry_circulation@libraries.cul.columbia.edu',
 
         /^(clm|dic|gax|off,dic|off,oral|off,rbms|off,rbx|off,uacl|oral|rbx|rbi|rbms|uacl)/ =>
-          "butler_circulation@libraries.cul.columbia.edu",
+          'butler_circulation@libraries.cul.columbia.edu',
 
         /^(eal|ean|ear|eax|off,eal|off,ean|off,ear|off,eax)/ =>
-          "starr_east_asian_circulation@libraries.cul.columbia.edu",
+          'starr_east_asian_circulation@libraries.cul.columbia.edu',
 
         /^(jazz|msa|msc|msci|msr|mus|mvr|off,msc|off,msr|off,mus|off,mvr)/ =>
-          "music_circulation@libraries.cul.columbia.edu",
+          'music_circulation@libraries.cul.columbia.edu',
 
         /^(for,morn|hmc|hml|hsl|nyspi|hsx|off,hsar|off,hsl|off,hsr|off,hssc|orth)/ =>
-          "health_sciences_circulation@libraries.cul.columbia.edu",
+          'health_sciences_circulation@libraries.cul.columbia.edu',
 
         /^(off,uta|off,utmrl|off,utn|off,utp|off,uts|uts)/ =>
-          "uts_circulation@libraries.cul.columbia.edu",
+          'uts_circulation@libraries.cul.columbia.edu',
 
         /^psy/ =>
-          "psychology_circulation@libraries.cul.columbia.edu",
+          'psychology_circulation@libraries.cul.columbia.edu',
 
         /^phy,/ =>
-          "mathsci@libraries.cul.columbia.edu",
+          'mathsci@libraries.cul.columbia.edu',
 
         /^phy/ =>
-          "physics_circulation@libraries.cul.columbia.edu",
+          'physics_circulation@libraries.cul.columbia.edu',
 
         /^swx/ =>
-          "social_work_circulation@libraries.cul.columbia.edu",
+          'social_work_circulation@libraries.cul.columbia.edu',
 
         /^mat/ =>
-          "math_science_circulation@libraries.cul.columbia.edu",
+          'math_science_circulation@libraries.cul.columbia.edu',
 
         /^sci/ =>
-          "scieng_circulation@libraries.cul.columbia.edu",
+          'scieng_circulation@libraries.cul.columbia.edu',
 
         /^jou/ =>
-          "journalism_circulation@libraries.cul.columbia.edu",
+          'journalism_circulation@libraries.cul.columbia.edu',
 
         /^(ewng|gsc|off,gsc)/ =>
-          "geoscience_circulation@libraries.cul.columbia.edu",
+          'geoscience_circulation@libraries.cul.columbia.edu',
 
         /^(off,glg|glg)/ =>
-          "geology_circulation@libraries.cul.columbia.edu",
+          'geology_circulation@libraries.cul.columbia.edu',
 
         /^eng/ =>
-          "engineering_circulation@libraries.cul.columbia.edu",
+          'engineering_circulation@libraries.cul.columbia.edu',
 
         /^(ava|avda|ave|avr|faa|far|fax|off,avda|off,avr|off,far|off,fax|off,war|war)/ =>
-          "avery_circulation@libraries.cul.columbia.edu"
+          'avery_circulation@libraries.cul.columbia.edu'
       }
 
       rules.each do |regex, email_alias|
@@ -133,7 +133,7 @@ module Service
       end
 
       # Default:
-      "butler_circulation@libraries.cul.columbia.edu"
+      'butler_circulation@libraries.cul.columbia.edu'
     end
   end
 end

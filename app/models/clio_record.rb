@@ -456,7 +456,7 @@ class ClioRecord
   #   { barcode: availability, barcode: availability, ...}
   def fetch_scsb_availabilty
     if id.empty?
-      Rails.logger.error "ERROR: fetch_scsb_availabilty() called with null id"
+      Rails.logger.error 'ERROR: fetch_scsb_availabilty() called with null id'
       return
     end
 
@@ -659,15 +659,15 @@ class ClioRecord
 
     format_category, position_008 =
       case leader_code
-      when /a[macd]/  then ["Book", 23]
-      when /a[sib]/   then ["Continuing Resource", 23]
-      when /^[ht]/    then ["Book", 23]
-      when /^m/       then ["Computer File", 23]
-      when /^[gkor]/  then ["Visual Material", 29]
-      when /^[cd]/    then ["Score", 23]
-      when /^[ij]/    then ["Recording", 23]
-      when /^[ef]/    then ["Map", 29]
-      when /^[bp]/    then ["Mixed", 23]
+      when /a[macd]/  then ['Book', 23]
+      when /a[sib]/   then ['Continuing Resource', 23]
+      when /^[ht]/    then ['Book', 23]
+      when /^m/       then ['Computer File', 23]
+      when /^[gkor]/  then ['Visual Material', 29]
+      when /^[cd]/    then ['Score', 23]
+      when /^[ij]/    then ['Recording', 23]
+      when /^[ef]/    then ['Map', 29]
+      when /^[bp]/    then ['Mixed', 23]
         else [nil, nil]
        end
 
@@ -684,15 +684,15 @@ class ClioRecord
   end
 
   FORMAT_008_CODES = {
-    'a' => "Microfilm",
-    'b' => "Microfiche",
-    'c' => "Microopaque",
-    'd' => "Large print",
-    'f' => "Braille",
-    'o' => "Online",
-    'q' => "Direct electronic",
-    'r' => "Print reproduction",
-    's' => "Electronic"
+    'a' => 'Microfilm',
+    'b' => 'Microfiche',
+    'c' => 'Microopaque',
+    'd' => 'Large print',
+    'f' => 'Braille',
+    'o' => 'Online',
+    'q' => 'Direct electronic',
+    'r' => 'Print reproduction',
+    's' => 'Electronic'
   }.freeze
 
   # Untested code.  I asked for an example bib to test this,

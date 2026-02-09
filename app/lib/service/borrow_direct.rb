@@ -21,7 +21,7 @@ module Service
     #      Lookup bib metadata, redirect to ReShare fielded search
     #  (3) /borrow_direct?Author=Smith&Title=Papers (OpenURL parameters)
     #      Parse OpenURL, redirect to ReShare fielded search
-    def build_service_url(params, bib_record, current_user)
+    def build_service_url(params, bib_record, _current_user)
       # 2024 - this is gone for good
       # # If we're configured to still use Relais
       # if @service_config[:backend] && @service_config[:backend] == 'relais'

@@ -12,7 +12,7 @@ module Service
       return false
     end
 
-    def setup_form_locals(params, bib_record, current_user)
+    def setup_form_locals(params, _bib_record, _current_user)
       # The ILL service may be called with an OpenURL or with a Bib ID.
       # We need to pass ALL params through the campus-triage form so
       # they can get to the ILL service code.
@@ -60,7 +60,7 @@ module Service
 
       # (1) Redirect to BorrowDirect Search page, with no arguments
       if bib_record.nil? and params.empty?
-        Rails.logger.debug "ill(1): redirect to ILLiad login page"
+        Rails.logger.debug 'ill(1): redirect to ILLiad login page'
         return APP_CONFIG[:illiad_login_url]
       end
 
