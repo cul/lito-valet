@@ -338,7 +338,7 @@ class User < ApplicationRecord
     #   end
     # end
 
-    # Default, if not explicitly permitted, return elible == false
+    # Default, if not explicitly permitted, return eligible == false
     false
   end
 

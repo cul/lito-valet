@@ -33,7 +33,7 @@ class FormsController < ApplicationController
         return redirect_to(@service_config['ineligible_url']) if @service_config['ineligible_url']
         return error(@service_config['ineligible_message']) if @service_config['ineligible_message']
         # Otherwise, use the default.
-        return error("Current user is not elible for service #{@service_config['label']}") 
+        return error("Current user is not eligible for service #{@service_config['label']}") 
       end
     end
 
