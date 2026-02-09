@@ -1,20 +1,19 @@
-# 
+#
 #
 # Wrapper around Stanford FolioClient
-# 
+#
 # Get a FolioClient with either of:
 #   folio_client = Folio::Client.new()
 #   folio_client = Folio::Client.folio_client
-# 
+#
 # Call the helper methods defined below:
 #   Folio::Client.get_user_by_username('sam119')
-# 
+#
 # Or make direct FOLIO API calls yourself:
 #   location_json = Folio::Client.folio_client.get('/locations')
-# 
+#
 module Folio
   class Client
-
     attr_reader :folio_client
 
     def initialize
@@ -25,7 +24,7 @@ module Folio
       # app_config should have a FOLIO stanza
       folio_config = APP_CONFIG['folio']
       raise "Cannot find 'folio' config in APP_CONFIG!" if folio_config.blank?
-      
+
       # Return the entire stanza - whatever it holds
       return folio_config
     end
@@ -33,14 +32,14 @@ module Folio
     def self.folio_client
       folio_config = get_folio_config
       @folio_client = FolioClient.configure(
-        url: folio_config['okapi_url'],
-        login_params: { 
-          username: folio_config['okapi_username'], 
+        url:           folio_config['okapi_url'],
+        login_params:  {
+          username: folio_config['okapi_username'],
           password: folio_config['okapi_password']
         },
-        okapi_headers: { 
-          'X-Okapi-Tenant': folio_config['okapi_tenant'], 
-          'User-Agent': 'FolioApiClient'
+        okapi_headers: {
+          'X-Okapi-Tenant': folio_config['okapi_tenant'],
+          'User-Agent':     'FolioApiClient'
         }
       )
       return @folio_client
@@ -73,15 +72,14 @@ module Folio
     #
     #   return folio_config
     # end
-    
-    
+
     def self.get_user_barcode(uni)
       Rails.logger.debug "- Folio::Client.get_user_barcode(uni=#{uni})"
       return nil unless uni.present?
-      
+
       folio_user = get_user_by_uni(uni)
       return nil unless folio_user
-      
+
       # path = '/users?query=(username=="' + uni + '")'
       # Rails.logger.debug "- Folio::Client.get_user_barcode() path=#{path}"
       #
@@ -95,54 +93,52 @@ module Folio
       # Or, return whatever barcode we find, let later processes fail
       # active = first_user["active"]
       # return nil unless active
-      
+
       barcode = folio_user["barcode"]
       return barcode
-
     end
-    
+
     # Given a course-number (registrar number or string with wildcards),
     # Make a courses query, return the FOLIO JSON course list
     def self.get_courses_list_by_course_number(course_number)
       Rails.logger.debug "- Folio::Client.get_courses_list_by_course_number(course_number=#{course_number})"
       return nil unless course_number.present?
-      
+
       path = '/coursereserves/courses?limit=100&query=(courseNumber=="' + course_number + '")'
       Rails.logger.debug "- Folio::Client.get_courses_list_by_course_number() path=#{path}"
-      
+
       @folio_client ||= folio_client
       folio_response = @folio_client.get(path)
-      
+
       courses_list = folio_response["courses"]
-      
+
       return courses_list
     end
-
 
     # Given a course-listing-id (the FOLIO UUID of the course listing object),
     # Lookup the reserves by course-listing-id, return the FOLIO JSON reserves list
     def self.get_reserves_list_by_course_listing_id(course_listing_id)
       # Rails.logger.debug "- Folio::Client.get_reserves_list_by_course_listing_id(course_listing_id=#{course_listing_id})"
       return nil unless course_listing_id.present?
-      
+
       path = '/coursereserves/courselistings/' + course_listing_id + '/reserves?limit=1000'
       Rails.logger.debug "- Folio::Client.get_reserves_list_by_course_listing_id() path=#{path}"
 
       @folio_client ||= folio_client
       folio_response = @folio_client.get(path)
-      
+
       reserves_list = folio_response["reserves"]
 
       return reserves_list
     end
-    
+
     def self.get_item(item_id)
       path = "/item-storage/items/#{item_id}"
       @folio_client ||= folio_client
       folio_response = @folio_client.get(path)
       return folio_response
     end
-    
+
     # Retrieve a single FOLIO Instance JSON record for a given Voyager Bib ID
     #   {{baseUrl}}/search/instances?query=(hrid="123")&limit=1
     def self.get_instance_by_hrid(hrid)
@@ -171,7 +167,6 @@ module Folio
       end
     end
 
-
     # Retrieve a single FOLIO User JSON record for a given Columbia uni
     #   {{baseUrl}}/users?query=(username=="sam119" )&limit=1
     def self.get_user_by_uni(uni)
@@ -187,14 +182,14 @@ module Folio
       end
     end
 
-    # service_response = Folio::Client.post_item_recall(recall_params)  
+    # service_response = Folio::Client.post_item_recall(recall_params)
     #   {{baseUrl}}/circulation/requests
     def self.post_item_recall(recall_params)
       @folio_client ||= folio_client
 
       # the error message, if any, is found in different places for different problems
       error_message = nil
-      
+
       begin
         folio_response = @folio_client.post("/circulation/requests", recall_params)
       rescue FolioClient::ValidationError => ex
@@ -208,23 +203,22 @@ module Folio
       rescue => ex
         error_message = ex.message
       end
-      
+
       # If any error-message was set in the rescues above, raise an exception for the caller
       raise error_message if error_message
-      
+
       # Otherwise, pass back whatever was returned from the API call
       return folio_response
     end
 
     def self.get_blocks_by_uni(uni)
       return nil unless uni
-      
+
       folio_user = get_user_by_uni(uni)
       return nil unless folio_user
 
-      return get_blocks_by_user_id( folio_user["id"] )
+      return get_blocks_by_user_id(folio_user["id"])
     end
-    
 
     # FOLIO has two kinds of blocks - automated and manual
     #  {{baseUrl}}/automated-patron-blocks/04354620-5852-54e7-93e5-67b8d374528c
@@ -232,7 +226,7 @@ module Folio
     # Fetch both, parse each appropriately, sort/uniq the list, return list of string messages
     def self.get_blocks_by_user_id(user_id)
       return nil unless user_id
-      
+
       @folio_client ||= folio_client
 
       all_blocks = []
@@ -256,8 +250,7 @@ module Folio
 
       return all_blocks
     end
-    
-    
+
     # # /contributor-types/{contributorTypeId}
     # def self.get_contributor_type(contributor_type_id)
     #   path = "/contributor-types/#{contributor_type_id}"
@@ -265,12 +258,6 @@ module Folio
     #   folio_response = @folio_client.get(path)
     #   return folio_response
     # end
-    
-    
-    
-    
-    
-    
 
     # This was built on RTAC
     # BUT -- Okapi single-item RTAC is DEPRECATED !!!
@@ -310,12 +297,6 @@ module Folio
     #
     #   availability_hash
     # end
-    
   end
 
-
-
 end
-
-
-

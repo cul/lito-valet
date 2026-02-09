@@ -1,13 +1,12 @@
 module Service
   class Notonshelf < Service::Base
-
     def setup_form_locals(params, bib_record, current_user)
       sorted_holdings = bib_record.holdings.sort_by { |h| h[:location_display].to_s }
       availability ||= bib_record.fetch_folio_availability
-      
+
       locals = {
         bib_record: bib_record,
-        holdings: sorted_holdings
+        holdings:   sorted_holdings
       }
       locals
     end
@@ -25,19 +24,19 @@ module Service
     end
 
     private
-    
+
     # form params looks like this:
     # {"id"=>"5685777", "mfhd_id"=>"88596060-5a76-5255-9999-0ff9b88aa112", "note"=>"test"}
     # params for the request email and the confirm page need more fields:
     def build_not_on_shelf_params(params, bib_record, current_user)
       # find the specific holding record
       holding = bib_record.holdings.find { |h| h[:mfhd_id] == params['mfhd_id'] }
-      
-      # for bibs without holdings, we still want to support a NOS request 
+
+      # for bibs without holdings, we still want to support a NOS request
       if holding.blank?
         holding = {
           location_display: '',
-          location_code: ''
+          location_code:    ''
         }
       end
 
@@ -46,15 +45,15 @@ module Service
 
       # override in non-production
       staff_email = 'noreply@libraries.cul.columbia.edu' unless Rails.env == 'valet_prod'
-      
+
       {
-        bib_record:        bib_record,
-        patron_uni:        current_user.uid,
-        patron_email:      current_user.email,
-        location_display:  holding[:location_display],
-        location_code:     holding[:location_code],
-        staff_email:       staff_email,
-        note:              params['note']
+        bib_record:       bib_record,
+        patron_uni:       current_user.uid,
+        patron_email:     current_user.email,
+        location_display: holding[:location_display],
+        location_code:    holding[:location_code],
+        staff_email:      staff_email,
+        note:             params['note']
       }
     end
 
@@ -136,10 +135,5 @@ module Service
       # Default:
       "butler_circulation@libraries.cul.columbia.edu"
     end
-
-
-
-
-
   end
 end

@@ -7,11 +7,9 @@ require 'library_stdnums'
 # require 'resolv-replace'
 
 class ApplicationController < ActionController::Base
-
   # Set headers to prevent all caching in authenticated sessions,
   # so that people can't 'back' in the browser to see possibly secret stuff.
   before_action :set_cache_headers
-
 
   # Prevent CSRF attacks by raising an exception.
   # For APIs, you may want to use :null_session instead.
@@ -26,11 +24,10 @@ class ApplicationController < ActionController::Base
 
   # prepend_before_action :cache_dns_lookups
 
-
   # Services can store lengthy error message text here
   # for display on the error page
   attr_accessor :error
-  
+
   # Register custom flash types
   add_flash_types :error
 
@@ -69,7 +66,6 @@ class ApplicationController < ActionController::Base
     data[:user_agent] = request.user_agent
     data
   end
-  
 
   # LIBSYS-4432 - Deprecation of IDMACCESS_ADTO affiliation
   # # CUMC staff who have not completed security training
@@ -93,16 +89,16 @@ class ApplicationController < ActionController::Base
   #     dns_cache << { 'hostname' => hostname, 'addr' => addr } if addr.present?
   #   }
   #   return unless dns_cache.size > 0
-  #   
+  #
   #   Rails.logger.debug "cache_dns_lookups() dns_cache=#{dns_cache}"
-  #   
+  #
   #   cached_resolver = Resolv::Hosts::Dynamic.new(dns_cache)
   #   Resolv::DefaultResolver.replace_resolvers( [cached_resolver, Resolv::DNS.new] )
   # end
-  # 
+  #
   # def getaddress_retry(hostname = nil)
   #   return unless hostname.present?
-  # 
+  #
   #   addr = nil
   #   (1..3).each do |try|
   #     begin
@@ -114,13 +110,13 @@ class ApplicationController < ActionController::Base
   #       sleep 1
   #     end
   #   end
-  # 
+  #
   #   return addr
   # end
 
   # Many of our services may want to use a common error page,
   # and may want flash errors and/or inset-box errors.
-  
+
   # Let caller just do:
   #    if broken() return error("Broken!")
   # instead of multi-line if/end
@@ -134,9 +130,8 @@ class ApplicationController < ActionController::Base
     render '/forms/error', locals: { service_error: @error || '' }
   end
 
-
   private
-  
+
   def set_cache_headers
     if current_user
       response.headers['Cache-Control'] = 'no-cache, no-store'
@@ -144,7 +139,7 @@ class ApplicationController < ActionController::Base
       response.headers['Expires'] = 'Fri, 01 Jan 1990 00:00:00 GMT'
     end
   end
-  
+
   # save original non-valet, non-cas referrer
   def set_original_referrer
     # blank referrer
@@ -153,8 +148,8 @@ class ApplicationController < ActionController::Base
     return if URI(request.referrer).host == request.host
     # referrer set to authentication host
     return if URI(request.referrer).host == 'cas.columbia.edu'
+
     # ok - looks like an external original referrer that we care about
     session[:referrer] = request.referrer
   end
-
 end

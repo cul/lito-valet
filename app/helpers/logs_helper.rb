@@ -18,6 +18,7 @@ module LogsHelper
   # output:  '( Foo v )'
   def download_label(text = nil)
     return "( #{text} #{download_glyph}".html_safe + ' )' unless text.nil?
+
     '( download csv '.html_safe + download_glyph + ')'
   end
 

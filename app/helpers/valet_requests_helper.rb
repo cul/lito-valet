@@ -5,6 +5,7 @@ module ValetRequestsHelper
                      clio_record.tocs.present? &&
                      barcode.present? &&
                      clio_record.tocs[barcode]
+
     label = 'Table of Contents'
     url = clio_record.tocs[barcode]
     link_to label, url, target: '_blank'
@@ -111,6 +112,7 @@ module ValetRequestsHelper
 
   def location_label(location_code_or_holding)
     return '' unless location_code_or_holding
+
     location_code = ''
     location_name = ''
 
@@ -192,13 +194,13 @@ module ValetRequestsHelper
 
     # Setup data attributes
     options = item_data_hash(item)
-    
+
     # mark all item checkboxes with a single class
     options[:class] = 'item_check_box'
 
     # Checkbox state immutable if barcode filter is active
     options[:onclick] = 'return false;' if barcode_filter.present?
-    
+
     check_box_tag('itemBarcodes[]', item[:barcode], checked_state, options)
   end
 

@@ -1,5 +1,4 @@
 class FormMailer < ApplicationMailer
-
   # add_template_helper(ValetRequestsHelper)
   helper ValetRequestsHelper
 
@@ -37,7 +36,7 @@ class FormMailer < ApplicationMailer
     @params = params
     to      = params[:staff_email]
     # from    = "Starr Remote Request Service <#{params[:staff_email]}>"
-    from = "Starr Remote Request Service <starrstor@library.columbia.edu>"  
+    from = "Starr Remote Request Service <starrstor@library.columbia.edu>"
     title   = params[:bib_record].title
     subject = "New StarrStor request [#{title}]"
     mail(to: to, from: from, subject: subject)
@@ -63,7 +62,6 @@ class FormMailer < ApplicationMailer
     subject = "Precat Search Request [#{title}]"
     mail(to: to, from: from, subject: subject)
   end
-  
 
   ###
   ### IN PROCESS / ON ORDER - single mail to both staff and patron
@@ -75,7 +73,6 @@ class FormMailer < ApplicationMailer
     subject = "On Order / In Process Request [#{title}]"
     mail(to: to, from: from, subject: subject)
   end
-  
 
   ###
   ### ITEM FEEDBACK - single mail to both staff and patron
@@ -87,11 +84,11 @@ class FormMailer < ApplicationMailer
     subject = "Item Feedback [#{title}]"
     mail(to: to, from: from, subject: subject)
   end
-  
+
   ###
   ### RECAP - confirmation emails to patrons
   ###
-  
+
   def recap_loan_confirm
     to = params['emailAddress']
     from = 'recap@library.columbia.edu'
@@ -121,7 +118,6 @@ class FormMailer < ApplicationMailer
     mail_params[:bcc] = confirm_bcc if confirm_bcc
     mail(mail_params)
   end
-
 
   ###
   ### AVERY ONSITE
@@ -154,15 +150,11 @@ class FormMailer < ApplicationMailer
   def notonshelf_request
     @params = params
     to = params[:patron_email] + ', ' + params[:staff_email]
-    
+
     from    = "Circulation <#{params[:staff_email]}>"
     title   = params[:bib_record].title
     timestamp = Time.now.strftime("%Y-%m-%d %H:%M:%S")
     subject = "Search_Request: #{timestamp}"
     mail(to: to, from: from, subject: subject)
   end
-
 end
-
-
-

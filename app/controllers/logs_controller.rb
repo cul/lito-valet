@@ -14,7 +14,7 @@ class LogsController < ApplicationController
 
   def index
     return error('Log access restricted') unless current_user.valet_admin?
-    
+
     @logset = log_params[:logset]
 
     # If no set of logs was specified,
@@ -24,7 +24,7 @@ class LogsController < ApplicationController
       return render action: 'logset_list'
     end
 
-    # If they've asked for access to a set, 
+    # If they've asked for access to a set,
     # make sure they're permitted
 
     # Have they asked to download a year of logs for a given logset?
@@ -117,6 +117,7 @@ class LogsController < ApplicationController
   # at the JSON logdata of the first retrieved row
   def get_keys_from_logdata(row)
     return [] if row.blank?
+
     begin
       logdata = JSON.parse(row['logdata'])
       return logdata.keys
@@ -161,6 +162,7 @@ class LogsController < ApplicationController
     return ActiveRecord::NullRelation unless download.present?
     return log_by_year(download) if download =~ /^\d\d\d\d$/
     return log_by_month(download) if download =~ /^\d\d\d\d\-\d\d$/
+
     # Any bad data, return null set
     ActiveRecord::NullRelation
   end

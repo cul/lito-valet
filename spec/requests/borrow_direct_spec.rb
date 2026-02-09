@@ -1,11 +1,7 @@
-
-
 RSpec.describe 'Borrow Direct' do
-
   # Some constants used throughout this file
   reshare_base_url   = 'https://columbia-borrowdirect.reshare.indexdata.com'
   reshare_search_url = reshare_base_url + '/Search/Results'
-
 
   it 'redirects to ReShare with ISBN' do
     sign_in FactoryBot.create(:happyuser)
@@ -31,7 +27,7 @@ RSpec.describe 'Borrow Direct' do
     sign_in FactoryBot.create(:happyuser)
 
     # hardcode expected URL
-    reshare_url = reshare_search_url + 
+    reshare_url = reshare_search_url +
                   '?type0[]=Title&lookfor0[]="Piotr"' \
                   '&type0[]=Author&lookfor0[]="Sokorski%2C+W%C5%82odzimierz"' \
                   '&join=AND'
@@ -44,10 +40,10 @@ RSpec.describe 'Borrow Direct' do
     sign_in FactoryBot.create(:happyuser)
 
     # hardcode expected URL
-    reshare_url = reshare_search_url + 
-                 '?type0[]=Title&lookfor0[]="A+national+public+labor+relations+policy+for+tomorrow"' \
-                 '&type0[]=Author&lookfor0[]="Emery%2C+James+A."' \
-                 '&join=AND'
+    reshare_url = reshare_search_url +
+                  '?type0[]=Title&lookfor0[]="A+national+public+labor+relations+policy+for+tomorrow"' \
+                  '&type0[]=Author&lookfor0[]="Emery%2C+James+A."' \
+                  '&join=AND'
 
     get borrow_direct_path('SCSB-1441991')
     expect(response).to redirect_to(reshare_url)
@@ -71,18 +67,18 @@ RSpec.describe 'Borrow Direct' do
     sign_in FactoryBot.create(:blockeduser)
     get borrow_direct_path('123')
     ineligible_url = APP_CONFIG[:borrow_direct][:ineligible_url]
-    
+
     expect(response).to redirect_to(ineligible_url)
   end
-  
-  # Valet's Borrow Direct also 
-  
+
+  # Valet's Borrow Direct also
+
   it 'without bib id, redirects authorized users to ILLiad' do
     sign_in FactoryBot.create(:happyuser)
 
     # For ReShare, the non-search URL is just the base URL
     reshare_url = reshare_base_url
-    
+
     get '/borrow_direct'
     expect(response).to redirect_to(reshare_url)
   end
@@ -91,11 +87,10 @@ RSpec.describe 'Borrow Direct' do
     sign_in FactoryBot.create(:blockeduser)
 
     ineligible_url = APP_CONFIG[:borrow_direct][:ineligible_url]
-  
+
     get '/borrow_direct'
     expect(response).to redirect_to(ineligible_url)
   end
-    
 
   # Valet no longer checks patron conditions directly.
   # Valet goes by the LDAP Affils only.
@@ -151,5 +146,4 @@ RSpec.describe 'Borrow Direct' do
   # #   get borrow_direct_path('9041682')
   # #   expect(response).to redirect_to(good_url)
   # # end
-
 end

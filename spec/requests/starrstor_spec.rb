@@ -1,7 +1,4 @@
-
-
 RSpec.describe 'StarrStor Request Service' do
-
   it 'StarrStor request renders form' do
     sign_in FactoryBot.create(:happyuser)
     get starrstor_path('12892723')
@@ -22,7 +19,7 @@ RSpec.describe 'StarrStor Request Service' do
     # two emails - confirm to user, request to staff
     staff_email, confirm_email = ActionMailer::Base.deliveries.last(2)
 
-    # N.B., for StarrStor, we hard-code the "From" address, because it's 
+    # N.B., for StarrStor, we hard-code the "From" address, because it's
     # different from the staff-email (which includes Clancy/CaiaSoft staff)
 
     # staff email
@@ -72,5 +69,4 @@ RSpec.describe 'StarrStor Request Service' do
   #   expect(inactive_barcodes).to have_attributes(size: 1)
   #   expect(inactive_barcodes.first).to eq('0315337170')
   # end
-
 end

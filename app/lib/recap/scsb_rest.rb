@@ -1,4 +1,3 @@
-
 module Recap
   class ScsbRest
     attr_reader :conn, :scsb_args
@@ -23,11 +22,11 @@ module Recap
       get_scsb_rest_args
       url ||= @scsb_args[:url]
       Rails.logger.debug "- opening new connection to #{url}"
-      
+
       # reduce api timeouts - if the endpoint is up, it'll respond quickly.
-      request_params = { 
+      request_params = {
         open_timeout: 15, # opening a connection
-        timeout: 15       # waiting for response
+        timeout:      15 # waiting for response
       }
       @conn = Faraday.new(url: url, request: request_params)
       raise "Faraday.new(#{url}) failed!" unless @conn
@@ -60,6 +59,7 @@ module Recap
     # scsb_availability = Recap::ScsbRest.get_item_availability(barcodes)
     def self.get_item_availability(barcodes = [], conn = nil)
       raise 'Recap::ScsbRest.get_item_availability() got blank barcodes' if barcodes.blank?
+
       Rails.logger.debug "- get_item_availability(#{barcodes})"
 
       conn ||= open_connection
@@ -102,6 +102,7 @@ module Recap
     def self.get_bib_availability(bibliographicId = nil, institutionId = nil, conn = nil)
       raise 'Recap::ScsbRest.get_bib_availability() got nil bibliographicId' if bibliographicId.blank?
       raise 'Recap::ScsbRest.get_bib_availability() got nil institutionId' if institutionId.blank?
+
       Rails.logger.debug "- get_bib_availability(#{bibliographicId}, #{institutionId})"
 
       conn ||= open_connection
@@ -167,7 +168,6 @@ module Recap
     #   return patron_information_hash
     # end
 
-
     def self.request_item(params, conn = nil)
       # Build SCSB-specific params from Valet application params
       request_item_params = build_request_item_params(params)
@@ -210,16 +210,16 @@ module Recap
       # Just return the full hash, let the caller pull out what they want
       response_hash
     end
-    
+
     # SCSB requests only need a specific set of values
     def self.build_request_item_params(params)
       request_item_params = Hash.new()
-      
+
       # Simple strings fields that we want copied from Valet into SCSB request params,
       # some apply only to EDD, some apply to physical delivery
       @simple_fields = [
         "author",
-        "bibId",    # LIBSYS-5508 - maybe should be cleaned up?
+        "bibId", # LIBSYS-5508 - maybe should be cleaned up?
         "callNumber",
         "chapterTitle",
         "deliveryLocation",
@@ -245,9 +245,8 @@ module Recap
 
         request_item_params[field] = params[field] || ''
       end
-      
+
       request_item_params
     end
-    
   end
 end

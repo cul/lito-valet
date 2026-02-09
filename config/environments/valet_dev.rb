@@ -68,8 +68,8 @@ Rails.application.configure do
   config.action_mailer.delivery_method = :smtp
   config.action_mailer.smtp_settings = {
     address: 'smtp.library.columbia.edu',
-    domain: 'library.columbia.edu',
-    port: '25'
+    domain:  'library.columbia.edu',
+    port:    '25'
   }
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
@@ -96,4 +96,3 @@ end
 #     sender_address: %("notifier" <no-reply@libraries.cul.columbia.edu>),
 #     exception_recipients: %w(clio-dev@libraries.cul.columbia.edu)
 #   }
-                                        

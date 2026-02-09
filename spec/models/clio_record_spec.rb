@@ -3,7 +3,6 @@
 require 'rails_helper'
 
 RSpec.describe ClioRecord, type: :model do
-
   # LIBSYS-3139 - Call Numbers
   it 'ClioRecord shows local call-number, not 050 call-number' do
     # local "g" suffix at the end of the publication date in the call number
@@ -14,6 +13,4 @@ RSpec.describe ClioRecord, type: :model do
     bib_record = ClioRecord.new_from_bib_id(360487)
     expect(bib_record.call_number).to eq 'ND239 R726 G56'
   end
-
 end
-

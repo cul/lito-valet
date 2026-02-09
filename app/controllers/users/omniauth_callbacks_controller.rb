@@ -7,6 +7,7 @@ class Users::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
   def affiliations(user, affils)
     return unless user
+
     user.affils = affils.sort
   end
 end

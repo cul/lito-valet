@@ -1,4 +1,3 @@
-
 class FormsController < ApplicationController
   # The FormsController handles many different services.
   # Initialize based on active service.
@@ -16,7 +15,6 @@ class FormsController < ApplicationController
   # - build an appropriate form
   # - bounce directly to URL
   def show
-
     # short-circuit immediately if the service is in an outage state
     return outage! if @service_config[:outage]
 
@@ -32,19 +30,20 @@ class FormsController < ApplicationController
         # There may be a service-specific message or URL
         return redirect_to(@service_config['ineligible_url']) if @service_config['ineligible_url']
         return error(@service_config['ineligible_message']) if @service_config['ineligible_message']
+
         # Otherwise, use the default.
-        return error("Current user is not eligible for service #{@service_config['label']}") 
+        return error("Current user is not eligible for service #{@service_config['label']}")
       end
     end
 
     # validate bib record
     bib_id = params['id']
-    
+
     # All services require a bib_id, unless they are configured as "bib_optional"
     if bib_id.blank?
       return error("Service #{@service_config['label']} not passed a bib id") unless @service_config['bib_optional']
     end
-    
+
     # If the bib id was passed, then it needs to be a real, valid ID (unless "bib_optional" is set)
     if bib_id.present?
       bib_record = ClioRecord.new_from_bib_id(bib_id)
@@ -53,7 +52,7 @@ class FormsController < ApplicationController
         return error("Bib ID #{bib_id} is not eligible for service #{@service_config['label']}") unless @service.bib_eligible?(bib_record)
       end
     end
-        
+
     # process as form or as direct bounce
     # case @service_config['type']
     case @service.service_type?(bib_record)
@@ -76,11 +75,12 @@ class FormsController < ApplicationController
   def create
     bib_id = params['id']
     bib_record = ClioRecord.new_from_bib_id(bib_id)
-    
+
     # Some services need to do some custom form processing.
     # If they do, stash any result of that processing into 'params'
     service_response = @service.service_form_handler(params)
     return error("Failure processing request!") if service_response.nil?
+
     params['service_response'] = service_response if service_response
 
     # All should log, so that should happen here.
@@ -116,11 +116,12 @@ class FormsController < ApplicationController
     Rails.logger.debug("begin initialize_service()")
     service_name = determine_service
     return error('Unable to determine service!') unless service_name
+
     load_service_config(service_name)
 
     # If load_service_config() was unable to load @service_config
     return if @service_config.nil? or @service_config.empty?
-    
+
     # If this service is in an outage state, take no further initialization steps!
     return if @service_config[:outage]
 
@@ -137,6 +138,7 @@ class FormsController < ApplicationController
     # original = request.original_fullpath   # fullpath includes CGI params
     original = request.path
     return unless original && original.starts_with?('/')
+
     # '/docdel/123'  ==>  [ '', 'docdel', '123' ]
     service = original.split('/')[1]
     service
@@ -172,6 +174,7 @@ class FormsController < ApplicationController
                                nil
                              end
     return error("Cannot constantize #{service_class_name}") if service_class_instance.nil?
+
     @service = service_class_instance.new(@service_config)
   end
 
@@ -218,13 +221,13 @@ class FormsController < ApplicationController
     # - tell about the user
     login = current_user.present? ? current_user.login : ''
     logdata[:user] = login
-    
+
     # -some services will pass along extra data for the log
     logdata.merge!(extra_log_params) if extra_log_params.present?
-    
+
     # logdata is stored as in JSON
     data[:logdata] = logdata.to_json
-    
+
     # Log it!
     begin
       # If logging fails, don't die - report the error and continue
@@ -252,7 +255,7 @@ class FormsController < ApplicationController
   # Outages may redirect, render custom forms, or custom messasges, or use a default form
   def outage!
     Rails.logger.debug "outage!"
-    
+
     # Redirect to outage URL, if configured
     return redirect_to(@service_config['outage_url']) if @service_config['outage_url']
 
@@ -262,8 +265,7 @@ class FormsController < ApplicationController
 
     # Render custom template, if configured
     return render(@service_config['outage_template'], locals: locals) if @service_config['outage_template']
-    
+
     return render('outage/default_template', locals: locals)
   end
-
 end

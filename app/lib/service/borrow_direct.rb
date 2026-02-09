@@ -1,7 +1,6 @@
 module Service
   class BorrowDirect < Service::Base
-
-    # If a patron has any disqualifying condition (fines, blocks, etc.), 
+    # If a patron has any disqualifying condition (fines, blocks, etc.),
     # then they'll have a "_blocked" affil, and won't match the permitted_affils list
     def patron_eligible?(current_user = nil)
       return false unless current_user && current_user.affils
@@ -15,7 +14,7 @@ module Service
 
     # Columbia's Borrow Direct service had been implemented by OCLC's Relais ILL,
     # but was migrated to Project ReShare in 2022
-    # The Valet Borrow Direct service can do three things depending on URL: 
+    # The Valet Borrow Direct service can do three things depending on URL:
     #  (1) /borrow_direct
     #      Redirect to ReShare Search page
     #  (2) /borrow_direct/123
@@ -32,16 +31,17 @@ module Service
       # Build a query URL against ReShare
       reshare_base_url = APP_CONFIG[:reshare_base_url]
       return false unless reshare_base_url
+
       # Cleanup params
       params.transform_keys!(&:downcase)
       params.delete('controller')
       params.delete('action')
       # params should now only hold OpenURL values, if there are any
-      
+
       # (1) Redirect to BorrowDirect Search page, with no arguments
       if bib_record.nil? and params.empty?
         Rails.logger.debug "borrow_direct(1): redirect to #{reshare_base_url}"
-        return reshare_base_url 
+        return reshare_base_url
       end
 
       # (2) Lookup bib metadata, redirect to BorrowDirect fielded search
@@ -65,9 +65,8 @@ module Service
 
       # raise
       return reshare_base_url + '/Search/Results?' + query
-
     end
-    
+
     def reshare_build_query_from_bib_record(bib_record)
       return unless bib_record
 
@@ -86,20 +85,20 @@ module Service
           query += '"&join=AND'
         end
       end
-      
+
       return query
     end
 
     def reshare_build_query_from_openurl(params)
       return unless params
-      
+
       # ReShare has a single ISBN/ISSN search field (named "ISN")
       best_isn = params['issn'] || params['rft.issn'] || params['isbn'] || params['rft.isbn']
       if best_isn.present?
         query = 'type=ISN&lookfor=' + best_isn
         return query
       end
-      
+
       # If we can't find an ISBN or ISSN, try a title/author search.
       # Title might be found in MANY possible OpenURL fields.
       best_title = params['title'] || params['stitle'] || params['rft.title'] || params['rft.btitle'] || params['rft.stitle'] || params['rft.jtitle'] || params['loantitle'] || params['photoarticletitle'] || ''
@@ -112,10 +111,10 @@ module Service
         query += '&type0[]=Author&lookfor0[]="' + CGI.escape(best_author)
         query += '"&join=AND'
       end
-      
+
       return query
     end
-    
+
     ######################################
     #####    LEGACY - RELAIS SUPPORT #####
     ######################################
@@ -169,6 +168,5 @@ module Service
     ######################################
     ######################################
     ######################################
-
   end
 end

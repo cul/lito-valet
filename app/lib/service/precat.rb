@@ -24,8 +24,8 @@ module Service
       available_items = get_available_items(precat_holdings.first, availability)
       locals = {
         bib_record: bib_record,
-        holding: precat_holdings.first,
-        available: (available_items.count > 0)
+        holding:    precat_holdings.first,
+        available:  (available_items.count > 0)
       }
       locals
     end
@@ -45,7 +45,7 @@ module Service
     #   }
     #   confirm_params
     # end
-    
+
     def get_confirmation_locals(params, bib_record, current_user)
       get_precat_params(params, bib_record, current_user)
     end
@@ -60,12 +60,12 @@ module Service
       holding = get_precat_holdings(bib_record).first
 
       precat_params = {
-        bib_record: bib_record,
+        bib_record:    bib_record,
         location_name: holding[:location_display],
         location_code: holding[:location_code],
-        note:  params[:note],
-        patron_email: current_user.email,
-        staff_email: APP_CONFIG[:precat][:staff_email]
+        note:          params[:note],
+        patron_email:  current_user.email,
+        staff_email:   APP_CONFIG[:precat][:staff_email]
       }
       precat_params
     end

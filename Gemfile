@@ -7,7 +7,7 @@ gem 'rails', '~> 6.0'
 #   Remove this when we update Rails to 7.1
 gem 'concurrent-ruby', '1.3.4'
 
-# Valet is built using Sprockets - need gem until migration to Webpacker 
+# Valet is built using Sprockets - need gem until migration to Webpacker
 gem "sprockets-rails"
 
 # Use SCSS for stylesheets
@@ -162,10 +162,9 @@ gem 'lcsort'
 # dependency of many other gems
 # gem 'nokogiri'
 # Pin nokogiri to 1.17.x, glibc version incompatibility with 1.18.x
-# /lib64/libm.so.6: version `GLIBC_2.29' not found 
+# /lib64/libm.so.6: version `GLIBC_2.29' not found
 gem 'nokogiri', '~> 1.17.0'
 
 # now fixed.
 # # UNIX-5942 - work around spotty CUIT DNS
 # gem 'resolv-hosts-dynamic'
-

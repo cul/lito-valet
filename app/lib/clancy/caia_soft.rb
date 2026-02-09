@@ -1,11 +1,11 @@
 module Clancy
   class CaiaSoft
-
     attr_reader :conn, :caiasoft_config
 
     def self.get_caiasoft_config
       caiasoft_config = APP_CONFIG['caiasoft']
       raise "Cannot find #{app_config_key} in APP_CONFIG!" if caiasoft_config.blank?
+
       caiasoft_config = HashWithIndifferentAccess.new(caiasoft_config)
 
       [:api_key, :api_url, :itemstatus_path].each do |key|
@@ -26,9 +26,9 @@ module Clancy
       url ||= @caiasoft_config[:api_url]
 
       # reduce api timeouts - if the endpoint is up, it'll respond quickly.
-      request_params = { 
+      request_params = {
         open_timeout: 10, # opening a connection
-        timeout: 10       # waiting for response
+        timeout:      10 # waiting for response
       }
 
       Rails.logger.debug "- opening new connection to #{url}"
@@ -40,8 +40,7 @@ module Clancy
 
       @conn
     end
-  
-  
+
     # Documentation at:   https://portal.caiasoft.com/apiguide.php
     # REST API endpoint:  /itemstatus
     # Details:  Item Status
@@ -55,6 +54,7 @@ module Clancy
     #
     def self.get_itemstatus(barcode, conn = nil)
         raise 'CaiaSoft.get_itemstatus() got blank barcode' if barcode.blank?
+
         Rails.logger.debug "- CaiaSoft.get_itemstatus(#{barcode})"
 
         conn ||= open_connection
@@ -77,7 +77,5 @@ module Clancy
 
         caiasoft_itemstatus
       end
-
   end
 end
-

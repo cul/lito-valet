@@ -249,7 +249,7 @@ class OffsiteRequestsController < ApplicationController
     # permit some from form params,
     # merge in others from other application state
     application_params = {
-      patronBarcode:   current_user.barcode,
+      patronBarcode:         current_user.barcode,
       requestingInstitution: 'CUL'
     }
 

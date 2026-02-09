@@ -59,9 +59,7 @@ Rails.application.routes.draw do
             :outage_template_example,
             :outage_default_example,
         controller: 'forms',
-        only: [:show, :create]
-
-
+        only:       [:show, :create]
 
   # === OTHER SERVICES ===
   # These services take no arguments, or take arguments other than 'id'.
@@ -71,8 +69,6 @@ Rails.application.routes.draw do
   get 'illiad', action: :show, controller: 'forms'
   get 'ill', action: :show, controller: 'forms'
   get 'elink', action: :show, controller: 'forms'
-
-
 
   # === NOT-SO-SIMPLE SERVICES ===
   # These services require extra information beyond the bib key
@@ -87,11 +83,10 @@ Rails.application.routes.draw do
   get 'recap_loan/:id(/:mfhd_id)', action: :show, controller: 'forms', as: 'recap_loan'
   get 'recap_scan/:id(/:mfhd_id)', action: :show, controller: 'forms', as: 'recap_scan'
   # Here are the regular POST routes
-  resources :recap_loan, 
-            :recap_scan, 
+  resources :recap_loan,
+            :recap_scan,
             controller: 'forms',
-            only: [:create]
-
+            only:       [:create]
 
   # === ARBITRARY SERVICES ===
   #
@@ -99,19 +94,15 @@ Rails.application.routes.draw do
   #
   resources :patron_barcode, only: [:index]
 
-
   # === COURSE RESERVES ===
   # our index page is a search page
   resources :reserves, only: [:index]
   # RESTFul path to reserves list for a specific course
   # get 'reserves/course/:course_number', to: 'reserves#course', as: 'course_reserves'
   get 'course/:course_number', to: 'reserves#course', as: 'course_reserves'
-  # redirector to handle form post of key/value 
+  # redirector to handle form post of key/value
   # post 'reserves/course_redirect', to: 'reserves#course_redirect', as: 'course_reserves_redirect'
   post 'course_redirect', to: 'reserves#course_redirect', as: 'course_reserves_redirect'
-  
-  
-
 
   # === OLD CRUD BELOW ===
 
@@ -132,6 +123,4 @@ Rails.application.routes.draw do
   # OLD first-generation approach to logfiles
   get 'admin/logs'
   get 'admin/log_file'
-
 end
-

@@ -1,5 +1,3 @@
-
-
 RSpec.describe 'Item Feedback Service' do
   it 'item feedback renders form' do
     sign_in FactoryBot.create(:happyuser)

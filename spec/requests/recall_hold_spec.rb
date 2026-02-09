@@ -1,6 +1,4 @@
-
 RSpec.describe 'Recall / Hold Request Service' do
-
   # it 'redirects anonymous user to Voyager URL for Voyager item' do
   #   bib = '123'
   #   get recall_hold_path(bib)
@@ -31,5 +29,4 @@ RSpec.describe 'Recall / Hold Request Service' do
   #   get recall_hold_url('SCSB-1441991')
   #   expect(response.body).to include('not owned by Columbia')
   # end
-
 end

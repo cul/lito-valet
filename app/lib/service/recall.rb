@@ -66,12 +66,8 @@
 #   "pickupServicePointId": "8359f2bc-b83e-48e1-8a5b-ca1a74e840de"
 # }
 
-
-
-
 module Service
   class Recall < Service::Base
-
     # Only bibs with checked-out items are eligible for Recall
     # (Not just not-available - status has to be "Checked Out")
     def bib_eligible?(bib_record = nil)
@@ -80,28 +76,28 @@ module Service
         self.error = 'Recall requests can only be made for Columbia Library items.'
         return false
       end
-      
+
       checked_out_count = 0
       item_statuses = bib_record.fetch_folio_availability()
       checked_out_count = item_statuses.values.count { |status| status == "Checked out" }
-      
+
       if checked_out_count == 0
         self.error = "This record has no checked-out items.
         <br><br>
         Recall requests can only be made against checked-out items."
         return false
       end
-      
+
       return true
     end
-    
+
     # The Voyager Recall form looks like this:
     #      Place a Recall
     #      Title:             The essence of totalitarianism
     #      Instructions:      Please select an item.
     #      () Any Copy
     #      () This Copy:      c.1 0051570718 glx
-    #     
+    #
     #      Comment:
     #      Pick Up At:        Butler Circulation Desk
     #      Not Needed After:  2025-11-15
@@ -109,29 +105,29 @@ module Service
     # The form will need bib details, copy details, and pickup locations
     def setup_form_locals(params, bib_record, current_user)
       locals = {
-        bib_record: bib_record,
+        bib_record:   bib_record,
         availability: bib_record.fetch_folio_availability
         # ... etc. ...
       }
       locals
     end
-    
+
     # Service-specific form-param handling, before any email or confirm screen.
     # For Recall, make an API call to FOLIO
     # Here is the minimal data needed to successfully place a FOLIO Recall:
     #   {
     #       "requestLevel": "Item",
     #       "requestType": "Recall",
-    #   
+    #
     #       "instanceId": "0000072e-baa8-5478-bed1-54206c268977",
     #       "holdingsRecordId": "1ba62e86-97f1-5b74-a447-6be52ea78489",
     #       "itemId": "60c95ae4-a1f1-59d0-96c0-1f0c2dd85be8",
-    #   
+    #
     #       "requesterId": "5a05ac92-5512-5f1e-8198-31bcb9bf3397",
-    #   
+    #
     #       "fulfillmentPreference": "Hold Shelf",
     #       "pickupServicePointId": "cb457737-6d17-4046-8c98-315cd9b70f9f",
-    #   
+    #
     #       "requestDate": "2025-05-29"
     #   }
     # What comes to us from the form?  Just the bib and item ids.
@@ -139,7 +135,7 @@ module Service
       uni = params[:uni]
       user = Folio::Client.get_user_by_uni(uni)
       user_id = user["id"]
-      
+
       # Use the bib ID to get the FOLIO Instance details
       bib_id = params[:id]
       instance = Folio::Client.get_instance_by_hrid(bib_id)
@@ -149,26 +145,26 @@ module Service
       item_id = params[:item_id]
       item = Folio::Client.get_item(item_id)
       holdings_id = item['holdingsRecordId']
-      
+
       today = Time.now.strftime("%Y-%m-%d")
 
       recall_params = {
-        "requestLevel": "Item",
-        "requestType": "Recall",
-     
-        "instanceId":       instance_id,
-        "holdingsRecordId": holdings_id,
-        "itemId":           item_id,
-     
-        "requesterId":      user_id,
-     
+        "requestLevel":          "Item",
+        "requestType":           "Recall",
+
+        "instanceId":            instance_id,
+        "holdingsRecordId":      holdings_id,
+        "itemId":                item_id,
+
+        "requesterId":           user_id,
+
         "fulfillmentPreference": "Hold Shelf",
         # Hardcoded to Butler for today....
-        "pickupServicePointId": "cb457737-6d17-4046-8c98-315cd9b70f9f",
-     
-        "requestDate":      today
+        "pickupServicePointId":  "cb457737-6d17-4046-8c98-315cd9b70f9f",
+
+        "requestDate":           today
       }
-      
+
       begin
         service_response = Folio::Client.post_item_recall(recall_params)
       rescue => ex
@@ -179,9 +175,7 @@ module Service
 
       # Success!
       return service_response
-
     end
-    
 
     # No email confirmaion for Recall at this time.
     # # We can send a confirm email to the user.
@@ -190,7 +184,7 @@ module Service
     #   recall_email_params = {}
     #   FormMailer.with(recall_email_params).recall.deliver_now
     # end
-    
+
     # The confirmation page is what users are redirected to
     # after submitting the form.
     # What data elements do we want to display?
@@ -198,7 +192,7 @@ module Service
       # pull out the direct FOLIO response,
       # the confirm page will just echo some of this data back to the user
       service_response = params['service_response']
-      
+
       # Link to "My Borrowing Account", appropriate for our environment
       clio = 'clio.columbia.edu'
       clio = 'clio-dev.cul.columbia.edu' if Rails.env == 'valet_dev'
@@ -206,18 +200,14 @@ module Service
       my_borrowing_account_url = 'http://' + clio + '/my_account'
 
       confirm_locals = {
-        title:       service_response['instance']['title'],
-        call_number: service_response['item']['callNumber'],
-        barcode:     service_response['item']['barcode'],
-        pickup:      service_response['pickupServicePoint']['discoveryDisplayName'],
-        status:      service_response['status'],
+        title:                    service_response['instance']['title'],
+        call_number:              service_response['item']['callNumber'],
+        barcode:                  service_response['item']['barcode'],
+        pickup:                   service_response['pickupServicePoint']['discoveryDisplayName'],
+        status:                   service_response['status'],
         my_borrowing_account_url: my_borrowing_account_url
       }
       confirm_locals
     end
-    
-    
   end
 end
-
-

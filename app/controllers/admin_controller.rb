@@ -22,7 +22,6 @@ class AdminController < ApplicationController
     end
   end
 
-
   def logs
     return redirect_to root_path unless current_user.valet_admin?
 

@@ -1,8 +1,7 @@
 RSpec.describe 'FLI Paging' do
-
   it 'redirects SAC patron to ezproxy/illiad' do
     user = FactoryBot.create(:happyuser)
-    user.affils = ['LIB_clio-EnhancedUndergraduate'] 
+    user.affils = ['LIB_clio-EnhancedUndergraduate']
     sign_in user
 
     get fli_paging_path('2049141')
@@ -28,32 +27,29 @@ RSpec.describe 'FLI Paging' do
     ]
 
     illiad_url = 'https://ezproxy.cul.columbia.edu/login?url=' +
-      'https://columbia.illiad.oclc.org/illiad/zcu/illiad.dll?' +
-      illiad_params.join('&')
+                 'https://columbia.illiad.oclc.org/illiad/zcu/illiad.dll?' +
+                 illiad_params.join('&')
 
     expect(response).to redirect_to(illiad_url)
-
   end
 
   it 'redirects to REG patron to failure page' do
     sign_in FactoryBot.create(:happyuser)
     get fli_paging_path('123')
-    expect(response).to redirect_to( APP_CONFIG[:fli_paging][:ineligible_url] )
+    expect(response).to redirect_to(APP_CONFIG[:fli_paging][:ineligible_url])
   end
-
 
   it 'redirects blocked patron to failure page' do
     sign_in FactoryBot.create(:blockeduser)
     get fli_paging_path('123')
-    expect(response).to redirect_to( APP_CONFIG[:fli_paging][:ineligible_url] )
+    expect(response).to redirect_to(APP_CONFIG[:fli_paging][:ineligible_url])
   end
 
   it 'fails for non-FLI material' do
     user = FactoryBot.create(:happyuser)
-    user.affils = ['LIB_clio-EnhancedUndergraduate'] 
+    user.affils = ['LIB_clio-EnhancedUndergraduate']
     sign_in user
     get fli_paging_path('123')
     expect(response.body).to include('This record has no FLI Partnership holdings')
   end
-
 end

@@ -1,11 +1,8 @@
-
-
 RSpec.configure do |config|
   config.include FactoryBot::Syntax::Methods
 end
 
 FactoryBot.define do
-
   # regular good user (good affils)
   factory :happyuser, class: User do
     uid { 'jdoe' }
@@ -58,7 +55,5 @@ FactoryBot.define do
     # factory :recalleduser do
     #   over_recall_notice_count { 99 }
     # end
-
   end
-
 end

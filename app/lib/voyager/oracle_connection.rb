@@ -29,11 +29,11 @@ module Voyager
 
       @results = {}
     end
-    
+
     def get_patron_record(uni)
       Rails.logger.debug "- get_patron_record(uni=#{uni})"
       return nil unless uni.present?
-      
+
       # If we've already fetched the patron record, return it
       return @patron_record if @patron_record.present?
 
@@ -52,7 +52,7 @@ module Voyager
       @patron_record = raw_results.first
       return @patron_record
     end
-    
+
     def get_patron_id(uni)
       Rails.logger.debug "- get_patron_id(uni=#{uni})"
       return nil unless uni.present?
@@ -97,10 +97,10 @@ module Voyager
     # def retrieve_patron_expire_date(uni)
     #   Rails.logger.debug "- retrieve_patron_expire_date(uni=#{uni})"
     #   return nil unless uni.present?
-    # 
+    #
     #   @patron_record ||= get_patron_record(uni)
     #   return nil unless @patron_record.present?
-    # 
+    #
     #   expire_date = @patron_record['EXPIRE_DATE']
     #   Rails.logger.debug "  found expire_date [#{expire_date}]"
     #   expire_date
@@ -108,10 +108,10 @@ module Voyager
 
     # def retrieve_patron_total_fees_due(uni)
     #   return nil unless uni.present?
-    # 
+    #
     #   @patron_record ||= get_patron_record(uni)
     #   return nil unless @patron_record.present?
-    # 
+    #
     #   total_fees_due = @patron_record['TOTAL_FEES_DUE']
     #   Rails.logger.debug "  found total_fees_due [#{total_fees_due}]"
     #   total_fees_due
@@ -135,7 +135,6 @@ module Voyager
     #   @circ_transactions_record = raw_results.first
     #   return @circ_transactions_record['OVER_RECALL_NOTICE_COUNT']
     # end
-
 
     def retrieve_patron_email(patron_id)
       Rails.logger.debug "- retrieve_patron_email(patron_id=#{patron_id})"
@@ -168,7 +167,7 @@ module Voyager
       return nil unless patron_id.present?
 
       query = <<-HERE
-        select patron_id, 
+        select patron_id,#{' '}
                patron_barcode,
                patron_group_id,
                barcode_status
@@ -189,7 +188,6 @@ module Voyager
       patron_barcode
     end
 
-
     # LIBSYS-5996 - StarrStor - include inactive barcodes in staff request emails
     def retrieve_inactive_barcodes(active_barcode)
       Rails.logger.debug "- retrieve_inactive_barcodes(active_barcode=#{active_barcode})"
@@ -199,17 +197,17 @@ module Voyager
         select item_barcode.item_barcode
         from   item_barcode
         where  item_barcode.barcode_status = 2
-        and    item_barcode.item_id in 
-        ( 
-          select  item_barcode.item_id 
-          from    item_barcode 
+        and    item_barcode.item_id in#{' '}
+        (#{' '}
+          select  item_barcode.item_id#{' '}
+          from    item_barcode#{' '}
           where   item_barcode.item_barcode = ~active_barcode~
         )
       HERE
 
       full_query = fill_in_query_placeholders(query, active_barcode: active_barcode)
       raw_results = execute_select_command(full_query)
-      
+
       inactive_barcodes = Array.new()
       raw_results.each do |row|
         inactive_barcodes.push(row['ITEM_BARCODE'])
@@ -218,8 +216,6 @@ module Voyager
       Rails.logger.debug "  found #{inactive_barcodes.size} inactive_barcodes: #{inactive_barcodes}"
       inactive_barcodes
     end
-    
-    
 
     # --- never called ---
     # def get_patron_stats(patron_id = nil)
@@ -299,6 +295,7 @@ module Voyager
 
       results.each do |row|
         next unless (key = row[options[:hash_by]].to_s)
+
         if options[:single_result]
           result_hash[key] = row[options[:single_result]]
         else

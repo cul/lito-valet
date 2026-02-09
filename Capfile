@@ -36,5 +36,3 @@ task :fix_timestamp do
   env.instance_variable_set(:@timestamp, Time.now)
 end
 after :"load:defaults", :fix_timestamp
-
-

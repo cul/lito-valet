@@ -50,7 +50,7 @@ class User < ApplicationRecord
     raise "LDAP config needs 'host'" unless ldap_args.key?(:host)
     raise "LDAP config needs 'port'" unless ldap_args.key?(:port)
     raise "LDAP config needs 'base'" unless ldap_args.key?(:base)
-    
+
     # This should use Resolv-Replace instead of DNS
     ldap_ip_address = Resolv.getaddress(ldap_args[:host])
 
@@ -68,7 +68,7 @@ class User < ApplicationRecord
     #     sleep 1
     #   end
     # end
-    # 
+    #
     # if ldap_ip_address.blank?
     #   Rails.logger.error "Unable to resolve hostname #{ldap_args[:host]}!."
     #   return
@@ -99,6 +99,7 @@ class User < ApplicationRecord
       @ldap_attributes = {}
       entry.each_attribute do |attribute, value_list|
         next if value_list.blank?
+
         @ldap_attributes[attribute] = value_list
       end
 
@@ -160,12 +161,11 @@ class User < ApplicationRecord
 
     self.barcode
   end
-  
+
   def set_barcode_folio(uid)
     patron_barcode = Folio::Client.get_user_barcode(uid)
     self.barcode = patron_barcode
   end
-  
 
   def login
     uid.split('@').first
@@ -209,9 +209,10 @@ class User < ApplicationRecord
   def has_affil(affil = nil)
     return false if affil.blank?
     return false unless affils
+
     affils.include?(affil)
   end
-  
+
   # # Instead of querying Oracle, look through LDAP affils
   # def patron_group
   #   return '' unless affils
@@ -232,6 +233,7 @@ class User < ApplicationRecord
   # Instead of querying Oracle, look through LDAP affils
   def patron_groups
     return [] unless affils
+
     patron_groups = []
 
     affils.each do |affil|
@@ -242,11 +244,10 @@ class User < ApplicationRecord
       if affilmatch = affil.match(/CUL_role-clio-([A-Z]+)/)
         patron_groups.push(affilmatch[1])
       end
-      # FOLIO - 
+      # FOLIO -
       if affilmatch = affil.match(/LIB_clio-([A-Za-z0-9]+)/)
         patron_groups.push(affilmatch[1])
       end
-
     end
 
     return patron_groups
@@ -268,6 +269,7 @@ class User < ApplicationRecord
 
   def offsite_blocked?
     return false unless affils
+
     # This is not a "denied" affiliation,
     # because blocked users can still request physical delivery.
     affils.each do |affil|
@@ -275,7 +277,7 @@ class User < ApplicationRecord
     end
     false
   end
-  
+
   # Extra requirements for EDD-eligibility (Electronic Document Delivery)
   def offsite_edd_eligible?
     # LIBSYS-1936 - prohibit EDD to patron-group RECAP
@@ -371,11 +373,10 @@ class User < ApplicationRecord
     return true if self.has_affil('CUL_bcpartners')
     return true if self.has_affil('CUL_tcpartners')
     return true if self.has_affil('CUL_hslpartners')
+
     return false
   end
 
-
-  
   # GETTERS / SETTERS
 
   # FOLIO - don't need these, don't use these
@@ -409,7 +410,7 @@ class User < ApplicationRecord
   # def over_recall_notice_count=(val)
   #   @over_recall_notice_count = val
   # end
-  
+
   # --- never called ---
   # def patron_barcode_record
   #   @patron_barcode_record ||= oracle_connection.get_patron_barcode_record(patron_id)
@@ -434,8 +435,6 @@ class User < ApplicationRecord
   #   @patron_stats = val
   # end
 
-  
-
   # TESTS
 
   # --- never called ---
@@ -444,7 +443,7 @@ class User < ApplicationRecord
   #   Rails.logger.info "patron expired! (#{uid})" if expired
   #   return expired
   # end
-  
+
   # --- never called ---
   # def patron_blocked?
   #   # LIBSYS-2888 - temporarily bump blocked-fees limit from $99 to $9,999
@@ -463,12 +462,11 @@ class User < ApplicationRecord
   #   Rails.logger.info "patron has recalls! (#{uid})" if recalls
   #   return recalls
   # end
-  
+
   # --- never called ---
   # def patron_2cul?
   #   is_2cul = patron_stats.include?('2CU')
   #   Rails.logger.info "patron is 2cul (#{uid})" if is_2cul
   #   return is_2cul
   # end
-  
 end

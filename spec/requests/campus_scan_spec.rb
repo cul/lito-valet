@@ -1,14 +1,9 @@
-
-
 RSpec.describe 'Campus Scan' do
-
-
   it 'presents campus-selection form' do
     sign_in FactoryBot.create(:happyuser)
     get campus_scan_path('123')
     expect(response.body).to include('Please select your campus')
   end
-
 
   it 'redirects MBUTS-campus patrons to ezproxy/illiad (book chapter)' do
     sign_in FactoryBot.create(:happyuser)
@@ -50,11 +45,6 @@ RSpec.describe 'Campus Scan' do
   it 'redirects blocked patron to failure page' do
     sign_in FactoryBot.create(:blockeduser)
     get campus_scan_path('123')
-    expect(response).to redirect_to( APP_CONFIG[:campus_scan][:ineligible_url] )
+    expect(response).to redirect_to(APP_CONFIG[:campus_scan][:ineligible_url])
   end
-
-
 end
-
-
-

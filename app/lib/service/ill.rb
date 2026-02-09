@@ -1,7 +1,6 @@
 module Service
   class Ill < Service::Base
-
-    # If a patron has any disqualifying condition (fines, blocks, etc.), 
+    # If a patron has any disqualifying condition (fines, blocks, etc.),
     # then they'll have a "_blocked" affil, and won't match the permitted_affils list
     def patron_eligible?(current_user = nil)
       return false unless current_user && current_user.affils
@@ -19,11 +18,10 @@ module Service
       # they can get to the ILL service code.
       locals = { ill_params: params }
       locals
-      
     end
 
     # ILL requests are managed by OCLC ILLiad
-    # The Valet ILL service can do many things depending on how it's called: 
+    # The Valet ILL service can do many things depending on how it's called:
     #  (0) If patron's campus == TC
     #      Redirect to Teachers College services web page
     #  (1) /ill
@@ -35,7 +33,6 @@ module Service
     #  (4) /ill?Author=Smith&Title=Papers (OpenURL parameters)
     #      Cleanup OpenURL params, send OpenURL to ILLiad
     def build_service_url(params, bib_record, current_user)
-
       # First, process the campus triage form, bounce TC patrons away immediately
       campus = params['campus']
       return 'https://resolver.library.columbia.edu/tc-ill' if campus == 'tc'
@@ -57,14 +54,14 @@ module Service
       params.delete('action')
       params.delete('authenticity_token')
       params.delete('commit')
-      # N.B. - the parameter name "action" is ambiguous - it's both an 
-      # ILLiad param and a Rails param.  
+      # N.B. - the parameter name "action" is ambiguous - it's both an
+      # ILLiad param and a Rails param.
       # Delete it here, add back in later if needed.
 
       # (1) Redirect to BorrowDirect Search page, with no arguments
       if bib_record.nil? and params.empty?
         Rails.logger.debug "ill(1): redirect to ILLiad login page"
-        return APP_CONFIG[:illiad_login_url] 
+        return APP_CONFIG[:illiad_login_url]
       end
 
       # (2) ILL OpenURL - formed from bib record
@@ -78,7 +75,7 @@ module Service
       # (3) Redirect to ILLiad, to the specific specified form
       if params.present? and params.has_key?('Form')
         # Action=10 tells Illiad that we'll pass the Form ID to use
-        params['Action']    = '10'
+        params['Action'] = '10'
         illiad_params.merge!(params)
         # Return the ILLiad base url, with all parameters including Form ID
         return Oclc::Illiad.build_full_url(illiad_base_url, illiad_params)
@@ -91,15 +88,12 @@ module Service
         # Return the ILLiad base url, with all parameters including Form ID
         return Oclc::Illiad.build_full_url(illad_openurl_url, illiad_params)
       end
-      
+
       # Should never get here!
     end
 
-    
     def open_params_from_bib(bib_record)
       # Not yet implemented
     end
-
-    
   end
 end

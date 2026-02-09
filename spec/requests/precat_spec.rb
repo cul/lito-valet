@@ -1,4 +1,3 @@
-
 # These tests run against bibs with status 'precat'
 # These 'precat' bibs become cataloged over time, and then
 # we need to hunt down a new precat bib to test against.

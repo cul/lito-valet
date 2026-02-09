@@ -1,4 +1,3 @@
-
 begin
   # No interpolation
   #   raw_config = File.read(Rails.root.to_s + '/config/app_config.yml')

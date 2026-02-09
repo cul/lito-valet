@@ -1,5 +1,3 @@
-
-
 # Called like this from the controller:
 #   solr_connection = Clio::SolrConnection.new()
 #   marc = solr_connection.retrieve_marc(bib_id)
@@ -11,6 +9,7 @@ module Clio
       solr_args = APP_CONFIG['solr_connection_details']
       raise 'Solr config missing!' unless solr_args.present?
       raise "Solr config missing 'url'" unless solr_args.key?(:url)
+
       Rails.logger.debug "Clio::SolrConnection#initialize: solr_args:#{solr_args}"
       @solr_connection = RSolr.connect url: solr_args[:url]
     end

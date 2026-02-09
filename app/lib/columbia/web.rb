@@ -1,4 +1,3 @@
-
 module Columbia
   class Web
     # Tocs live at URLs like this:
@@ -20,9 +19,9 @@ module Columbia
 
     def self.open_connection
       # reduce api timeouts - if the endpoint is up, it'll respond quickly.
-      request_params = { 
+      request_params = {
         open_timeout: 5, # opening a connection
-        timeout: 5       # waiting for response
+        timeout:      5 # waiting for response
       }
 
       conn = Faraday.new(url: HOST, request: request_params)
@@ -57,6 +56,7 @@ module Columbia
 
     def self.get_bib_toc_links(bib = nil, conn = nil)
       raise 'Columbia::Web.get_bib_toc_links() got nil bib' if bib.blank?
+
       Rails.logger.debug "- Columbia::Web.get_bib_toc_links(#{bib})"
 
       conn ||= open_connection

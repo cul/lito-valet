@@ -1,6 +1,5 @@
 module Service
   class RecapLoan < Service::Base
-
     # For the ReCAP services, use the offsite_elibible? logic from User model
     def patron_eligible?(current_user = nil)
       return false unless current_user && current_user.affils
@@ -22,23 +21,23 @@ module Service
       default_form_name = @service_config[:service_name]
 
       # We already know the holding id if:
-      # - there's a mfhd_id in the params, or 
+      # - there's a mfhd_id in the params, or
       return default_form_name if params[:mfhd_id]
       # - there's only a single offsite holding
       return default_form_name if bib_record.offsite_holdings.size == 1
 
-      # But if we don't know the holding, ask for it, 
+      # But if we don't know the holding, ask for it,
       # using a special "holdings" form...
       return "#{default_form_name}_holdings"
     end
 
-    # this method needs to setup form locals for 
+    # this method needs to setup form locals for
     # EITHER holdings-selection form OR item-selection form
     def setup_form_locals(params, bib_record, current_user)
       # identify the target holding for item-selection form
       # (or leave nil for holding-selection form)
       target_holding = nil
-      
+
       if params[:mfhd_id]
         target_holding = bib_record.holdings.select do |holding|
           holding[:mfhd_id] == params[:mfhd_id]
@@ -48,7 +47,7 @@ module Service
       if target_holding.nil? && bib_record.offsite_holdings.size == 1
         target_holding = bib_record.offsite_holdings.first
       end
-      
+
       # item-selection form has special handling for zero-available-items
       available_count = 0
 
@@ -60,8 +59,8 @@ module Service
 
       # pass along the bib and the holding being requested
       locals = {
-        bib_record: bib_record,
-        holding: target_holding,
+        bib_record:      bib_record,
+        holding:         target_holding,
         available_count: available_count
       }
       locals
@@ -72,19 +71,19 @@ module Service
     def service_form_handler(params)
       service_response = Recap::ScsbRest.request_item(params)
     end
-    
+
     # Basic request data (bib, user, datestamp, IP) is automatically logged.
     # Services may return a hash of additional data to be logged.
     def get_extra_log_params(params)
       extra_log_params = {}
-      
+
       extra_log_params['patronBarcode'] = params['patronBarcode']
       extra_log_params['emailAddress'] = params['emailAddress']
-      
-      success = params['service_response']['success'] ||  params['service_response']['error'] || 'false'
+
+      success = params['service_response']['success'] || params['service_response']['error'] || 'false'
       extra_log_params['success'] = success
 
-      screenMessage = params['service_response']['screenMessage'] ||  params['service_response']['message'] || ''
+      screenMessage = params['service_response']['screenMessage'] || params['service_response']['message'] || ''
       extra_log_params['screenMessage'] = screenMessage
 
       extra_log_params['requestType'] = params['requestType']
@@ -96,13 +95,13 @@ module Service
 
       extra_log_params
     end
-    
+
     def send_emails(params, bib_record, current_user)
       # Call recap_loan() method of /app/mailers/form_mailer.rb
       # Pass along all our params to be used in email subject and body template
       FormMailer.with(params).recap_loan_confirm.deliver_now
     end
-    
+
     # The ReCAP services will give the patrons a confirmation screen,
     # so they need to define a locals hash for the template
     def get_confirmation_locals(params, bib_record, current_user)
@@ -116,7 +115,5 @@ module Service
       }
       confirm_locals
     end
-
-    
   end
 end

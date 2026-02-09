@@ -10,7 +10,7 @@ class ClioRecord
 
   def initialize(marc_record = nil)
     @marc_record = marc_record
-    
+
     # TODO: - do this better
     populate_holdings
     populate_owningInstitution
@@ -77,9 +77,9 @@ class ClioRecord
   # Hash of basic bib fields, used in logging of most request services
   def basic_log_data
     {
-      bib_id:  id,
-      title:   title,
-      author:  author
+      bib_id: id,
+      title:  title,
+      author: author
     }
   end
 
@@ -97,11 +97,12 @@ class ClioRecord
   end
 
   def folio?
-    owningInstitution == 'CUL' && ( id.match(/^\d+$/) || id.match(/^in/) )
+    owningInstitution == 'CUL' && (id.match(/^\d+$/) || id.match(/^in/))
   end
 
   def title
     return '' unless @marc_record && @marc_record['245']
+
     subfieldA = @marc_record['245']['a'] || ''
     subfieldB = @marc_record['245']['b'] || ''
     title = subfieldA.strip
@@ -113,6 +114,7 @@ class ClioRecord
   # For some purposes (e.g., Borrow Direct) we want only 245$a (NEXT-1735)
   def title_brief
     return '' unless @marc_record && @marc_record['245']
+
     subfieldA = @marc_record['245']['a'] || ''
     title = subfieldA.strip
     # return the cleaned up title
@@ -124,6 +126,7 @@ class ClioRecord
     %w(100 110 111).each do |field|
       # skip ahead to the first author field we find
       next unless @marc_record[field].present?
+
       # gather up a few subfields
       'abcj'.split(//).each do |subfield|
         author_tokens << @marc_record[field][subfield]
@@ -148,6 +151,7 @@ class ClioRecord
     publisher ||= []
     %w(260 264).each do |field|
       next unless @marc_record[field]
+
       'abcefg3'.split(//).each do |subfield|
         publisher << @marc_record[field][subfield]
       end
@@ -165,18 +169,21 @@ class ClioRecord
   def pub_place
     return '' unless (pub_field = self.pub_field)
     return '' unless (pub_place = pub_field['a'])
+
     pub_place.sub(/\s*[:;,]$/, '')
   end
 
   def pub_name
     return '' unless (pub_field = self.pub_field)
     return '' unless (pub_name = pub_field['b'])
+
     pub_name.sub(/\s*[:;,]$/, '')
   end
 
   def pub_date
     return '' unless (pub_field = self.pub_field)
     return '' unless (pub_date = pub_field['c'])
+
     pub_date.sub(/\s*[:;,]$/, '')
   end
 
@@ -198,24 +205,24 @@ class ClioRecord
     tag050 = @marc_record['050']
     call_number_050 = call_number_from_050(tag050)
     return call_number_050 if call_number_050.present?
-    
+
     # none found?
     return nil
   end
-  
+
   CALL_NUMBER_ONLY = /^.* \>\> (.*)\|DELIM\|.*/
-  
+
   def call_number_from_992(tag992 = nil)
     return nil unless tag992 && tag992['b']
 
     # If the regexp finds a call-number, return it.
     if matchdata = tag992['b'].match(CALL_NUMBER_ONLY)
-      return matchdata[1] 
+      return matchdata[1]
     else
       return nil
     end
   end
-  
+
   def call_number_from_050(tag050 = nil)
     return '' unless tag050
 
@@ -234,6 +241,7 @@ class ClioRecord
 
       oclc_regex = /OCoLC[^0-9A-Za-z]*([0-9A-Za-z]*)/
       next unless (oclc_match = number.match(oclc_regex))
+
       oclc_number = oclc_match[1]
       return oclc_number
     end
@@ -245,6 +253,7 @@ class ClioRecord
   # and 020$a can have ISBN together with notes "123 (paperback)"
   def isbn
     return nil unless @marc_record.fields('020')
+
     isbns = @marc_record.fields('020').map do |field|
       StdNum::ISBN.normalize(field['a'])
     end
@@ -262,18 +271,19 @@ class ClioRecord
       digits[0..3] + '-' + digits[4..7]
     end
   end
-  
+
   # Finding-Aid links look like:
   #   https://findingaids.library.columbia.edu/ead/nnc-rb/ldpd_4079355
   # Return the first found, or if none found, return nil
   def finding_aid_link
     @marc_record.fields('856').each do |field|
-      url   = field['u']
+      url = field['u']
       # has to look like a finding aid...
-      next unless url.match(/findingaids.library.columbia.edu/) or 
+      next unless url.match(/findingaids.library.columbia.edu/) or
                   url.match(/findingaids.cul.columbia.edu/)
       # cannot be a downloadable document...
       next if url.match(/(pdf|doc|htm|html)$/)
+
       return url
     end
     return nil
@@ -320,11 +330,11 @@ class ClioRecord
       best_call_number = tag852['h'].present? ? tag852['h'] : self.call_number
 
       holdings[mfhd_id] = {
-        mfhd_id:                  mfhd_id,
-        location_display:         tag852['a'],
-        location_code:            tag852['b'],
-        display_call_number:      best_call_number,
-        items:                    []
+        mfhd_id:             mfhd_id,
+        location_display:    tag852['a'],
+        location_code:       tag852['b'],
+        display_call_number: best_call_number,
+        items:               []
       }
       # And fill in all possible mfhd fields with empty array
       mfhd_fields.each_pair do |label, _tag|
@@ -340,6 +350,7 @@ class ClioRecord
         mfhd_id = mfhd_data_field['0']
         value = mfhd_data_field['a']
         next unless mfhd_id && holdings[mfhd_id] && value
+
         holdings[mfhd_id][label] << value
       end
     end
@@ -404,13 +415,13 @@ class ClioRecord
 
   # Return the availability for the passed item.
   def get_item_availability(holding, item)
-
     # For Offsite items, always return SCSB availability
     #   (Not the FOLIO availability of the matching FOLIO item)
     if is_offsite_location_code?(holding[:location_code])
       self.fetch_scsb_availabilty unless @scsb_availability
-      return @scsb_availability[ item[:barcode] ] if @scsb_availability.has_key?(item[:barcode])
-      # No SCSB availability for an offsite item?  
+      return @scsb_availability[item[:barcode]] if @scsb_availability.has_key?(item[:barcode])
+
+      # No SCSB availability for an offsite item?
       # Something's wrong - either not yet accessioned at ReCAP or another problem.
       return ''
     end
@@ -418,13 +429,13 @@ class ClioRecord
     # fetch FOLIO availability for all holdings/items of this bib...
     self.fetch_folio_availability unless @folio_availability
     # ...and then pull out the availability for just the item of interest
-    folio_item_status = @folio_availability[ item[:item_id] ]
-  
+    folio_item_status = @folio_availability[item[:item_id]]
+
     # Clancy houses Barnard Remote(bar,stor) and StarrStor (East Asian temporary)
     # If FOLIO says the item is Available, double-check with Clancy/CaiaSoft,
     # It may be missing from the shelf.
     if folio_item_status.eql?('Available') &&
-           is_clancy_location_code?(holding[:location_code])
+       is_clancy_location_code?(holding[:location_code])
       # Clancy uses the CaiaSoft inventory management system
       caiasoft_itemstatus = Clancy::CaiaSoft::get_itemstatus(item[:barcode])
       status_string = caiasoft_itemstatus[:status] || ''
@@ -438,7 +449,6 @@ class ClioRecord
 
     # If NOT Clancy/CaiaSoft, return FOLIO status
     return folio_item_status
-    
   end
 
   # Fetch availability for each barcode from SCSB
@@ -473,7 +483,6 @@ class ClioRecord
   #   @voyager_availability ||= Clio::BackendConnection.get_bib_availability(id) || {}
   # end
 
-  
   def fetch_folio_availability
     @folio_availability = {}
     # Simple approach - for every item, lookup it's individual status
@@ -481,7 +490,7 @@ class ClioRecord
       holding[:items].each do |item|
         item_id = item[:item_id]
         begin
-          item_folio_details = Folio::Client.get_item( item_id )
+          item_folio_details = Folio::Client.get_item(item_id)
           @folio_availability[item_id] = item_folio_details['status']['name']
         rescue => ex
           # Any error retrieving item availability?  Assume Unavailable.
@@ -489,11 +498,10 @@ class ClioRecord
         end
       end
     end
-    
-    return @folio_availability 
-    
 
-    # This assumed that there was some clever way to gather item-status for 
+    return @folio_availability
+
+    # This assumed that there was some clever way to gather item-status for
     # a set of items - but RTAC is broken/deprecated, and we don't know of another
     # API endpoint.
     # # The FOLIO Instance ID is in the 999$i
@@ -591,7 +599,7 @@ class ClioRecord
 
     str
   end
-  
+
   # Given a string location code,
   # return True/False whether the location code is offsite.
   def is_offsite_location_code?(location_code = shift)
@@ -601,7 +609,7 @@ class ClioRecord
     return true if location_code.match(/^off/i)
     # All SCSB locations are offsite
     return true if location_code.match(/^scsb/i)
-    
+
     # Anything else is NOT offsite
     return false
   end
@@ -632,34 +640,34 @@ class ClioRecord
     return start_year unless end_year && end_year.match?(/[0-9u]{4}/) && end_year != '9999'
 
     "#{start_year} #{end_year}"
-  end    
-
+  end
 
   # 506 - Restrictions on Access Note
   def get_aeon_access_restrictions_from_bib()
     return '' unless @marc_record && @marc_record['506']
+
     subfieldA = @marc_record['506']['a'] || ''
 
     @marc_record.fields('506').each do |field|
       next unless (restriction = field['a'])
       return 'UNPROCESSED' if restriction.match?(/unprocessed/i)
     end
-  end    
+  end
 
   def get_aeon_format_from_bib()
     leader_code = @marc_record.leader[6, 2]
 
-    format_category, position_008 = 
+    format_category, position_008 =
       case leader_code
-        when /a[macd]/  then ["Book", 23]
-        when /a[sib]/   then ["Continuing Resource", 23]
-        when /^[ht]/    then ["Book", 23]
-        when /^m/       then ["Computer File", 23]
-        when /^[gkor]/  then ["Visual Material", 29]
-        when /^[cd]/    then ["Score", 23]
-        when /^[ij]/    then ["Recording", 23]
-        when /^[ef]/    then ["Map", 29]
-        when /^[bp]/    then ["Mixed", 23]
+      when /a[macd]/  then ["Book", 23]
+      when /a[sib]/   then ["Continuing Resource", 23]
+      when /^[ht]/    then ["Book", 23]
+      when /^m/       then ["Computer File", 23]
+      when /^[gkor]/  then ["Visual Material", 29]
+      when /^[cd]/    then ["Score", 23]
+      when /^[ij]/    then ["Recording", 23]
+      when /^[ef]/    then ["Map", 29]
+      when /^[bp]/    then ["Mixed", 23]
         else [nil, nil]
        end
 
@@ -687,8 +695,8 @@ class ClioRecord
     's' => "Electronic"
   }.freeze
 
-  # Untested code.  I asked for an example bib to test this,  
-  # and was told that support for this field was unnecessary.  
+  # Untested code.  I asked for an example bib to test this,
+  # and was told that support for this field was unnecessary.
   #
   # def get_aeon_series_from_bib()
   #   # Try 490$a first
@@ -705,9 +713,4 @@ class ClioRecord
   #
   #   nil
   # end
-  
-  
 end
-
-
-

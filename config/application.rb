@@ -26,7 +26,7 @@ module Valet
     # https://mattbrictson.com/dynamic-rails-error-pages
     config.exceptions_app = routes
 
-    # set ActiveRecord timestamps (e.g., 'created_at') to local time 
+    # set ActiveRecord timestamps (e.g., 'created_at') to local time
     config.time_zone = 'Eastern Time (US & Canada)'
     config.active_record.default_timezone = :local # Or :utc
   end

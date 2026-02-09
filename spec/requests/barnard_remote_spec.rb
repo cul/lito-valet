@@ -1,6 +1,4 @@
-
 RSpec.describe 'Barnard Remote Request Service' do
-
   it 'Barnard Remote Request renders form' do
     sign_in FactoryBot.create(:happyuser)
     get barnard_remote_path('5060332')

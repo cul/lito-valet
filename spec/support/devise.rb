@@ -1,4 +1,3 @@
-
 # https://github.com/plataformatec/devise#test-helpers
 RSpec.configure do |config|
   # Controller tests
