@@ -17,9 +17,9 @@ module Oclc
       params['ItemInfo2'] = current_user.barcode
       params['ItemInfo4'] = current_user.patron_groups.join(',')
 
-      # LIBSYS-7889 - Try using UserInfo fields - awaiting testing
-      params['UserInfo3'] = current_user.barcode
-      params['UserInfo2'] = current_user.patron_groups.join(',')
+      # # LIBSYS-7889 - Try using UserInfo fields - awaiting testing
+      # params['UserInfo3'] = current_user.barcode
+      # params['UserInfo2'] = current_user.patron_groups.join(',')
 
       return params
     end
