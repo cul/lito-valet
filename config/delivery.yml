@@ -12,6 +12,8 @@ standard_delivery_locations:
   - HS
   - CJ
   - GS
+  # LIBSYS-8082 - Add Law Library
+  - CL
   - LE
   # LIBSYS-6805 - Remove Math Library from Offsite delivery options
   # LIBSYS-7098 - Re-enable Math Library as Offsite delivery location

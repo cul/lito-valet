@@ -21,6 +21,8 @@ BU:  Butler Library
 EA:  East Asian (C.V. Starr Library)
 EN:  Engineering Library
 GS:  Lamont-Doherty Earth Observatory
+# LIBSYS-8082 - Add Law Library
+CL:  Law Library
 HS:  Health Sciences Library
 CJ:  Journalism Library
 LE:  Lehman Library
