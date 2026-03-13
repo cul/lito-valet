@@ -40,7 +40,8 @@ module Folio
         okapi_headers: {
           'X-Okapi-Tenant': folio_config['okapi_tenant'],
           'User-Agent':     'FolioApiClient'
-        }
+        },
+        timeout: folio_config.key?('okapi_timeout') ? folio_config['okapi_timeout'] : 15
       )
       return @folio_client
     end
@@ -96,6 +97,9 @@ module Folio
 
       barcode = folio_user['barcode']
       return barcode
+    rescue StandardError => e
+      Rails.logger.error("get_user_barcode(#{uni}) failed: #{e.class}: #{e.message}")
+      nil
     end
 
     # Given a course-number (registrar number or string with wildcards),
@@ -113,6 +117,9 @@ module Folio
       courses_list = folio_response['courses']
 
       return courses_list
+    rescue StandardError => e
+      Rails.logger.error("get_courses_list_by_course_number(#{course_number}) failed: #{e.class}: #{e.message}")
+      nil
     end
 
     # Given a course-listing-id (the FOLIO UUID of the course listing object),
@@ -130,6 +137,9 @@ module Folio
       reserves_list = folio_response['reserves']
 
       return reserves_list
+    rescue StandardError => e
+      Rails.logger.error("get_reserves_list_by_course_listing_id(#{course_listing_id}) failed: #{e.class}: #{e.message}")
+      nil
     end
 
     def self.get_item(item_id)
@@ -137,6 +147,9 @@ module Folio
       @folio_client ||= folio_client
       folio_response = @folio_client.get(path)
       return folio_response
+    rescue StandardError => e
+      Rails.logger.error("get_item(#{item_id}) failed: #{e.class}: #{e.message}")
+      nil
     end
 
     # Retrieve a single FOLIO Instance JSON record for a given Voyager Bib ID
@@ -152,6 +165,9 @@ module Folio
       else
         return {}
       end
+    rescue StandardError => e
+      Rails.logger.error("get_instance_by_hrid(#{hrid}) failed: #{e.class}: #{e.message}")
+      {}
     end
 
     # Retrieve a single FOLIO Instance JSON record by its UUID
@@ -165,6 +181,9 @@ module Folio
       else
         return {}
       end
+    rescue StandardError => e
+      Rails.logger.error("get_instance_by_id(#{id}) failed: #{e.class}: #{e.message}")
+      {}
     end
 
     # Retrieve a single FOLIO User JSON record for a given Columbia uni
@@ -180,6 +199,9 @@ module Folio
       else
         return {}
       end
+    rescue StandardError => e
+      Rails.logger.error("get_user_by_uni(#{uni}) failed: #{e.class}: #{e.message}")
+      {}
     end
 
     # service_response = Folio::Client.post_item_recall(recall_params)
@@ -249,6 +271,9 @@ module Folio
       end
 
       return all_blocks
+    rescue StandardError => e
+      Rails.logger.error("get_blocks_by_user_id(#{user_id}) failed: #{e.class}: #{e.message}")
+      []
     end
 
     # # /contributor-types/{contributorTypeId}
