@@ -10,7 +10,8 @@ class User < ApplicationRecord
 
   serialize :affils, Array
 
-  attr_reader :ldap_attributes, :patron_id, :oracle_connection
+  # attr_reader :ldap_attributes, :patron_id, :oracle_connection
+  attr_reader :ldap_attributes, :patron_id
 
   # cul_omniauth sets "devise :recoverable", and that requires
   # that the following user attributes be available.
@@ -140,29 +141,30 @@ class User < ApplicationRecord
     self
   end
 
+  # def set_barcode
+  #   ils = APP_CONFIG[:ils] || 'voyager'
+  #   return set_barcode_voyager(uid) if ils == 'voyager'
+  #   return set_barcode_folio(uid) if ils == 'folio'
+  # end
+
+  # def set_barcode_voyager(uid)
+  #   self.barcode = ''
+  #
+  #   if uid
+  #     if @oracle_connection ||= Voyager::OracleConnection.new
+  #       if @patron_id ||= @oracle_connection.get_patron_id(uid)
+  #         if (patron_barcode = @oracle_connection.retrieve_patron_barcode(@patron_id))
+  #           self.barcode = patron_barcode
+  #         end
+  #       end
+  #     end
+  #   end
+  #
+  #   self.barcode
+  # end
+
+  # def set_barcode_folio(uid)
   def set_barcode
-    ils = APP_CONFIG[:ils] || 'voyager'
-    return set_barcode_voyager(uid) if ils == 'voyager'
-    return set_barcode_folio(uid) if ils == 'folio'
-  end
-
-  def set_barcode_voyager(uid)
-    self.barcode = ''
-
-    if uid
-      if @oracle_connection ||= Voyager::OracleConnection.new
-        if @patron_id ||= @oracle_connection.get_patron_id(uid)
-          if (patron_barcode = @oracle_connection.retrieve_patron_barcode(@patron_id))
-            self.barcode = patron_barcode
-          end
-        end
-      end
-    end
-
-    self.barcode
-  end
-
-  def set_barcode_folio(uid)
     patron_barcode = Folio::Client.get_user_barcode(uid)
     self.barcode = patron_barcode
   end
