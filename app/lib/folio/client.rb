@@ -17,7 +17,7 @@ module Folio
     attr_reader :folio_client
 
     def initialize
-      @folio_client ||= Folio::Client.folio_client
+      # @folio_client ||= Folio::Client.folio_client
     end
 
     def self.get_folio_config
