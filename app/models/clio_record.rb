@@ -609,6 +609,8 @@ class ClioRecord
     return true if location_code.match(/^off/i)
     # All SCSB locations are offsite
     return true if location_code.match(/^scsb/i)
+    # LIBSYS-8169 - Law Support
+    return true if location_code.match(/lawgnofr|lawspofr|lawcdofr/)    
 
     # Anything else is NOT offsite
     return false
