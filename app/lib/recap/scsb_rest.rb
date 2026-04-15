@@ -21,7 +21,7 @@ module Recap
 
       get_scsb_rest_args
       url ||= @scsb_args[:url]
-      Rails.logger.debug "- opening new connection to #{url}"
+      Rails.logger.debug "- opening new SCSB REST connection to #{url}"
 
       # reduce api timeouts - if the endpoint is up, it'll respond quickly.
       request_params = {
@@ -173,7 +173,7 @@ module Recap
       request_item_params = build_request_item_params(params)
 
       # Do we want to check params to see if what we need is in there?
-      Rails.logger.debug "- request_item(#{request_item_params.inspect})"
+      Rails.logger.debug "Recap::ScsbRest::request_item(#{request_item_params.inspect})"
 
       conn ||= open_connection
       raise "request_item() bad connection [#{conn.inspect}]" unless conn

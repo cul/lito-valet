@@ -20,8 +20,11 @@ class FormsController < ApplicationController
 
     # If this service requires authentication, then also check that the user is eligible
     if @service_config[:authenticate]
+      Rails.logger.debug('service_config include :authenticate')
       # - Lookup any FOLIO blocks (fines, recalls, etc.)
       blocks = Folio::Client.get_blocks_by_uni(current_user.uid)
+      Rails.logger.debug("found user blocks: #{blocks}") if blocks.present?
+      
       # - Lookup service-specific eligibility
       service_eligibility = @service.patron_eligible?(current_user)
 
