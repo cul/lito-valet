@@ -12,8 +12,9 @@ standard_delivery_locations:
   - HS
   - CJ
   - GS
-  # LIBSYS-8082 - Add Law Library
-  - CL
+  # No, not yet, maybe never
+  # # LIBSYS-8082 - Add Law Library
+  # - CL
   - LE
   # LIBSYS-6805 - Remove Math Library from Offsite delivery options
   # LIBSYS-7098 - Re-enable Math Library as Offsite delivery location
@@ -78,7 +79,27 @@ scsbpul:
   default:  BU
 
 
-# Columbia material
+# ***  Columbia material  ***
+
+
+# --  Law - special rules --
+
+lawgnofr:
+  default:  CL
+  available:
+    - CL
+
+lawspofr:
+  default:  CL
+  available:
+    - CL
+
+lawcdofr:
+  default:  CL
+  available:
+    - CL
+
+# --  All other Columbia offsite locations  --
 
 off,ave:
   default:  AR
