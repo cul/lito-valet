@@ -357,6 +357,9 @@ class ClioRecord
 
     # Now add the list of items to each holding.
     @marc_record.each_by_tag('876') do |item_field|
+      # Ignore 876s that are not value item fields
+      next unless item_field['0'] and item_field['a']
+
       # build the Item hash
       item = {
         item_id:            item_field['a'],
@@ -367,7 +370,7 @@ class ClioRecord
         enum_chron:         item_field['3']
         # customer_code:      item_field['z']
       }
-      # Store this item hash in the apppropriate Holding
+      # Store this item hash in the appropriate Holding
       mfhd_id = item_field['0']
 
       # should not happen - but just in case...
