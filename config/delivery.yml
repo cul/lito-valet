@@ -86,8 +86,9 @@ scsbpul:
 
 lawgnofr:
   default:  CL
-  available:
-    - CL
+  # LIBSYS-8082 - Law material can be delivered to the full list of campus locations
+  # available:
+  #   - CL
 
 lawspofr:
   default:  CL
