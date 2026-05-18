@@ -54,8 +54,10 @@ gem 'bootsnap', require: false
 group :development, :test do
   # Use sqlite3 as the database for Active Record - only during localhost development
   # gem 'sqlite3'
-  # sqlite 2.0.x is giving us problems - pin to 1.x for now
-  gem 'sqlite3', '~> 1.0'
+  # # sqlite 2.0.x is giving us problems - pin to 1.x for now
+  # gem 'sqlite3', '~> 1.0'
+  # Still a problem with rails/sqlite mismatch, but 1.5 is ok
+  gem 'sqlite3', '~> 1.5'
 
   # Call 'byebug' anywhere in the code to stop execution and get a debugger console
   gem 'byebug'
