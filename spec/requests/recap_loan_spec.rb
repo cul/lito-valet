@@ -34,7 +34,7 @@ RSpec.describe 'ReCAP Loan' do
     # Princeton QK customer code: SCSB-1855010
     get recap_loan_path('SCSB-1855010', '1830621')
     # - specific delivery location as only option in drop-down menu
-    music_only = '<select name="deliveryLocation" id="deliveryLocation" class="retrieval-field"><option selected="selected" value="MR">Music &amp; Arts Library</option></select>'
+    music_only = '<select name="deliveryLocation" id="deliveryLocation" class="retrieval-field"><option selected="selected" value="MR">Music Library</option></select>'
     expect(response.body).to include(music_only)
   end
 

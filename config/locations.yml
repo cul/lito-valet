@@ -1,16 +1,14 @@
 # Simple location code-to-label lookup table
 
-# BC:  Bibliographic Control (CAMS)
+BC:  Bibliographic Control
 BT:  Butler Preservation
-# CI:  Interlibrary Loan
+CI:  Interlibrary Loan
 # CV:  Milstein Reserves
-CV:  Butler Media Collections
-# MP:  Monographic Recon -- for MRP
-# MP:  Monographic Processing
+CV:  Butler Library
+MP:  Monographic Recon -- for MRP
 # LIBSYS-1647 - Create new Offsite delivery location
 # MZ:  ReCAP Coordinator
-# MZ:  Reid Hall (Paris, France)
-# MZ:  Delivery Services
+MZ:  Reid Hall (Paris, France)
 IL:  ReCAP Interlibrary Loan
 AR:  Avery Library
 BL:  Barnard Library
@@ -28,15 +26,13 @@ CL:  Law Library
 HS:  Health Sciences Library
 CJ:  Journalism Library
 LE:  Lehman Library
-# RH:  Lehman Suite
-# RH:  Human Rights Watch
-ML:  Math Library
-CF:  401 Butler Library (Microforms Reading Room)
-MR:  Music Library
+RH:  Lehman Suite
+ML:  Mathematics Library
+CF:  401 Butler Library (Microform Reading Room)
+MR:  Music & Arts Library
 RS:  Rare Book Library
-CA:  Science & Engineering Library
+CA:  Science & Engineering Lib (NWC Building)
 SW:  Social Work Library
-# BZ:  Preservation Project
 
 
 offsite_locations_UNUSED:
