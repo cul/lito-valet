@@ -16,8 +16,8 @@ gem 'sass-rails'
 # Use Terser as compressor for JavaScript assets
 gem 'terser'
 
-# Use CoffeeScript for .coffee assets and views
-gem 'coffee-rails'
+# # Use CoffeeScript for .coffee assets and views
+# gem 'coffee-rails'
 
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
