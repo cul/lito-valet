@@ -214,16 +214,16 @@ module Folio
 
       begin
         folio_response = @folio_client.post('/circulation/requests', recall_params)
-      rescue FolioClient::ValidationError => ex
-        message = ex.message.sub(/There was a validation problem with the request: /, '')
+      rescue FolioClient::ValidationError => e
+        message = e.message.sub(/There was a validation problem with the request: /, '')
         json = JSON.parse(message)
-        if json and json['errors']
+        if json && json['errors']
           error_message = json['errors'].first['message']
         else
-          error_message = ex.message
+          error_message = e.message
         end
-      rescue => ex
-        error_message = ex.message
+      rescue StandardError => e
+        error_message = e.message
       end
 
       # If any error-message was set in the rescues above, raise an exception for the caller
@@ -304,7 +304,7 @@ module Folio
     #   @folio_client ||= folio_client
     #   begin
     #     folio_response = @folio_client.get(path)
-    #   rescue => ex
+    #   rescue StandardError => ex
     #     # Error if, for example, the passed instance uuid does not exist in the tenant
     #     Rails.logger.error "Folio::Client#get_availability(#{instance_id}) error: #{ex.message}"
     #     return {}

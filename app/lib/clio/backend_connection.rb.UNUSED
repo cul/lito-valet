@@ -55,7 +55,7 @@ module Clio
         # json_results = backend_httpclient.get_content(backend_url)
         json_results = conn.get(circ_status_path).body
         backend_results = JSON.parse(json_results).with_indifferent_access
-      rescue => ex
+      rescue StandardError => ex
         Rails.logger.error "Clio::BackendConnection#circ_status #{ex} URL: #{conn.url_prefix + circ_status_path}"
         return nil
       end

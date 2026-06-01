@@ -208,7 +208,7 @@ module Voyager
       full_query = fill_in_query_placeholders(query, active_barcode: active_barcode)
       raw_results = execute_select_command(full_query)
 
-      inactive_barcodes = Array.new()
+      inactive_barcodes = []
       raw_results.each do |row|
         inactive_barcodes.push(row['ITEM_BARCODE'])
       end

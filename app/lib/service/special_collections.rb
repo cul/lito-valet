@@ -110,7 +110,7 @@ module Service
         # HOLDINGS WITH NO ITEMS (OR locations where we only want holdings-level requests)
         # We'll create a single container, made up of only holding level details
         # (and container_id will the Holding UUID)
-        if holding[:items].blank? or request_entire_holding
+        if holding[:items].blank? || request_entire_holding
           container = {}
           # container id, display label
           container[:container_id]      = holding[:mfhd_id]

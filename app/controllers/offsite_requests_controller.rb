@@ -160,8 +160,8 @@ class OffsiteRequestsController < ApplicationController
 
     begin
       log_request(@offsite_request_params, @request_item_response)
-    rescue => ex
-      Rails.logger.error "log_request(@offsite_request_params, @request_item_response) failed: #{ex.message}"
+    rescue StandardError => e
+      Rails.logger.error "log_request(@offsite_request_params, @request_item_response) failed: #{e.message}"
     end
 
     # Instead of raise/catch, just detect failed API call directly here

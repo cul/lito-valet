@@ -104,7 +104,7 @@ class ApplicationController < ActionController::Base
   #     begin
   #       addr = Resolv.getaddress(hostname)
   #       break if addr.present?
-  #     rescue => ex
+  #     rescue StandardError => ex
   #       # failed?  log, pause, and try again
   #       Rails.logger.error "Resolv.getaddress(#{hostname}) failed on try #{try}: #{ex.message}, retrying..."
   #       sleep 1
@@ -143,13 +143,13 @@ class ApplicationController < ActionController::Base
   # save original non-valet, non-cas referrer
   def set_original_referrer
     # blank referrer
-    return if request.referrer.blank?
+    return if request.referer.blank?
     # self-referrer (multi-form valet service)
-    return if URI(request.referrer).host == request.host
+    return if URI(request.referer).host == request.host
     # referrer set to authentication host
-    return if URI(request.referrer).host == 'cas.columbia.edu'
+    return if URI(request.referer).host == 'cas.columbia.edu'
 
     # ok - looks like an external original referrer that we care about
-    session[:referrer] = request.referrer
+    session[:referrer] = request.referer
   end
 end

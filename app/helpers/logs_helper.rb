@@ -5,8 +5,8 @@ module LogsHelper
     begin
       logdata = JSON.parse(logdata)
       return logdata[field]
-    rescue => ex
-      Rails.logger.error "get_logdata_field(logdata, field) failed: #{ex.message}"
+    rescue StandardError => e
+      Rails.logger.error "get_logdata_field(logdata, field) failed: #{e.message}"
     end
 
     # failed to parse field from data

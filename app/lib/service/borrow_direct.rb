@@ -39,7 +39,7 @@ module Service
       # params should now only hold OpenURL values, if there are any
 
       # (1) Redirect to BorrowDirect Search page, with no arguments
-      if bib_record.nil? and params.empty?
+      if bib_record.nil? && params.empty?
         Rails.logger.debug "borrow_direct(1): redirect to #{reshare_base_url}"
         return reshare_base_url
       end
@@ -51,7 +51,7 @@ module Service
       end
 
       # (3) Parse OpenURL, redirect to BorrowDirect fielded search
-      if bib_record.nil? and not params.empty?
+      if bib_record.nil? && (not params.empty?)
         query = reshare_build_query_from_openurl(params)
         Rails.logger.debug "borrow_direct(3): openurl search #{query}"
       end

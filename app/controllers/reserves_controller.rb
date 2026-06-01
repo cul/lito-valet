@@ -187,14 +187,14 @@ class ReservesController < ApplicationController
   end
 
   def format_contributors(contributors_list)
-    return '' unless contributors_list.present? and contributors_list.length > 0
+    return '' unless contributors_list.present? && (contributors_list.length > 0)
 
     # We will look for either a single primary contributor,
     # or - if none are primary - we will list all of them.
     primary_contributor = nil
     contributor_list = []
     contributors_list.each do |contributor|
-      next unless contributor.key?('name') and contributor['name'].present?
+      next unless contributor.key?('name') && contributor['name'].present?
 
       if contributor.fetch('primary', false) == true
         primary_contributor = contributor['name']

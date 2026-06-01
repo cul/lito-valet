@@ -59,7 +59,7 @@ module Service
       # Delete it here, add back in later if needed.
 
       # (1) Redirect to BorrowDirect Search page, with no arguments
-      if bib_record.nil? and params.empty?
+      if bib_record.nil? && params.empty?
         Rails.logger.debug 'ill(1): redirect to ILLiad login page'
         return APP_CONFIG[:illiad_login_url]
       end
@@ -73,7 +73,7 @@ module Service
       end
 
       # (3) Redirect to ILLiad, to the specific specified form
-      if params.present? and params.has_key?('Form')
+      if params.present? && params.key?('Form')
         # Action=10 tells Illiad that we'll pass the Form ID to use
         params['Action'] = '10'
         illiad_params.merge!(params)
@@ -82,7 +82,7 @@ module Service
       end
 
       # (4) We were passed an OpenURL (without an ILLiad form specifier)
-      if params.present? and not params.has_key?('Form')
+      if params.present? && (not params.key?('Form'))
         params.permit!
         illiad_params.merge!(params)
         # Return the ILLiad base url, with all parameters including Form ID

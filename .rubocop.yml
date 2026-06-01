@@ -1,5 +1,8 @@
 
-require:
+AllCops:
+  NewCops: disable
+
+plugins:
   - rubocop-rails
 
 Layout/LineLength:
@@ -15,4 +18,24 @@ Rails/UnknownEnv:
     - valet_dev
     - valet_test
     - valet_prod
+
+# What do we want to ignore?
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+
+Naming/VariableNumber:
+  Enabled: false
+
+Style/Not:
+  Enabled: false
+
+Layout/EmptyLinesAroundModuleBody:
+  Enabled: false
+
+
+
+
 

@@ -24,12 +24,12 @@ class FormsController < ApplicationController
       # - Lookup any FOLIO blocks (fines, recalls, etc.)
       blocks = Folio::Client.get_blocks_by_uni(current_user.uid)
       Rails.logger.debug("found user blocks: #{blocks}") if blocks.present?
-      
+
       # - Lookup service-specific eligibility
       service_eligibility = @service.patron_eligible?(current_user)
 
       # - Either condition prohibits the user from using this request service
-      if blocks.present? or (service_eligibility == false)
+      if blocks.present? || (service_eligibility == false)
         # There may be a service-specific message or URL
         return redirect_to(@service_config['ineligible_url']) if @service_config['ineligible_url']
         return error(@service_config['ineligible_message']) if @service_config['ineligible_message']
@@ -123,7 +123,7 @@ class FormsController < ApplicationController
     load_service_config(service_name)
 
     # If load_service_config() was unable to load @service_config
-    return if @service_config.nil? or @service_config.empty?
+    return if @service_config.nil? || @service_config.empty?
 
     # If this service is in an outage state, take no further initialization steps!
     return if @service_config[:outage]
@@ -173,7 +173,7 @@ class FormsController < ApplicationController
     Rails.logger.debug "instatiating class #{service_class_name}"
     service_class_instance = begin
                                service_class_name.constantize
-                             rescue
+                             rescue StandardError => e
                                nil
                              end
     return error("Cannot constantize #{service_class_name}") if service_class_instance.nil?
@@ -218,7 +218,7 @@ class FormsController < ApplicationController
     data[:logset] = @service_config['logset'] || @service_config[:service_name].titleize
 
     # build up logdata for this specific transation
-    logdata = Hash.new
+    logdata = {}
     # - tell about the bib, if there is one for this service request
     logdata.merge!(bib_record.basic_log_data) if bib_record.present?
     # - tell about the user
@@ -235,8 +235,8 @@ class FormsController < ApplicationController
     begin
       # If logging fails, don't die - report the error and continue
       Log.create(data)
-    rescue => ex
-      Rails.logger.error "FormsController#bounce error: #{ex.message}"
+    rescue StandardError => e
+      Rails.logger.error "FormsController#bounce error: #{e.message}"
       Rails.logger.error data.inspect
     end
   end
@@ -249,7 +249,7 @@ class FormsController < ApplicationController
     flash.now[:error] = message
     service_error = begin
                       @service.error
-                    rescue
+                    rescue StandardError => e
                       ''
                     end
     render :error, locals: { service_error: service_error }

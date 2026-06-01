@@ -103,9 +103,9 @@ class ClioRecord
   def title
     return '' unless @marc_record && @marc_record['245']
 
-    subfieldA = @marc_record['245']['a'] || ''
+    subfield_a = @marc_record['245']['a'] || ''
     subfieldB = @marc_record['245']['b'] || ''
-    title = subfieldA.strip
+    title = subfield_a.strip
     title += " #{subfieldB.strip}" if subfieldB.present?
     # return the cleaned up title
     trim_punctuation(title)
@@ -115,8 +115,8 @@ class ClioRecord
   def title_brief
     return '' unless @marc_record && @marc_record['245']
 
-    subfieldA = @marc_record['245']['a'] || ''
-    title = subfieldA.strip
+    subfield_a = @marc_record['245']['a'] || ''
+    title = subfield_a.strip
     # return the cleaned up title
     trim_punctuation(title)
   end
@@ -210,7 +210,7 @@ class ClioRecord
     return nil
   end
 
-  CALL_NUMBER_ONLY = /^.* \>\> (.*)\|DELIM\|.*/
+  CALL_NUMBER_ONLY = /^.* >> (.*)\|DELIM\|.*/
 
   def call_number_from_992(tag992 = nil)
     return nil unless tag992 && tag992['b']
@@ -279,7 +279,7 @@ class ClioRecord
     @marc_record.fields('856').each do |field|
       url = field['u']
       # has to look like a finding aid...
-      next unless url.match(/findingaids.library.columbia.edu/) or
+      next unless url.match(/findingaids.library.columbia.edu/) ||
                   url.match(/findingaids.cul.columbia.edu/)
       # cannot be a downloadable document...
       next if url.match(/(pdf|doc|htm|html)$/)
@@ -358,7 +358,7 @@ class ClioRecord
     # Now add the list of items to each holding.
     @marc_record.each_by_tag('876') do |item_field|
       # Ignore 876s that are not value item fields
-      next unless item_field['0'] and item_field['a']
+      next unless item_field['0'] && item_field['a']
 
       # build the Item hash
       item = {
@@ -422,7 +422,7 @@ class ClioRecord
     #   (Not the FOLIO availability of the matching FOLIO item)
     if is_offsite_location_code?(holding[:location_code])
       self.fetch_scsb_availabilty unless @scsb_availability
-      return @scsb_availability[item[:barcode]] if @scsb_availability.has_key?(item[:barcode])
+      return @scsb_availability[item[:barcode]] if @scsb_availability.key?(item[:barcode])
 
       # No SCSB availability for an offsite item?
       # Something's wrong - either not yet accessioned at ReCAP or another problem.
@@ -468,7 +468,7 @@ class ClioRecord
     institution_id = id.to_s
 
     # But if it's a SCSB Id...
-    if institution_id =~ /^SCSB\-/
+    if institution_id =~ /^SCSB-/
       institution = 'SCSB'
       institution_id = institution_id.gsub(/SCSB-/, '')
     end
@@ -495,7 +495,7 @@ class ClioRecord
         begin
           item_folio_details = Folio::Client.get_item(item_id)
           @folio_availability[item_id] = item_folio_details['status']['name']
-        rescue => ex
+        rescue StandardError => e
           # Any error retrieving item availability?  Assume Unavailable.
           @folio_availability[item_id] = 'Unavailable'
         end
@@ -606,14 +606,14 @@ class ClioRecord
   # Given a string location code,
   # return True/False whether the location code is offsite.
   def is_offsite_location_code?(location_code = shift)
-    return unless location_code and location_code.instance_of?(String)
+    return unless location_code && location_code.instance_of?(String)
 
     # Any location code that begins with "off" is offsite
     return true if location_code.match(/^off/i)
     # All SCSB locations are offsite
     return true if location_code.match(/^scsb/i)
     # LIBSYS-8169 - Law Support
-    return true if location_code.match(/lawgnofr|lawspofr|lawcdofr/)    
+    return true if location_code.match(/lawgnofr|lawspofr|lawcdofr/)
 
     # Anything else is NOT offsite
     return false
@@ -621,7 +621,7 @@ class ClioRecord
 
   # Is this material available in a CaiaSoft-managed repository?
   def is_clancy_location_code?(location_code = shift)
-    return unless location_code and location_code.instance_of?(String)
+    return unless location_code && location_code.instance_of?(String)
 
     return true if APP_CONFIG['clancy_locations'].include?(location_code)
 
@@ -651,7 +651,7 @@ class ClioRecord
   def get_aeon_access_restrictions_from_bib()
     return '' unless @marc_record && @marc_record['506']
 
-    subfieldA = @marc_record['506']['a'] || ''
+    subfield_a = @marc_record['506']['a'] || ''
 
     @marc_record.fields('506').each do |field|
       next unless (restriction = field['a'])

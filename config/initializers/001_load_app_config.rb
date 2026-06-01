@@ -11,7 +11,7 @@ begin
   env_config = loaded_config[Rails.env] || {}
   APP_CONFIG ||= all_config.merge(env_config)
 
-rescue
+rescue StandardError => e
   APP_CONFIG = {}.freeze
 end
 

@@ -80,11 +80,11 @@ module Oclc
         next unless key && value
 
         # strip problematic angle-bracket chars from the value
-        value.gsub!(/\>/, '')
-        value.gsub!(/\</, '')
+        value.gsub!(/>/, '')
+        value.gsub!(/</, '')
         # other chars that shouldn't be in bib fields
-        value.gsub!(/\&/, '')
-        value.gsub!(/\%/, '')
+        value.gsub!(/&/, '')
+        value.gsub!(/%/, '')
         value.gsub!(/\#/, '')
       end
       return hash

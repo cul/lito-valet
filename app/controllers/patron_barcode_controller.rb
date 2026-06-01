@@ -34,7 +34,7 @@ class PatronBarcodeController < ApplicationController
   #     patron_id ||= oracle_connection.get_patron_id(uni)
   #     patron_barcode = oracle_connection.retrieve_patron_barcode(patron_id)
   #     return patron_barcode
-  #   rescue => ex
+  #   rescue StandardError => ex
   #     return nil
   #   end
   # end

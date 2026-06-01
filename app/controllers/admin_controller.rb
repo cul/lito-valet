@@ -12,11 +12,11 @@ class AdminController < ApplicationController
     redirect_to root_path unless current_user && current_user.culstaff?
 
     # Don't hard-code a list of services here, discover them by looking through APP_CONFIG
-    @request_service_list = Array.new
+    @request_service_list = []
     APP_CONFIG.keys.each do |key_name|
       # no true scotsman
       next unless APP_CONFIG[key_name].is_a? Hash
-      next unless APP_CONFIG[key_name].has_key?('label') && APP_CONFIG[key_name].has_key?('authenticate')
+      next unless APP_CONFIG[key_name].key?('label') && APP_CONFIG[key_name].key?('authenticate')
 
       @request_service_list.push key_name
     end

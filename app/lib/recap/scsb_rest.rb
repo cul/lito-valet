@@ -184,8 +184,8 @@ module Recap
       # response = conn.post path, request_item_params.to_json
       begin
         response = conn.post path, request_item_params.to_json
-      rescue => ex
-        Rails.logger.error "Recap::ScsbRest::request_item(#{params}) conn.post(#{path}) #{ex}"
+      rescue StandardError => e
+        Rails.logger.error "Recap::ScsbRest::request_item(#{params}) conn.post(#{path}) #{e}"
         return nil
       end
 
@@ -213,7 +213,7 @@ module Recap
 
     # SCSB requests only need a specific set of values
     def self.build_request_item_params(params)
-      request_item_params = Hash.new()
+      request_item_params = {}
 
       # Simple strings fields that we want copied from Valet into SCSB request params,
       # some apply only to EDD, some apply to physical delivery

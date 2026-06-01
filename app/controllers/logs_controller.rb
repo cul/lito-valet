@@ -86,7 +86,7 @@ class LogsController < ApplicationController
   #     begin
   #       # If the database save fails, log it, continue the redirect
   #       Log.create(all_data)
-  #     rescue => ex
+  #     rescue StandardError => ex
   #       Rails.logger.error "LogsController#bounce error: #{ex.message}"
   #       Rails.logger.error all_data.inspect
   #     end
@@ -121,7 +121,7 @@ class LogsController < ApplicationController
     begin
       logdata = JSON.parse(row['logdata'])
       return logdata.keys
-    rescue
+    rescue StandardError => e
       Rails.logger.warn "JSON.parse() failed for row [#{row.inspect}]"
     end
     []
@@ -161,7 +161,7 @@ class LogsController < ApplicationController
   def logs_by_date(download = nil)
     return ActiveRecord::NullRelation unless download.present?
     return log_by_year(download) if download =~ /^\d\d\d\d$/
-    return log_by_month(download) if download =~ /^\d\d\d\d\-\d\d$/
+    return log_by_month(download) if download =~ /^\d\d\d\d-\d\d$/
 
     # Any bad data, return null set
     ActiveRecord::NullRelation

@@ -167,9 +167,9 @@ module Service
 
       begin
         service_response = Folio::Client.post_item_recall(recall_params)
-      rescue => ex
+      rescue StandardError => e
         # Failure!  Set error message, and return nil to signal failure.
-        self.error = ex.message
+        self.error = e.message
         return
       end
 

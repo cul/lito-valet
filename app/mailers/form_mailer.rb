@@ -99,7 +99,7 @@ class FormMailer < ApplicationMailer
     subject = recap_subject
     # Make params available within template by using an instance variable
     @params = params
-    mail_params = {to: to, from: from, subject: subject}
+    mail_params = { to: to, from: from, subject: subject }
     mail_params[:bcc] = confirm_bcc if confirm_bcc
     mail(mail_params)
   end
@@ -114,7 +114,7 @@ class FormMailer < ApplicationMailer
     subject = recap_subject
     # Make params available within template by using an instance variable
     @params = params
-    mail_params = {to: to, from: from, subject: subject}
+    mail_params = { to: to, from: from, subject: subject }
     mail_params[:bcc] = confirm_bcc if confirm_bcc
     mail(mail_params)
   end

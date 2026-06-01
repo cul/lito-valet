@@ -49,12 +49,11 @@ group :development do
   # gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'listen'
 
-  # # Spring speeds up development by keeping your application running in the background. Read more: https://github.com/rails/spring
-  # gem 'spring'
+  # Uncomment these when you want to run some RuboCop cleanup
+  # gem 'rubocop', require: false
+  # gem 'rubocop-rails', require: false
 
   # browser-based live debugger and REPL
-  # HAML REPL breaks in 2.7.0/2.7.1 ???
-  # gem 'better_errors', '~> 2.6.0'
   gem 'better_errors'
   # And get a REPL
   gem 'binding_of_caller'

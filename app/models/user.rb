@@ -63,7 +63,7 @@ class User < ApplicationRecord
     #   break if ldap_ip_address.present?
     #   begin
     #     ldap_ip_address = Resolv.getaddress(ldap_args[:host])
-    #   rescue => ex
+    #   rescue StandardError => ex
     #     # failed?  pause, and try again
     #     Rails.logger.error "Resolv.getaddress(#{ldap_args[:host]}) failed: #{ex.message}, retrying..."
     #     sleep 1

@@ -68,8 +68,8 @@ module Columbia
       tocpath = "#{TOCLISTURL}?bib=#{bib}"
       begin
         response = conn.get(tocpath)
-      rescue => ex
-        Rails.logger.error "Columbia::Web::get_bib_toc_links(#{bib}) conn.get(#{TOCLISTURL}) #{ex}"
+      rescue StandardError => e
+        Rails.logger.error "Columbia::Web::get_bib_toc_links(#{bib}) conn.get(#{TOCLISTURL}) #{e}"
         return nil
       end
 
