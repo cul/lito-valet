@@ -19,6 +19,9 @@
 !/log/.keep
 /tmp
 
+# don't commit yarn/node
+/node_modules
+
 # Ignore private configuration
 config/database.yml
 config/app_config.yml
@@ -28,6 +31,10 @@ config/cas.yml
 # Don't need to commit localhost dev/test databases
 db/*.sqlite3
 
-# My own notes during localhost development
-NOTES.txt
+# Precompiled assets
+/public/assets
+
+# macOS
+.DS_Store
+
 

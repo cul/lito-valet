@@ -65,4 +65,69 @@ https://valet-dev.cul.columbia.edu/offsite_requests/new?bib_id=SCSB-767649&mfhd_
 
 
 
+==============================
+
+marquis@daisy valet % ls -ld notes.txt 
+-rw-r--r--@ 1 marquis  staff  1624 Nov  1  2018 notes.txt
+marquis@daisy valet % cat notes.txt
+
+
+Adding Barnard required a lot of function-specific work.
+
+- new database table
+- new model
+- new view directory, with about 20 customized templates
+- new controller
+- new route
+- new app_config settings
+- new record-filter methods
+
+This is like building a full new app.
+This won't scale to rapid conversion of legacy forms and won't be easily maintainable.
+
+We don't want each new form to require this much customization.
+We want Valet to be a request framework, where new functions 
+are easily added, and use mostly common code
+
+- single database table, or none at all
+- single shared model
+- single shared set of view customizable view templates
+- single shared controller
+- common logging system
+- yes, new route for each function, aliasing common routes
+- yes, app_config details for each function
+- yes, more complete config definition for each function
+
+- shared record-qualification methods
+- shared patron-qualification methods
+
+"form" MVC
+goes nicely with "log" MVC
+
+
+Form Simple
+
+new
+- input param(s), usually just a bib
+- query datastore(s) to fetch data:  bib, holdings, item, availability
+- build form with any additional fields (e.g., "notes")
+create
+- form submission lands here
+- generate any emails (to patron, to staff)
+- log the event, including user-input from the form field(s)
+- terminate (close window)
+- do NOT "save" to create a form record in the db
+
+Form Bounce
+(examples:  Borrow Direct, Recall/Hold)
+
+new
+- input param(s)
+- query datastore(s) to fetch data:  bib, holdings, item, availability
+- reformat/validate params
+- generate destination URL 
+- log the event immediately
+- redirect
+
+
 

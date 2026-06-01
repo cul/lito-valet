@@ -11,42 +11,19 @@ gem 'concurrent-ruby', '1.3.4'
 gem 'sprockets-rails'
 
 # Use SCSS for stylesheets
-# gem 'sass-rails'
-# sass-rails 6.x uses sassc, which won't build on our CentOS 6 VMs
-# gem 'sass-rails', '~> 5.0'
 gem 'sass-rails'
 
-# Use Uglifier as compressor for JavaScript assets
-gem 'uglifier'
+# Use Terser as compressor for JavaScript assets
+gem 'terser'
 
 # Use CoffeeScript for .coffee assets and views
 gem 'coffee-rails'
 
-# See https://github.com/rails/execjs#readme for more supported runtimes
-# gem 'therubyracer', platforms: :ruby
-
 # Use jquery as the JavaScript library
 gem 'jquery-rails'
 
-# # Turbolinks makes following links in your web application faster. Read more: https://github.com/rails/turbolinks
-# gem 'turbolinks'
-
 # Build JSON APIs with ease. Read more: https://github.com/rails/jbuilder
 gem 'jbuilder'
-
-# # bundle exec rake doc:rails generates the API under doc/api.
-# gem 'sdoc', group: :doc
-
-# Use ActiveModel has_secure_password
-# gem 'bcrypt'
-
-# Which server do we want to use?
-# Use Unicorn as the app server
-# gem 'unicorn'
-gem 'webrick'
-
-# Use Capistrano for deployment
-# gem 'capistrano-rails', group: :development
 
 # Reduces boot times through caching; required in config/boot.rb
 gem 'bootsnap', require: false
@@ -59,18 +36,15 @@ group :development, :test do
   # Still a problem with rails/sqlite mismatch, but 1.5 is ok
   gem 'sqlite3', '~> 1.5'
 
-  # Call 'byebug' anywhere in the code to stop execution and get a debugger console
-  gem 'byebug'
-
   # Testing
   gem 'rspec-rails'
   gem 'factory_bot'
 end
 
 group :development do
-  # Let's use better_errors instead of this
-  # # Access an IRB console on exception pages or by using <%= console %> in views
-  # gem 'web-console', '~> 2.0'
+  # Which server do we want to use on localhost?
+  # gem 'webrick'
+  gem 'puma'
 
   # gem 'listen', '>= 3.0.5', '< 3.2'
   gem 'listen'
@@ -150,10 +124,6 @@ gem 'mysql2'
 
 # DataTables
 gem 'jquery-datatables-rails'
-
-# No longer used
-# # Send notifications when application errors occur
-# gem 'exception_notification'
 
 # Parse User Agent into browser name, version
 gem 'browser'
