@@ -1,13 +1,13 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 6.0'
+gem 'rails', '~> 7.0.0'
 
 # https://stackoverflow.com/questions/79360526/uninitialized-constant
 # uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger
 #   Remove this when we update Rails to 7.1
 gem 'concurrent-ruby', '1.3.4'
 
-# Valet is built using Sprockets - need gem until migration to Webpacker
+# Valet is built using Sprockets
 gem 'sprockets-rails'
 
 # Use SCSS for stylesheets
@@ -47,7 +47,8 @@ group :development do
   gem 'puma'
 
   # gem 'listen', '>= 3.0.5', '< 3.2'
-  gem 'listen'
+  # marginal improvement, not necessary
+  # gem 'listen'
 
   # Uncomment these when you want to run some RuboCop cleanup
   # gem 'rubocop', require: false
@@ -78,7 +79,8 @@ gem 'devise'
 # gem 'cul_omniauth', github: 'cul/cul_omniauth', branch: 'rails-5'
 # gem 'cul_omniauth', path: '/Users/marquis/src/cul_omniauth'
 # gem 'cul_omniauth', git: 'https://github.com/cul/cul_omniauth', branch: 'cas-5.3'
-gem 'cul_omniauth', git: 'https://github.com/cul/cul_omniauth', branch: 'rails-6'
+# gem 'cul_omniauth', git: 'https://github.com/cul/cul_omniauth', branch: 'rails-6'
+gem 'cul_omniauth'
 
 # Fetch ldap details - first name, last name, etc.
 gem 'net-ldap'

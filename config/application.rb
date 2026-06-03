@@ -13,8 +13,14 @@ module Valet
     # Initialize configuration defaults for originally generated Rails version.
     config.load_defaults 6.1
 
-    # Only needed up to 6.x / in 7.x and beyond, autoloader is always Zeitwerk
-    config.autoloader = :zeitwerk
+    # Uncomment these lines to fully commit to a 7.0 rollout
+    # config.load_defaults 7.0
+    # config.active_support.cache_format_version = 7.0
+    
+
+    # we're now moving to Rails 7.x - dont' need this anymore
+    # # Only needed up to 6.x / in 7.x and beyond, autoloader is always Zeitwerk
+    # config.autoloader = :zeitwerk
 
     include Cul::Omniauth::FileConfigurable
 
