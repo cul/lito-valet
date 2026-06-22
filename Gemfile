@@ -34,7 +34,8 @@ group :development, :test do
   # # sqlite 2.0.x is giving us problems - pin to 1.x for now
   # gem 'sqlite3', '~> 1.0'
   # Still a problem with rails/sqlite mismatch, but 1.5 is ok
-  gem 'sqlite3', '~> 1.5'
+  # gem 'sqlite3', '~> 1.5'
+  gem 'sqlite3'
 
   # Testing
   gem 'rspec-rails'
@@ -133,10 +134,10 @@ gem 'browser'
 gem 'lcsort'
 
 # dependency of many other gems
-# gem 'nokogiri'
+gem 'nokogiri'
 # Pin nokogiri to 1.17.x, glibc version incompatibility with 1.18.x
 # /lib64/libm.so.6: version `GLIBC_2.29' not found
-gem 'nokogiri', '~> 1.17.0'
+# gem 'nokogiri', '~> 1.17.0'
 
 # now fixed.
 # # UNIX-5942 - work around spotty CUIT DNS
