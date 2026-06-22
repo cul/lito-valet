@@ -101,6 +101,10 @@ gem 'marc'
 # marc uses rexml, and rexml was unbundled from the stdlib in ruby 3
 gem 'rexml'
 
+# unbundled from stdlib in Ruby 3.4
+gem 'csv'
+
+
 # Normalization of ISBN (10 and 13), ISSN, and LCCN
 gem 'library_stdnums'
 
