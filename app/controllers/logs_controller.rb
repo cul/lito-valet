@@ -43,7 +43,8 @@ class LogsController < ApplicationController
 
       response.headers['Content-Type'] = 'text/csv'
       response.headers['Content-Disposition'] = "attachment; filename=#{filename}"
-      return render template: 'logs/index.csv.erb'
+      # return render template: 'logs/index.csv.erb'
+      return render template: 'logs/index'
     end
 
     @year_month = log_params[:year_month]
