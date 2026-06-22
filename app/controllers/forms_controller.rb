@@ -31,7 +31,7 @@ class FormsController < ApplicationController
       # - Either condition prohibits the user from using this request service
       if blocks.present? || (service_eligibility == false)
         # There may be a service-specific message or URL
-        return redirect_to(@service_config['ineligible_url']) if @service_config['ineligible_url']
+        return redirect_to(@service_config['ineligible_url'], allow_other_host: true) if @service_config['ineligible_url']
         return error(@service_config['ineligible_message']) if @service_config['ineligible_message']
 
         # Otherwise, use the default.
@@ -98,7 +98,7 @@ class FormsController < ApplicationController
 
     # --- redirect browser to an external URL
     redirect_url = @service.build_service_url(params, bib_record, current_user)
-    return redirect_to redirect_url if redirect_url.present?
+    return redirect_to(redirect_url, allow_other_host: true) if redirect_url.present?
 
     # --- render a confirmation page
     if template_exists?("forms/#{@service_config[:service_name]}_confirm")
@@ -201,7 +201,7 @@ class FormsController < ApplicationController
     if bounce_url.present?
       log(bib_record, current_user)
       Rails.logger.debug "bounce() redirecting to: #{bounce_url}"
-      return redirect_to bounce_url
+      return redirect_to(bounce_url, allow_other_host: true)
     end
 
     # Unable to build a bounce URL?  Error!
@@ -260,7 +260,7 @@ class FormsController < ApplicationController
     Rails.logger.debug 'outage!'
 
     # Redirect to outage URL, if configured
-    return redirect_to(@service_config['outage_url']) if @service_config['outage_url']
+    return redirect_to(@service_config['outage_url'], allow_other_host: true) if @service_config['outage_url']
 
     # Pass custom outage message, if configured
     locals = { params: params }
