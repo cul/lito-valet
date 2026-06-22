@@ -134,10 +134,10 @@ gem 'browser'
 gem 'lcsort'
 
 # dependency of many other gems
-gem 'nokogiri'
+# gem 'nokogiri'
 # Pin nokogiri to 1.17.x, glibc version incompatibility with 1.18.x
 # /lib64/libm.so.6: version `GLIBC_2.29' not found
-# gem 'nokogiri', '~> 1.17.0'
+gem 'nokogiri', '~> 1.17.0'
 
 # now fixed.
 # # UNIX-5942 - work around spotty CUIT DNS
