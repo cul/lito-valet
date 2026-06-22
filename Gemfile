@@ -35,7 +35,7 @@ group :development, :test do
   # gem 'sqlite3', '~> 1.0'
   # Still a problem with rails/sqlite mismatch, but 1.5 is ok
   # gem 'sqlite3', '~> 1.5'
-  gem 'sqlite3'
+  gem 'sqlite3', '~> 1.7'
 
   # Testing
   gem 'rspec-rails'
@@ -110,12 +110,14 @@ gem 'bootstrap-sass'
 # Talk to SCSB REST API
 # gem 'rest-client'
 gem 'faraday'
-# Silence "already initialized constant" warnings
-#   reference:  https://github.com/ruby/net-imap/issues/16
-gem 'net-http'
 
-# Talk to HTTP servers
-gem 'httpclient'
+# # Silence "already initialized constant" warnings
+# #   reference:  https://github.com/ruby/net-imap/issues/16
+# gem 'net-http'
+
+# we use faraday - httpclient is not needed
+# # Talk to HTTP servers
+# gem 'httpclient'
 
 # Use MySQL for deployed server environments
 gem 'mysql2'
