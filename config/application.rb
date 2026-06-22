@@ -10,17 +10,8 @@ VALET_VERSION = IO.read('VERSION').strip
 
 module Valet
   class Application < Rails::Application
-    # Initialize configuration defaults for originally generated Rails version.
-    config.load_defaults 6.1
-
-    # Uncomment these lines to fully commit to a 7.0 rollout
-    # config.load_defaults 7.0
-    # config.active_support.cache_format_version = 7.0
-    
-
-    # we're now moving to Rails 7.x - dont' need this anymore
-    # # Only needed up to 6.x / in 7.x and beyond, autoloader is always Zeitwerk
-    # config.autoloader = :zeitwerk
+    config.load_defaults 7.0
+    config.active_support.cache_format_version = 7.0
 
     include Cul::Omniauth::FileConfigurable
 
