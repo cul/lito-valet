@@ -40,13 +40,16 @@ module Service
       # Use the campus setting to determine the ILLiad base URL.
       # Either MBUTS (Morningside, etc), or MCC (Medical Campus, ZCH)
       illiad_base_url = APP_CONFIG[:illiad_base_url]
-      illiad_base_url = APP_CONFIG[:illiad_base_url_zch] if campus == 'MCC'
+      illiad_base_url = APP_CONFIG[:illiad_base_url_zch] if campus == 'mcc'
 
       # And setup an OpenURL URL, based on the base-url (zcu or zch)
       illad_openurl_url = illiad_base_url + '/OpenURL'
 
       # Default values that we always want to pass to any ILLiad form
       illiad_params = Oclc::Illiad.get_default_params(current_user, bib_record)
+      Rails.logger.debug("illiad_params=#{illiad_params}")
+
+      Rails.logger.debug("ILL before cleanup - params=#{params}")
 
       # Next, cleanup params - afterwards should only hold OpenURL values
       params.delete('campus')
@@ -54,19 +57,26 @@ module Service
       params.delete('action')
       params.delete('authenticity_token')
       params.delete('commit')
+      params.delete('service_response')
       # N.B. - the parameter name "action" is ambiguous - it's both an
       # ILLiad param and a Rails param.
       # Delete it here, add back in later if needed.
+      
+      Rails.logger.debug("ILL after cleanup - params=#{params}")
+      
 
       # (1) Redirect to BorrowDirect Search page, with no arguments
       if bib_record.nil? && params.empty?
         Rails.logger.debug 'ill(1): redirect to ILLiad login page'
+        return APP_CONFIG[:illiad_login_url_zch] if campus == 'mcc'
         return APP_CONFIG[:illiad_login_url]
       end
 
       # (2) ILL OpenURL - formed from bib record
       if bib_record.present?
+        Rails.logger.debug 'ill(2): bib record - build OpenURL'
         openurl_bib_params = open_params_from_bib(bib_record)
+        Rails.logger.debug("openurl_bib_params=#{openurl_bib_params}")
         illiad_params.merge!(openurl_bib_params)
         # Return the OpenURL url, with our OpenURl params
         return Oclc::Illiad.build_full_url(illad_openurl_url, illiad_params)
@@ -74,6 +84,7 @@ module Service
 
       # (3) Redirect to ILLiad, to the specific specified form
       if params.present? && params.key?('Form')
+        Rails.logger.debug 'ill(3): redirect to specified ILLiad form'
         # Action=10 tells Illiad that we'll pass the Form ID to use
         params['Action'] = '10'
         illiad_params.merge!(params)
@@ -83,6 +94,7 @@ module Service
 
       # (4) We were passed an OpenURL (without an ILLiad form specifier)
       if params.present? && (not params.key?('Form'))
+        Rails.logger.debug 'ill(4): passed in an OpenURL'
         params.permit!
         illiad_params.merge!(params)
         # Return the ILLiad base url, with all parameters including Form ID
