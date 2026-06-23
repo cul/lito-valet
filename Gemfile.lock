@@ -124,6 +124,8 @@ GEM
       rails (~> 7.0)
     date (3.5.1)
     debug_inspector (1.2.0)
+    deprecation (1.1.0)
+      activesupport
     devise (4.9.4)
       bcrypt (~> 3.0)
       orm_adapter (~> 0.1)
@@ -157,12 +159,14 @@ GEM
     faraday-net_http (3.4.4)
       net-http (~> 0.5)
     ffi (1.17.4)
-    folio_client (0.19.0)
+    folio_client (1.1.0)
       activesupport (>= 4.2)
+      deprecation
       dry-monads
       faraday
       faraday-cookie_jar
       marc
+      ostruct
       zeitwerk
     globalid (1.4.0)
       activesupport (>= 6.1)

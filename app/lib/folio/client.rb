@@ -37,10 +37,12 @@ module Folio
           username: folio_config['okapi_username'],
           password: folio_config['okapi_password']
         },
-        okapi_headers: {
-          'X-Okapi-Tenant': folio_config['okapi_tenant'],
-          'User-Agent':     'FolioApiClient'
-        },
+        # okapi_headers: {
+        #   'X-Okapi-Tenant': folio_config['okapi_tenant'],
+        #   'User-Agent':     'FolioApiClient'
+        # },
+        tenant_id:    folio_config['okapi_tenant'],
+        # user_agent:   'FolioApiClient',   # let the gem fill in its default
         timeout: folio_config.key?('okapi_timeout') ? folio_config['okapi_timeout'] : 15
       )
       return @folio_client
