@@ -106,6 +106,7 @@ module Service
 
     def open_params_from_bib(bib_record)
       # Not yet implemented
+      # Columbia sends Loan requests first to Borrow-Direct, never directly to ILL
     end
   end
 end
