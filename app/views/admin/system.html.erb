@@ -34,12 +34,12 @@
 
 <h2>Full APP_CONFIG</h2>
 <pre>
-  <%= APP_CONFIG.to_hash.to_yaml %>
+  <%= @app_config.to_yaml %>
 </pre>
 
 <h2>Full ENV</h2>
 <pre>
-  <%= ENV.sort.to_h.to_yaml %>
+  <%= @env.to_yaml %>
 </pre>
 
 

@@ -5,6 +5,13 @@ class AdminController < ApplicationController
 
   def system
     return redirect_to root_path unless current_user.admin?
+    
+    # Redact sensitive values (passwords, api-keys) before displaying in the view.
+    # The list of filter parameters is in initializers/filter_parameter_logging.rb
+    filter = ActiveSupport::ParameterFilter.new(Rails.application.config.filter_parameters)
+    @app_config = filter.filter(APP_CONFIG.to_hash)
+    @env = filter.filter(ENV.sort.to_h)
+    
   end
 
   def request_services
