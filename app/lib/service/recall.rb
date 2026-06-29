@@ -195,8 +195,8 @@ module Service
 
       # Link to "My Borrowing Account", appropriate for our environment
       clio = 'clio.columbia.edu'
-      clio = 'clio-dev.cul.columbia.edu' if Rails.env == 'valet_dev'
-      clio = 'clio-test.cul.columbia.edu' if Rails.env == 'valet_test'
+      clio = 'clio-dev.cul.columbia.edu' if Rails.env.valet_dev?
+      clio = 'clio-test.cul.columbia.edu' if Rails.env.valet_test?
       my_borrowing_account_url = 'http://' + clio + '/my_account'
 
       confirm_locals = {

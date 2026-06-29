@@ -44,7 +44,7 @@ module Service
       staff_email = get_email_alias_for_location(holding[:location_code])
 
       # override in non-production
-      staff_email = 'noreply@libraries.cul.columbia.edu' unless Rails.env == 'valet_prod'
+      staff_email = 'noreply@libraries.cul.columbia.edu' unless Rails.env.valet_prod?
 
       {
         bib_record:       bib_record,

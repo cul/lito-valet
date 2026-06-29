@@ -19,7 +19,6 @@
 # library.columbia.edu 856 link - add a test here when one is identified.
 
 RSpec.describe 'Special Collections' do
-
   # --- Error cases ---
 
   it 'renders error for non-existent bib' do
@@ -94,5 +93,4 @@ RSpec.describe 'Special Collections' do
   #   get special_collection_path('FINDING_AID_BIB_ID')
   #   expect(response).to redirect_to(/findingaids\.library\.columbia\.edu/)
   # end
-
 end

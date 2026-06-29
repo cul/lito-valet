@@ -98,7 +98,7 @@ module ValetRequestsHelper
         active_delivery_locations.include?(location)
       }
       # Did we delete the last location?  Use 'BU' as last-resort fallback.
-      delivery_options = [ 'BU' ] if delivery_options.empty?
+      delivery_options = ['BU'] if delivery_options.empty?
       # Next, hardcode default, unless the default is an active location
       delivery_default = 'BU' unless active_delivery_locations.include?(delivery_default)
     end
@@ -224,7 +224,7 @@ module ValetRequestsHelper
     location    = holding[:location_display]
     call_number = holding[:display_call_number]
     acq_info    = holding[:acquisitions_information].join(', ')
-    data = [ location, call_number, acq_info ]
+    data = [location, call_number, acq_info]
     return data.compact_blank.join(' - ')
   end
 

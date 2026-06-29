@@ -95,7 +95,7 @@ class FormMailer < ApplicationMailer
     confirm_bcc = APP_CONFIG[:recap_loan][:confirm_bcc]
     recap_subject = 'Offsite Pick-Up Confirmation'
     recap_subject += " [#{params['titleIdentifier']}]" if params['titleIdentifier']
-    recap_subject += " (#{Rails.env})" if Rails.env != 'valet_prod'
+    recap_subject += " (#{Rails.env})" if !Rails.env.valet_prod?
     subject = recap_subject
     # Make params available within template by using an instance variable
     @params = params
@@ -110,7 +110,7 @@ class FormMailer < ApplicationMailer
     confirm_bcc = APP_CONFIG[:recap_scan][:confirm_bcc]
     recap_subject = 'Offsite Scan Confirmation'
     recap_subject += " [#{params['titleIdentifier']}]" if params['titleIdentifier']
-    recap_subject += " (#{Rails.env})" if Rails.env != 'valet_prod'
+    recap_subject += " (#{Rails.env})" if !Rails.env.valet_prod?
     subject = recap_subject
     # Make params available within template by using an instance variable
     @params = params

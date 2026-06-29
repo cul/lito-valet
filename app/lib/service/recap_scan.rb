@@ -13,7 +13,7 @@ module Service
 
     # May this bib be requested from Offsite?
     def bib_eligible?(bib_record = nil)
-      bib_record.offsite_holdings.size > 0
+      !bib_record.offsite_holdings.empty?
     end
 
     # def setup_form_locals(params, bib_record, current_user)

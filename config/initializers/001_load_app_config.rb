@@ -4,7 +4,7 @@ begin
   #   loaded_config = YAML.load(raw_config)
   # Interpolation
   app_config_file = Rails.root.to_s + '/config/app_config.yml'
-  loaded_config = YAML.load(ERB.new(IO.read(app_config_file)).result) || {}
+  loaded_config = YAML.safe_load(ERB.new(IO.read(app_config_file)).result) || {}
   loaded_config = HashWithIndifferentAccess.new(loaded_config)
 
   all_config = loaded_config['_all_environments'] || {}
@@ -15,6 +15,6 @@ rescue StandardError => e
   APP_CONFIG = {}.freeze
 end
 
-LOCATIONS ||= YAML.load(File.read(Rails.root.to_s + '/config/locations.yml'))
+LOCATIONS ||= YAML.safe_load(File.read(Rails.root.to_s + '/config/locations.yml'))
 
-DELIVERY ||= YAML.load(File.read(Rails.root.to_s + '/config/delivery.yml'))
+DELIVERY ||= YAML.safe_load(File.read(Rails.root.to_s + '/config/delivery.yml'))

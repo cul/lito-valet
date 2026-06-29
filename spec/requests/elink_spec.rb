@@ -11,5 +11,4 @@ RSpec.describe 'E-Link' do
     expect(response.location).to include('rft.issn')
     expect(response.location).to include('1234-5678')
   end
-
 end

@@ -41,7 +41,7 @@ class ReservesController < ApplicationController
 
     # If the course-number lookup for no matching course,
     # return to the index page
-    if folio_courses_list.size == 0
+    if folio_courses_list.empty?
       error_message = 'No courses found matching: ' + @course_number
       redirect_to reserves_path, error: error_message
       return
@@ -187,7 +187,7 @@ class ReservesController < ApplicationController
   end
 
   def format_contributors(contributors_list)
-    return '' unless contributors_list.present? && (contributors_list.length > 0)
+    return '' unless contributors_list.present? && (!contributors_list.empty?)
 
     # We will look for either a single primary contributor,
     # or - if none are primary - we will list all of them.
@@ -204,7 +204,7 @@ class ReservesController < ApplicationController
     end
 
     return primary_contributor if primary_contributor.present?
-    return contributor_list.join('; ') if contributor_list.length > 0
+    return contributor_list.join('; ') if !contributor_list.empty?
 
     # No contributor found?
     return ''

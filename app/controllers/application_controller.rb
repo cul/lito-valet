@@ -33,7 +33,7 @@ class ApplicationController < ActionController::Base
 
   # Overwriting the sign_out redirect path method
   def after_sign_out_path_for(_resource_or_scope)
-    cas_opts = YAML.load_file(File.join(Rails.root, 'config', 'cas.yml'))[Rails.env] || {}
+    cas_opts = YAML.load_file(Rails.root.join("config/cas.yml").to_s)[Rails.env] || {}
 
     # If CAS options are absent, we can only do application-level logout,
     # not CAS logout.  Warn, and proceed.

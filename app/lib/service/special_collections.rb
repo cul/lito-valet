@@ -24,7 +24,7 @@ module Service
       return false unless bib_record
 
       special_collections_holdings = get_special_collections_holdings(bib_record)
-      if special_collections_holdings.size.zero?
+      if special_collections_holdings.empty?
         self.error = "This record has no holdings in any Special Collections library.
         <br><br>
         Requests can only be made for Special Collections items."
@@ -129,7 +129,7 @@ module Service
             container = {}
             # container id, display label
             container[:container_id] = item[:item_id]
-            container[:label] = [ holding[:display_call_number], item[:enum_chron] ].join(' ')
+            container[:label] = [holding[:display_call_number], item[:enum_chron]].join(' ')
             # holding details
             container[:location_code]   = holding[:location_code]
             container[:site]            = sites_hash[holding[:location_code]]

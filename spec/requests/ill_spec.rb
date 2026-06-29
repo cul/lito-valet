@@ -5,7 +5,6 @@
 # Step 2: POST /ill - processes campus choice, redirects to ILLiad
 
 RSpec.describe 'ILL' do
-
   it 'bounces unauthenticated user to sign-in page' do
     get '/ill'
     expect(response).to redirect_to('http://www.example.com/sign_in')

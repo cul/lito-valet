@@ -13,7 +13,6 @@
 #   4. logset + year_month       -> renders index (log entry datatable)
 
 RSpec.describe 'Logs' do
-
   def admin_user
     user = FactoryBot.create(:happyuser)
     user.affils = ['CUL_allstaff']
@@ -97,5 +96,4 @@ RSpec.describe 'Logs' do
     expect(response.content_type).to include('text/csv')
     expect(response.headers['Content-Disposition']).to include('recap_loan_2025_07.csv')
   end
-
 end

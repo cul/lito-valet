@@ -1,7 +1,6 @@
 # spec/requests/in_process_spec.rb
 
 RSpec.describe 'In Process Request Service' do
-
   # Bib 10897690 has holdings with "On Order" or "In Process" call numbers
   it 'in_process request renders form' do
     sign_in FactoryBot.create(:happyuser)

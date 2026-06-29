@@ -13,7 +13,7 @@ module Service
       # which include an available item
       availability ||= bib_record.fetch_folio_availability
       barnard_remote_holdings = get_barnard_remote_holdings(bib_record)
-      if barnard_remote_holdings.size.zero?
+      if barnard_remote_holdings.empty?
         self.error = "This record has no Barnard Remote holdings.
         <br><br>
         Only items stored in Barnard's remote storage facility

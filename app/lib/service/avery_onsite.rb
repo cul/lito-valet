@@ -76,9 +76,9 @@ module Service
 
       # If the holding has no items (which happens in Avery), we
       # create a faux item, to pass data to the location
-      if requested_items.size == 0
+      if requested_items.empty?
         faux_item = { holding: avery_onsite_holdings.first }
-        requested_items = [ faux_item ]
+        requested_items = [faux_item]
       end
 
       mail_params = {

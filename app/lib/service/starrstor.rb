@@ -23,7 +23,7 @@ module Service
 
       starrstor_holdings = get_starrstor_holdings(bib_record)
       # raise
-      if starrstor_holdings.size.zero?
+      if starrstor_holdings.empty?
         self.error = "This record has no StarrStor holdings.
         <br><br>
         Only items stored in Starr's remote storage facility

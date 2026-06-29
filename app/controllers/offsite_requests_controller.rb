@@ -45,7 +45,7 @@ class OffsiteRequestsController < ApplicationController
     end
 
     offsite_holdings = @clio_record.offsite_holdings
-    if offsite_holdings.size.zero?
+    if offsite_holdings.empty?
       flash[:error] = "The requested record (bib id #{bib_id}) has no offsite holdings available."
       return redirect_to bib_offsite_requests_path
     end
@@ -84,7 +84,7 @@ class OffsiteRequestsController < ApplicationController
     bib_id = @clio_record.id
 
     offsite_holdings = @clio_record.offsite_holdings
-    if offsite_holdings.size.zero?
+    if offsite_holdings.empty?
       flash[:error] = "The requested record (bib id #{bib_id}) has no offsite holdings available."
       redirect_to(error_offsite_requests_path) && return
     end
@@ -307,7 +307,7 @@ class OffsiteRequestsController < ApplicationController
       subject += " [#{@request_item_response[:titleIdentifier]}]"
     end
 
-    subject += " (#{Rails.env})" if Rails.env != 'valet_prod'
+    subject += " (#{Rails.env})" if !Rails.env.valet_prod?
     subject
   end
 

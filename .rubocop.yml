@@ -35,6 +35,8 @@ Style/Not:
 Layout/EmptyLinesAroundModuleBody:
   Enabled: false
 
+Rails/LinkToBlank:
+  Enabled: false
 
 
 
