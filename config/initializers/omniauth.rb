@@ -20,8 +20,12 @@
 # See https://github.com/cookpad/omniauth-rails_csrf_protection?tab=readme-ov-file#omniauth---rails-csrf-protection
 OmniAuth.config.request_validation_phase = OmniAuth::AuthenticityTokenProtection.new(key: :_csrf_token)
 
+# Valet hits the login path with a GET, not the expected POST,
+# so add 'get' to the allowed methods
 OmniAuth.config.allowed_request_methods = %i[get post]
 
-
+# Since allowing GET above is a deliberate choice,
+# silence the logged OmniAuth warning about CSRF risk on GET.
+OmniAuth.config.silence_get_warning = true
 
 
