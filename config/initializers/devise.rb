@@ -1,9 +1,21 @@
 # Use this hook to configure devise mailer, warden hooks and so forth.
 # Many of these configuration options can be set straight in your model.
 Devise.setup do |config|
-  Valet::Application.configure_devise_omniauth(config)
+
+  # old gem
+  # Valet::Application.configure_devise_omniauth(config)
+  # OmniAuth.config.logger = Rails.logger
+  
+  # new gem
+  # ==> OmniAuth
+  # omniauth-cul provides two strategies: :columbia_cas (production CAS login)
+  # and :developer_uid (a local dev-only "type in a uid" form). Both read their
+  # user/session wiring from Users::OmniauthCallbacksController.
+  config.omniauth :columbia_cas, { label: 'Columbia SSO (CAS)' }
+  config.omniauth :developer_uid, { label: 'Developer UID' } if Rails.env.development?
 
   OmniAuth.config.logger = Rails.logger
+  
 
   # The secret key used by Devise. Devise uses this key to generate
   # random tokens. Changing this key will render invalid all existing
