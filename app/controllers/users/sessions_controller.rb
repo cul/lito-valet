@@ -32,18 +32,16 @@ class Users::SessionsController < Devise::SessionsController
 
   private 
 
-  # Hardcoded for Columbia
-  CAS_HOST = 'cas.columbia.edu'.freeze
-
-  # Allow off-host redirects, to the CAS server only
+  # Allow off-host redirects, to the CAS server only (hardcoded)
   def redirect_to(options = {}, response_options = {})
+    # parse the passed full redirect URL to find just the host portion
     if options.is_a?(String)
       host = begin
         URI(options).host
       rescue URI::InvalidURIError
         nil
       end
-      response_options = response_options.merge(allow_other_host: true) if host == CAS_HOST
+      response_options = response_options.merge(allow_other_host: true) if host == 'cas.columbia.edu'
     end
     super(options, response_options)
   end
