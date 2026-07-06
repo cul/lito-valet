@@ -147,7 +147,7 @@ class User < ApplicationRecord
     # end
 
     # No email!  Fill in guess.
-    Rails.logger.error "ERROR: Cannot find email address via LDAP or Voyager for uid [#{uid}], assuming @columbia.edu"
+    Rails.logger.error "cannot find email address via LDAP or Voyager for uid [#{uid}], assuming @columbia.edu"
     self.email = "#{uid}@columbia.edu"
     self
   end

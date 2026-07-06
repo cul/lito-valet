@@ -97,4 +97,9 @@ RSpec.configure do |config|
   # test failures related to randomization by passing the same `--seed` value
   # as the one that triggered the failure.
   Kernel.srand config.seed
+
+
+  # turn deprecation warnings into errors, giving a full backtrace
+  config.raise_errors_for_deprecations!
+
 end
