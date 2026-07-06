@@ -18,7 +18,8 @@ class User < ApplicationRecord
   devise :trackable, :rememberable, :timeoutable, :omniauthable,
          omniauth_providers: Devise.omniauth_configs.keys
   
-  serialize :affils, Array
+  # serialize :affils, Array
+  serialize :affils, type: Array
 
   # attr_reader :ldap_attributes, :patron_id, :oracle_connection
   attr_reader :ldap_attributes, :patron_id
