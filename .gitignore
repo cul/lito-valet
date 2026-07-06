@@ -36,12 +36,13 @@ config/cas.yml
 # (they're encrypted) only the .key files are secret.
 config/credentials/*.key
 config/master.key
-
+config/credentials/*.key
 
 # Precompiled assets
 /public/assets
 
 # macOS
 .DS_Store
+
 
 
