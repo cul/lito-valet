@@ -10,8 +10,8 @@ VALET_VERSION = IO.read('VERSION').strip
 
 module Valet
   class Application < Rails::Application
-    config.load_defaults 7.0
-    config.active_support.cache_format_version = 7.0
+    config.load_defaults 7.1
+    config.active_support.cache_format_version = 7.1
 
     # old gem
     # include Cul::Omniauth::FileConfigurable

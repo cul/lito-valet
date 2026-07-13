@@ -130,11 +130,12 @@ class LogsController < ApplicationController
 
   def get_year_counts
     # default clause works in MySQL
-    group_clause = 'date_format(created_at, "%Y")'
+    group_clause = "date_format(created_at, '%Y')" # MySQL
+    
 
     # SQLite needs something special
     if ActiveRecord::Base.connection.adapter_name =~ /sqlite/i
-      group_clause = 'strftime("%Y", created_at)'
+      group_clause = "strftime('%Y', created_at)"
     end
 
     counts = Log.where(logset: @logset).group(group_clause).count
@@ -145,11 +146,11 @@ class LogsController < ApplicationController
 
   def get_month_counts
     # default clause works in MySQL
-    group_clause = 'date_format(created_at, "%Y-%m")'
+    group_clause = "date_format(created_at, '%Y-%m')" # MySQL
 
     # SQLite needs something special
     if ActiveRecord::Base.connection.adapter_name =~ /sqlite/i
-      group_clause = 'strftime("%Y-%m", created_at)'
+      group_clause = "strftime('%Y-%m', created_at)"
     end
 
     counts = Log.where(logset: @logset).group(group_clause).count
