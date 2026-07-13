@@ -1,7 +1,8 @@
 source 'https://rubygems.org'
 
 # gem 'rails', '~> 7.0.0'
-gem 'rails', '~> 7.1.0'
+# gem 'rails', '~> 7.1.0'
+gem 'rails', '~> 7.2.0'
 
 # https://stackoverflow.com/questions/79360526/uninitialized-constant
 # uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger
