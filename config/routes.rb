@@ -4,7 +4,7 @@ Rails.application.routes.draw do
 
   root 'welcome#index'
   get 'welcome/index'
-  get 'welcome/out'
+  get 'welcome/logout'
 
   get '/timeout', to: 'welcome#timeout'
 

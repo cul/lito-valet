@@ -1,14 +1,27 @@
 class User < ApplicationRecord
-  include Cul::Omniauth::Users
 
   require 'resolv'
 
-  # cul_omniauth includes several options (:registerable,
-  # :recoverable, :rememberable, :trackable, :validatable, ...)
-  # but we also want...
-  devise :timeoutable
+  # old gem
+  # include Cul::Omniauth::Users
+  #
+  # # cul_omniauth includes several options (:registerable,
+  # # :recoverable, :rememberable, :trackable, :validatable, ...)
+  # # but we also want...
+  # devise :timeoutable
 
-  serialize :affils, Array
+  # new gem
+  # cul_omniauth used to provide :registerable, :recoverable, :rememberable,
+  # :trackable, :validatable, :omniauthable via Cul::Omniauth::Users. We don't
+  # use password auth (see #password / #password= below) or password reset, so
+  # we only declare the modules whose backing columns/behavior we actually use.
+  devise :trackable, :rememberable, :timeoutable, :omniauthable,
+         omniauth_providers: Devise.omniauth_configs.keys
+  
+  # serialize :affils, Array
+  # serialize :affils, type: Array
+  serialize :affils, coder: YAML, type: Array
+  
 
   # attr_reader :ldap_attributes, :patron_id, :oracle_connection
   attr_reader :ldap_attributes, :patron_id
@@ -136,7 +149,7 @@ class User < ApplicationRecord
     # end
 
     # No email!  Fill in guess.
-    Rails.logger.error "ERROR: Cannot find email address via LDAP or Voyager for uid [#{uid}], assuming @columbia.edu"
+    Rails.logger.error "cannot find email address via LDAP or Voyager for uid [#{uid}], assuming @columbia.edu"
     self.email = "#{uid}@columbia.edu"
     self
   end
@@ -171,6 +184,19 @@ class User < ApplicationRecord
 
   def login
     uid.split('@').first
+  end
+
+  # new gem
+  # Replaces Cul::Omniauth::Users#find_for_provider / #find_for_saml.
+  # uid and affils come from Omniauth::Cul::ColumbiaCas.validation_callback
+  # (see Users::OmniauthCallbacksController#columbia_cas). Creating with just
+  # `uid:` is enough to trigger the before_create/after_initialize LDAP
+  # lookups above, which fill in name/email/barcode exactly as before.
+  def self.find_for_columbia_cas(uid)
+    return nil if uid.blank?
+
+    uid = uid.downcase
+    find_by(uid: uid) || create!(uid: uid)
   end
 
   def email

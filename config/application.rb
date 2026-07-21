@@ -1,6 +1,6 @@
-require_relative 'boot'
+require_relative "boot"
 
-require 'rails/all'
+require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
@@ -10,10 +10,16 @@ VALET_VERSION = IO.read('VERSION').strip
 
 module Valet
   class Application < Rails::Application
-    config.load_defaults 7.0
-    config.active_support.cache_format_version = 7.0
+    config.load_defaults 7.2
+    config.active_support.cache_format_version = 7.1
 
-    include Cul::Omniauth::FileConfigurable
+    # old gem
+    # include Cul::Omniauth::FileConfigurable
+
+    # Please, add to the `ignore` list any other `lib` subdirectories that do
+    # not contain `.rb` files, or that should not be reloaded or eager loaded.
+    # Common ones are `templates`, `generators`, or `middleware`, for example.
+    config.autoload_lib(ignore: %w[assets tasks])
 
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers

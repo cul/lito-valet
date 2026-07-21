@@ -1,6 +1,9 @@
 # config valid only for current version of Capistrano
 lock '~> 3.0'
 
+# Let Capistrano know that we're using Bundler 4.x
+set :bundle_version, 4
+
 # set :application, 'my_app_name'
 # set :repo_url, 'git@example.com:me/my_repo.git'
 set :application, 'valet'
@@ -26,7 +29,7 @@ ask :branch, `git rev-parse --abbrev-ref HEAD`.chomp
 
 # Default value for :linked_files is []
 # set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/secrets.yml')
-set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/app_config.yml', 'config/secrets.yml', 'config/cas.yml', 'public/robots.txt')
+set :linked_files, fetch(:linked_files, []).push('config/database.yml', 'config/app_config.yml', 'public/robots.txt')
 
 # Default value for linked_dirs is []
 # set :linked_dirs, fetch(:linked_dirs, []).push('log', 'tmp/pids', 'tmp/cache', 'tmp/sockets', 'vendor/bundle', 'public/system')

@@ -13,6 +13,9 @@
 # Ignore the default SQLite database.
 /db/*.sqlite3
 /db/*.sqlite3-journal
+/db/*.sqlite3-wal
+/db/*.sqlite3-shm
+
 
 # Ignore all logfiles and tempfiles.
 /log/*
@@ -28,13 +31,18 @@ config/app_config.yml
 config/secrets.yml
 config/cas.yml
 
-# Don't need to commit localhost dev/test databases
-db/*.sqlite3
+# Rails credentials decryption keys - never commit these.
+# corresponding config/credentials/*.yml.enc files ARE committed 
+# (they're encrypted) only the .key files are secret.
+config/credentials/*.key
+config/master.key
+config/credentials/*.key
 
 # Precompiled assets
 /public/assets
 
 # macOS
 .DS_Store
+
 
 

@@ -1,6 +1,29 @@
 # spec/models/user_spec.rb
 
 RSpec.describe User, type: :model do
+
+  describe '.find_for_columbia_cas' do
+    it 'returns nil for a blank uid' do
+      expect(User.find_for_columbia_cas(nil)).to be_nil
+      expect(User.find_for_columbia_cas('')).to be_nil
+    end
+
+    it 'finds an existing user by uid' do
+      existing = FactoryBot.create(:happyuser, uid: 'jdoe')
+      expect(User.find_for_columbia_cas('jdoe')).to eq(existing)
+    end
+
+    it 'downcases the uid before searching' do
+      existing = FactoryBot.create(:happyuser, uid: 'jdoe')
+      expect(User.find_for_columbia_cas('JDOE')).to eq(existing)
+    end
+
+    it 'creates a new user when none exists for the uid' do
+      expect { User.find_for_columbia_cas('newuid') }.to change(User, :count).by(1)
+      expect(User.find_by(uid: 'newuid')).to be_present
+    end
+  end
+
   describe '#valet_admin?' do
     it 'returns true for user with CUL_allstaff affil' do
       user = FactoryBot.build(:happyuser, affils: ['CUL_allstaff'])

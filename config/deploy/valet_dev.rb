@@ -6,6 +6,9 @@ server 'lito-rails-dev1.cul.columbia.edu', user: 'litoserv', roles: %w(app db we
 set :deploy_to, '/opt/passenger/valet_dev'
 set :rvm_ruby_version, 'valet_dev'
 
+# deploy the environment-specific credentials key
+append :linked_files, 'config/credentials/valet_dev.key'
+
 # If for some reason we're not on campus or on VPN,
 # we can deploy via a jumphost, as follows:
 # (taken from https://gist.github.com/peterhellberg/e823e3f73495e17f1f02 )

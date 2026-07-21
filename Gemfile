@@ -1,11 +1,14 @@
 source 'https://rubygems.org'
 
-gem 'rails', '~> 7.0.0'
+# gem 'rails', '~> 7.0.0'
+# gem 'rails', '~> 7.1.0'
+gem 'rails', '~> 7.2'
 
 # https://stackoverflow.com/questions/79360526/uninitialized-constant
 # uninitialized constant ActiveSupport::LoggerThreadSafeLevel::Logger
 #   Remove this when we update Rails to 7.1
-gem 'concurrent-ruby', '1.3.4'
+# gem 'concurrent-ruby', '1.3.4'
+# gem 'concurrent-ruby'
 
 # Valet is built using Sprockets
 gem 'sprockets-rails'
@@ -35,7 +38,8 @@ group :development, :test do
   # gem 'sqlite3', '~> 1.0'
   # Still a problem with rails/sqlite mismatch, but 1.5 is ok
   # gem 'sqlite3', '~> 1.5'
-  gem 'sqlite3', '~> 1.7'
+  # gem 'sqlite3', '~> 1.7'
+  gem 'sqlite3'
 
   # Testing
   gem 'rspec-rails'
@@ -81,7 +85,11 @@ gem 'devise'
 # gem 'cul_omniauth', path: '/Users/marquis/src/cul_omniauth'
 # gem 'cul_omniauth', git: 'https://github.com/cul/cul_omniauth', branch: 'cas-5.3'
 # gem 'cul_omniauth', git: 'https://github.com/cul/cul_omniauth', branch: 'rails-6'
-gem 'cul_omniauth'
+# gem 'cul_omniauth'
+
+# newer gem
+gem 'omniauth-cul'
+gem 'omniauth', '~> 2.1'
 
 # Fetch ldap details - first name, last name, etc.
 gem 'net-ldap'
