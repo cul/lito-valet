@@ -97,6 +97,12 @@ module Service
         Rails.logger.debug 'ill(4): passed in an OpenURL'
         params.permit!
         illiad_params.merge!(params)
+
+        # LIBSYS-8268 - ReShare/ILLiad integration
+        if params.key?('rfr_id') and params['rfr_id'].include?('borrowdirect.reshare.indexdata.com')
+          illiad_params['CitedIn'] = 'RESHARE-BOOK'
+        end
+
         # Return the ILLiad base url, with all parameters including Form ID
         return Oclc::Illiad.build_full_url(illad_openurl_url, illiad_params)
       end

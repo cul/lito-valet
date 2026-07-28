@@ -1,7 +1,7 @@
 RSpec.describe 'Borrow Direct' do
   # Some constants used throughout this file
-  # reshare_base_url   = 'https://columbia-borrowdirect.reshare.indexdata.com'
-  reshare_base_url   = 'https://borrowdirect.reshare.indexdata.com'
+  # reshare_base_url   = 'https://borrowdirect.reshare.indexdata.com'
+  reshare_base_url   = 'https://columbia-borrowdirect.reshare.indexdata.com'
   reshare_search_url = reshare_base_url + '/Search/Results'
 
   it 'redirects to ReShare with ISBN' do
