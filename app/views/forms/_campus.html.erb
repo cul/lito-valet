@@ -9,11 +9,14 @@ Please select your campus.
 <br>
 
 <%= form.radio_button(:campus, 'mbuts', id: :campus_mbuts) %>
-<%= label_tag(:campus_mbuts, 'Columbia (Morningside) / Barnard / Union Theological Seminary / Columbia Law') %>
+<%= label_tag(:campus_mbuts, 'Columbia (Morningside) / Barnard / Law / Teachers College / UTS') %>
 <br>
 <%= form.radio_button(:campus, 'mcc', id: :campus_mcc) %>
-<%= label_tag(:campus_mcc, 'Medical Center Campus') %>
+<%= label_tag(:campus_mcc, 'Medical Center Campus (CUIMC)') %>
+
+<!-- LIBSYS-8318 - TC requests now managed by CUL delivery services
 <br>
 <%= form.radio_button(:campus, 'tc', id: 'campus_tc') %>
 <%= label_tag(:campus_tc, 'Teachers College') %>
+-->
 
