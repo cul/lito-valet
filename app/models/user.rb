@@ -345,7 +345,7 @@ class User < ApplicationRecord
 
     # unless permitted_affils.present? || permitted_affil_regex.present?
     unless permitted_affils.present?
-      Rails.log.error 'Cannot find ANY permitted_affils - no access allowed!'
+      Rails.logger.error 'Cannot find ANY permitted_affils - no access allowed!'
       return false
     end
 

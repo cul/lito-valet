@@ -16,7 +16,7 @@ class AdminController < ApplicationController
 
   def request_services
     # Allow all CUL staff to view the configuration rules for Valet request services
-    redirect_to root_path unless current_user && current_user.culstaff?
+    return redirect_to root_path unless current_user && current_user.culstaff?
 
     # Don't hard-code a list of services here, discover them by looking through APP_CONFIG
     @request_service_list = []
