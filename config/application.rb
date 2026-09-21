@@ -1,6 +1,17 @@
 require_relative "boot"
 
-require "rails/all"
+# Valet doesn't need a lot of Rails - only load selected pieces
+# require "rails/all"
+require "rails"
+
+require "active_model/railtie"
+require "active_job/railtie"      # ActionMailer depends on it
+require "active_record/railtie"
+require "action_controller/railtie"
+require "action_mailer/railtie"
+require "action_view/railtie"
+require "rails/test_unit/railtie"
+
 
 # Require the gems listed in Gemfile, including any gems
 # you've limited to :test, :development, or :production.
