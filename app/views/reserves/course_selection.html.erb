@@ -1,5 +1,9 @@
 <!-- views/reseves/course_selection.html.erb -->
 
+<% content_for :head do %>
+  <%= render 'shared/datatables_assets' %>
+<% end %>
+
 Course Number:
 <%= form_with url: course_reserves_redirect_path, method: :post do |form| %>
   <%= form.text_field :course_number, value: @course_number %>

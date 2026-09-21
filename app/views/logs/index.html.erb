@@ -1,3 +1,7 @@
+<% content_for :head do %>
+  <%= render 'shared/datatables_assets' %>
+<% end %>
+
 <%= link_to 'back', logs_path(logset: @logset) %>
 <h3><%= @logset %> logs for <%= @year_month %></h3>
 

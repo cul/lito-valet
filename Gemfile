@@ -14,7 +14,8 @@ gem 'rails', '~> 7.2'
 gem 'sprockets-rails'
 
 # Use SCSS for stylesheets
-gem 'sass-rails'
+# gem 'sass-rails'
+gem 'sassc-rails'
 
 # Use Terser as compressor for JavaScript assets
 gem 'terser'
@@ -138,8 +139,9 @@ gem 'mysql2'
 # # Talk to SCSB ActiveMQ via STOMP
 # gem 'stomp'
 
-# DataTables
-gem 'jquery-datatables-rails'
+# replaced with direct cdn calls
+# # DataTables
+# gem 'jquery-datatables-rails'
 
 # Parse User Agent into browser name, version
 gem 'browser'

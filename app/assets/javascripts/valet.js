@@ -7,13 +7,26 @@ $(function() {
   });
 });
 
-$(function() {
-  $('#log_file_table').DataTable({
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  var el = document.getElementById('log_file_table');
+  if (!el) { return; }
+
+  new DataTable(el, {
     pageLength: 100,
-    lengthMenu: [ [20, 50, 100, -1], [20, 50, 100, "All"] ],
-    dom: '<"top"flip>'
+    lengthMenu: [[20, 50, 100, -1], [20, 50, 100, 'All']],
+    layout: {
+      topStart:    ['search', 'pageLength'],
+      topEnd:      ['info', 'paging'],
+      bottomStart: null,
+      bottomEnd:   null
+    }
   });
 });
+
+
+
 
 // We don't want old Valet window hanging around.
 $(function() {

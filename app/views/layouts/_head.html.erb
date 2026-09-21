@@ -8,5 +8,8 @@
   <%= javascript_include_tag 'application' %>
   <%= csrf_meta_tags %>
 
+  <%# Page-specific head additions. %>
+  <%= yield :head %>
+
 </head>
 
