@@ -10,9 +10,15 @@ module Columbia
     # conn = Columbia::Web.open_connection()
     # toc = Columbia::Web.get_toc_link(barcode, conn)
 
-    HOST = 'http://www.columbia.edu'.freeze
-    TOCURL = '/cgi-bin/cul/toc.pl'.freeze
-    TOCLISTURL = '/cgi-bin/cul/toclist.pl'.freeze
+    # LIBSYS-8305 - move TOC from CUIT to CUL webservers
+    # HOST = 'http://www.columbia.edu'.freeze
+    # TOCURL = '/cgi-bin/cul/toc.pl'.freeze
+    # TOCLISTURL = '/cgi-bin/cul/toclist.pl'.freeze
+
+    HOST = 'https://systems.library.columbia.edu'.freeze
+    TOCURL = '/cul/toc/toc.pl'.freeze
+    TOCLISTURL = '/cul/toc/toclist.pl'.freeze
+
     # Test the connection-timeout logic with:
     # TOCURL = '/cgi-bin/cul/sleep.pl'.freeze
     # TOCLISTURL = '/cgi-bin/cul/sleep.pl'.freeze
