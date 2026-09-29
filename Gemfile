@@ -158,3 +158,7 @@ gem 'nokogiri', '~> 1.17.0'
 # now fixed.
 # # UNIX-5942 - work around spotty CUIT DNS
 # gem 'resolv-hosts-dynamic'
+
+# don't let Bundler move us to json 3.x until everything else is ready
+gem "json", "~> 2.0"
+
