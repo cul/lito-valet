@@ -23,6 +23,8 @@ standard_delivery_locations:
   # - MZ
   - CA
   - SW
+  # LIBSYS-8331 - Add Teachers College as a delivery location for all services
+  - GE
 
 # CUSTOMER CODES
 # there are some customer codes which have special delivery rules
