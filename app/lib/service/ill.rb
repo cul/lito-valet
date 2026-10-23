@@ -73,13 +73,17 @@ module Service
       end
 
       # (2) ILL OpenURL - formed from bib record
+      # *** NOT YET IMPLEMENTED ***
+      # There is no scenario yet that uses this pathway 
+      # CLIO requests use ill_loan or ill_scan instead
       if bib_record.present?
-        Rails.logger.debug 'ill(2): bib record - build OpenURL'
-        openurl_bib_params = open_params_from_bib(bib_record)
-        Rails.logger.debug("openurl_bib_params=#{openurl_bib_params}")
-        illiad_params.merge!(openurl_bib_params)
-        # Return the OpenURL url, with our OpenURl params
-        return Oclc::Illiad.build_full_url(illad_openurl_url, illiad_params)
+        return
+        # Rails.logger.debug 'ill(2): bib record - build OpenURL'
+        # openurl_bib_params = open_params_from_bib(bib_record)
+        # Rails.logger.debug("openurl_bib_params=#{openurl_bib_params}")
+        # illiad_params.merge!(openurl_bib_params)
+        # # Return the OpenURL url, with our OpenURl params
+        # return Oclc::Illiad.build_full_url(illad_openurl_url, illiad_params)
       end
 
       # (3) Redirect to ILLiad, to the specific specified form
