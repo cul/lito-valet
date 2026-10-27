@@ -2,33 +2,19 @@ class User < ApplicationRecord
 
   require 'resolv'
 
-  # old gem
-  # include Cul::Omniauth::Users
-  #
-  # # cul_omniauth includes several options (:registerable,
-  # # :recoverable, :rememberable, :trackable, :validatable, ...)
-  # # but we also want...
-  # devise :timeoutable
-
-  # new gem
-  # cul_omniauth used to provide :registerable, :recoverable, :rememberable,
-  # :trackable, :validatable, :omniauthable via Cul::Omniauth::Users. We don't
-  # use password auth (see #password / #password= below) or password reset, so
-  # we only declare the modules whose backing columns/behavior we actually use.
   devise :trackable, :rememberable, :timeoutable, :omniauthable,
          omniauth_providers: Devise.omniauth_configs.keys
   
-  # serialize :affils, Array
-  # serialize :affils, type: Array
   serialize :affils, coder: YAML, type: Array
-  
 
-  # attr_reader :ldap_attributes, :patron_id, :oracle_connection
   attr_reader :ldap_attributes, :patron_id
 
   # cul_omniauth sets "devise :recoverable", and that requires
   # that the following user attributes be available.
   attr_accessor :reset_password_token, :reset_password_sent_at
+
+  # How long to wait on an LDAP connect before giving up.
+  LDAP_CONNECT_TIMEOUT = 5
 
   # Before first-time User record creation...
   before_create :set_personal_info_via_ldap, :set_email
@@ -38,8 +24,6 @@ class User < ApplicationRecord
   after_initialize :set_email
   after_initialize :set_barcode
 
-  # we don't need this
-  # after_initialize :get_scsb_patron_information
 
   def to_s
     if first_name
@@ -65,45 +49,29 @@ class User < ApplicationRecord
     raise "LDAP config needs 'port'" unless ldap_args.key?(:port)
     raise "LDAP config needs 'base'" unless ldap_args.key?(:base)
 
-    # This should use Resolv-Replace instead of DNS
-    ldap_ip_address = Resolv.getaddress(ldap_args[:host])
+    # CUIT was having some DNS problems - be wary
+    begin
+      ldap_ip_address = Resolv.getaddress(ldap_args[:host])
+    rescue StandardError => e
+      Rails.logger.error "Resolv.getaddress(#{ldap_args[:host]}) failed: #{e.class}: #{e.message}"
+      return self
+    end
 
-    # DNS retry logic moved to ApplicationController#cache_dns_lookups()
-    #
-    # # CUIT DNS sometimes fails (UNIX-5942).  Retry a few times.
-    # ldap_ip_address = nil
-    # 3.times do
-    #   break if ldap_ip_address.present?
-    #   begin
-    #     ldap_ip_address = Resolv.getaddress(ldap_args[:host])
-    #   rescue StandardError => ex
-    #     # failed?  pause, and try again
-    #     Rails.logger.error "Resolv.getaddress(#{ldap_args[:host]}) failed: #{ex.message}, retrying..."
-    #     sleep 1
-    #   end
-    # end
-    #
-    # if ldap_ip_address.blank?
-    #   Rails.logger.error "Unable to resolve hostname #{ldap_args[:host]}!."
-    #   return
-    # end
-
-    # Rails.logger.debug "Querying LDAP #{ldap_ip_address} #{ldap_args.inspect} for uid=#{uid}"
-    # entry = Net::LDAP.new(host: ldap_ip_address, port: ldap_args[:port]).search(base: ldap_args[:base], filter: Net::LDAP::Filter.eq('uid', uid)) || []
     Rails.logger.debug "Querying LDAP #{ldap_args.except('password').inspect} for uid=#{uid}"
 
-    # ### this does not work?
-    # ldap = Net::LDAP.new
-    # ldap.host = ldap_ip_address
-    # ldap.port = ldap_args[:port]
-    # ldap.auth ldap_args[:username], ldap_args[:password]
-    # unless ldap.bind
-    #   Rails.logger.error "LDAP Authentication Failed!"
-    #   return
-    # end
-    # entry = ldap.search(base: ldap_args[:base], filter: Net::LDAP::Filter.eq('uid', uid)) || []
+    # Catch any errors in the LDAP lookup
+    # entry = Net::LDAP.new(host: ldap_ip_address, port: ldap_args[:port]).search(base: ldap_args[:base], filter: Net::LDAP::Filter.eq('uid', uid)) || []
+    begin
+      ldap = Net::LDAP.new(host: ldap_ip_address,
+                           port: ldap_args[:port],
+                           connect_timeout: LDAP_CONNECT_TIMEOUT)
+      entry = ldap.search(base: ldap_args[:base],
+                          filter: Net::LDAP::Filter.eq('uid', uid)) || []
+    rescue StandardError => e
+      Rails.logger.error "LDAP search for uid=#{uid} failed: #{e.class}: #{e.message}"
+      return self
+    end
 
-    entry = Net::LDAP.new(host: ldap_ip_address, port: ldap_args[:port]).search(base: ldap_args[:base], filter: Net::LDAP::Filter.eq('uid', uid)) || []
     entry = entry.first
     Rails.logger.debug "LDAP response: #{entry.inspect}"
 
@@ -118,8 +86,14 @@ class User < ApplicationRecord
       end
 
       # Process certain raw attributes into cleaned up fields
-      self.last_name  = Array(entry[:sn]).first.to_s
-      self.first_name = Array(entry[:givenname]).first.to_s
+      ldap_last_name  = Array(entry[:sn]).first.to_s
+      ldap_first_name = Array(entry[:givenname]).first.to_s
+      self.last_name  = ldap_last_name  if ldap_last_name.present?
+      self.first_name = ldap_first_name if ldap_first_name.present?
+    else
+      # LDAP answered, but has no record for this uid. Not a failure
+      # but also no new data, so leave stored names as they are.
+      Rails.logger.warn "LDAP has no entry for uid=#{uid}"
     end
 
     self
@@ -135,52 +109,42 @@ class User < ApplicationRecord
       end
     end
 
-    # FOLIO - don't lookup user email in the ILS, rely on LDAP
-    # # Try to find email via Voyager
-    # if @oracle_connection ||= Voyager::OracleConnection.new
-    #   if @patron_id ||= @oracle_connection.get_patron_id(uid)
-    #     if (voyager_email = @oracle_connection.retrieve_patron_email(@patron_id))
-    #       if voyager_email.length > 6 && voyager_email.match(/^.+@.+$/)
-    #         self.email = voyager_email
-    #         return self
-    #       end
-    #     end
-    #   end
-    # end
+    if self[:email].present?
+      Rails.logger.warn "no email via LDAP for uid [#{uid}], keeping stored address"
+      return self
+    end
 
     # No email!  Fill in guess.
-    Rails.logger.error "cannot find email address via LDAP or Voyager for uid [#{uid}], assuming @columbia.edu"
+    Rails.logger.error "cannot find email address via LDAP for uid [#{uid}], assuming @columbia.edu"
     self.email = "#{uid}@columbia.edu"
     self
   end
 
+
   # def set_barcode
-  #   ils = APP_CONFIG[:ils] || 'voyager'
-  #   return set_barcode_voyager(uid) if ils == 'voyager'
-  #   return set_barcode_folio(uid) if ils == 'folio'
+  #   patron_barcode = Folio::Client.get_user_barcode(uid)
+  #   self.barcode = patron_barcode
   # end
 
-  # def set_barcode_voyager(uid)
-  #   self.barcode = ''
-  #
-  #   if uid
-  #     if @oracle_connection ||= Voyager::OracleConnection.new
-  #       if @patron_id ||= @oracle_connection.get_patron_id(uid)
-  #         if (patron_barcode = @oracle_connection.retrieve_patron_barcode(@patron_id))
-  #           self.barcode = patron_barcode
-  #         end
-  #       end
-  #     end
-  #   end
-  #
-  #   self.barcode
-  # end
-
-  # def set_barcode_folio(uid)
+  # Calls get_user_by_uni() directly (rather than get_user_barcode) 
+  # so we can distinguish "FOLIO is down" from "patron has no barcode".
+  # If FOLIO returns any barcode value - even an empty string - respect that.
   def set_barcode
-    patron_barcode = Folio::Client.get_user_barcode(uid)
-    self.barcode = patron_barcode
+    return if uid.blank?
+
+    folio_user = Folio::Client.get_user_by_uni(uid)
+
+    # nil => the FOLIO API lookup call failed
+    # {}  => FOLIO lookup found no such user record (returned empty hash)
+    # In either case,  keep whatever any barcode already in the user record
+    if folio_user.nil? || folio_user.empty?
+      Rails.logger.warn "Could not retrieve barcode for [#{uid}], keeping stored barcode [#{self[:barcode]}]"
+      return
+    end
+    
+    self.barcode = folio_user['barcode']
   end
+
 
   def login
     uid.split('@').first
@@ -223,6 +187,8 @@ class User < ApplicationRecord
   end
 
   def get_first_ldap_value(*attribute_list)
+    return '' if @ldap_attributes.blank?
+    
     # Try passed attributes in preference order
     Array(attribute_list).each do |attribute|
       value_list = @ldap_attributes[attribute]
@@ -241,24 +207,7 @@ class User < ApplicationRecord
     affils.include?(affil)
   end
 
-  # # Instead of querying Oracle, look through LDAP affils
-  # def patron_group
-  #   return '' unless affils
-  #   patron_group = ''
-  #
-  #   affils.each do |affil|
-  #     # LIBSYS-3206 bogus affil, not actually a patron group
-  #     next if affil.match(/CUL_role-clio-PhD/)
-  #     # All legit patron groups are 3-4 all-caps patterns
-  #     if affilmatch = affil.match(/CUL_role-clio-([A-Z]+)/)
-  #       patron_group = affilmatch[1]
-  #     end
-  #   end
-  #
-  #   return patron_group
-  # end
-
-  # Instead of querying Oracle, look through LDAP affils
+  # Affils should reflect the patron groups
   def patron_groups
     return [] unless affils
 
@@ -286,11 +235,6 @@ class User < ApplicationRecord
 
     # Offsite eligibility set via app_config
     config = APP_CONFIG['offsite'] || {}
-
-    # # But hardcode a default, in case nothing is set in app_config
-    # if config['permitted_affils'].blank? && config['permitted_affil_regex'].blank?
-    #   config['permitted_affil_regex'] = ['CUL_role-clio']
-    # end
 
     eligible?(config, affils)
   end

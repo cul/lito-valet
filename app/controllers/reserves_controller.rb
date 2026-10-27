@@ -38,6 +38,7 @@ class ReservesController < ApplicationController
     end
 
     folio_courses_list = Folio::Client.get_courses_list_by_course_number(course_number_query)
+    return [] if folio_courses_list.blank?
 
     # If the course-number lookup for no matching course,
     # return to the index page
@@ -65,6 +66,7 @@ class ReservesController < ApplicationController
     # lookup the reserves for that course.
     course_listing_id = @course['course_listing_id']
     folio_reserves_list = Folio::Client.get_reserves_list_by_course_listing_id(course_listing_id)
+    return [] if folio_reserves_list.blank?
 
     # Simlify the complex FOLIO JSON response object into a simple list of elements for display
     @simple_reserves_list = parse_folio_reserves_list(folio_reserves_list)
@@ -102,6 +104,8 @@ class ReservesController < ApplicationController
       instructor_names = parse_folio_instructor_objects(folio_course['courseListingObject']['instructorObjects'])
       # FOLIO reserves lists include multiple copies - we need to consolidate
       folio_reserves_list = Folio::Client.get_reserves_list_by_course_listing_id(folio_course['courseListingId'])
+      return [] if folio_reserves_list.blank?
+
       reserves_count = parse_folio_reserves_list(folio_reserves_list).size
 
       simple_course = {}
