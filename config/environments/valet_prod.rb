@@ -104,6 +104,6 @@ Rails.application.configure do
   # Reject requests whose Host / X-Forwarded-Host isn't columbia.edu
   # Guards against host header injection and DNS rebinding
   # config.hosts = ["valet.cul.columbia.edu"]
-  config.hosts = [".columbia.edu"]
+  config.hosts = [".cul.columbia.edu", ".library.columbia.edu", ".columbia.edu"]
 
 end
