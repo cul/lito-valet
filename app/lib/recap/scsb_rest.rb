@@ -24,9 +24,12 @@ module Recap
       Rails.logger.debug "- opening new SCSB REST connection to #{url}"
 
       # reduce api timeouts - if the endpoint is up, it'll respond quickly.
+      # LIBSYS-8381 - Apparently 15 seconds isn't enough.  Double to 30.
       request_params = {
-        open_timeout: 15, # opening a connection
-        timeout:      15 # waiting for response
+        # open_timeout: 15, # opening a connection
+        # timeout:      15 # waiting for response
+        open_timeout: 30, # opening a connection
+        timeout:      30 # waiting for response
       }
       @conn = Faraday.new(url: url, request: request_params)
       raise "Faraday.new(#{url}) failed!" unless @conn
