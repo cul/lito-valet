@@ -96,6 +96,7 @@ Rails.application.configure do
 
   # === Host authorization =============================================
   # config.hosts = ["valet-test.cul.columbia.edu"]
+  config.hosts = [".columbia.edu"]
   
   # Annotate rendered view with file names.
   config.action_view.annotate_rendered_view_with_filenames = true

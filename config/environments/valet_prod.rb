@@ -101,6 +101,9 @@ Rails.application.configure do
   # config.active_storage.service = :local
 
   # === Host authorization =============================================
-  # Enable to get DNS-rebinding protection:
+  # Reject requests whose Host / X-Forwarded-Host isn't columbia.edu
+  # Guards against host header injection and DNS rebinding
   # config.hosts = ["valet.cul.columbia.edu"]
+  config.hosts = [".columbia.edu"]
+
 end

@@ -13,6 +13,11 @@
 # characteristic of the suite, not something new introduced here.
 
 RSpec.describe 'Omniauth Callbacks' do
+
+  # OmniAuth.config.allowed_hosts (config/initializers/omniauth.rb) rejects
+  # the default request-spec host, www.example.com
+  before { host! 'fake-valet-testing-hostname.columbia.edu' }
+
   describe 'GET /users/auth/columbia_cas/callback' do
     it 'signs in an existing user and updates affiliations' do
       user = FactoryBot.create(:happyuser, uid: 'jdoe', affils: [])

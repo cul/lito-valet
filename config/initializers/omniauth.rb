@@ -28,4 +28,6 @@ OmniAuth.config.allowed_request_methods = %i[get post]
 # silence the logged OmniAuth warning about CSRF risk on GET.
 OmniAuth.config.silence_get_warning = true
 
+# Guards against host header injection (Host / X-Forwarded-Host)
+OmniAuth.config.allowed_hosts = [/\A([a-z0-9-]+\.)*columbia\.edu\z/i]
 
