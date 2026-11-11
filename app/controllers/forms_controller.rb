@@ -21,22 +21,18 @@ class FormsController < ApplicationController
     # If this service requires authentication, then also check that the user is eligible
     if @service_config[:authenticate]
       Rails.logger.debug('service_config include :authenticate')
-      # - Lookup any FOLIO blocks (fines, recalls, etc.)
-      blocks = Folio::Client.get_blocks_by_uni(current_user.uid)
-      Rails.logger.debug("found user blocks: #{blocks}") if blocks.present?
 
-      # - Lookup service-specific eligibility
-      service_eligibility = @service.patron_eligible?(current_user)
-
-      # - Either condition prohibits the user from using this request service
-      if blocks.present? || (service_eligibility == false)
-        # There may be a service-specific message or URL
-        return redirect_to(@service_config['ineligible_url'], allow_other_host: true) if @service_config['ineligible_url']
-        return error(@service_config['ineligible_message']) if @service_config['ineligible_message']
-
-        # Otherwise, use the default.
-        return error("Current user is not eligible for service #{@service_config['label']}")
+      # - Check the patron's FOLIO account: blocks, inactive, or expired.
+      #   Any of these goes to a single library-maintained page that explains
+      #   how to restore access (LIBSYS-8360).
+      account_problems = Folio::Client.get_account_problems_by_uni(current_user.uid)
+      if account_problems.present?
+        Rails.logger.info("FOLIO account problems for #{current_user.uid}: #{account_problems.join('; ')}")
+        return account_problem!
       end
+
+      # - Check service-specific eligibility (affiliations, etc.)
+      return ineligible! if @service.patron_eligible?(current_user) == false
     end
 
     # validate bib record
@@ -253,6 +249,25 @@ class FormsController < ApplicationController
                       ''
                     end
     render :error, locals: { service_error: service_error }
+  end
+
+  # The patron's FOLIO account is blocked, inactive, or expired.
+  # Send them to the single account-problem page from app_config.
+  # If that isn't configured, fall back to the service's ineligible handling.
+  def account_problem!
+    account_problem_url = APP_CONFIG['patron_account_problem_url']
+    return redirect_to(account_problem_url, allow_other_host: true) if account_problem_url.present?
+
+    ineligible!
+  end
+
+  # The patron is not eligible for this particular service.
+  # There may be a service-specific URL or message; otherwise, use the default.
+  def ineligible!
+    return redirect_to(@service_config['ineligible_url'], allow_other_host: true) if @service_config['ineligible_url']
+    return error(@service_config['ineligible_message']) if @service_config['ineligible_message']
+
+    error("Current user is not eligible for service #{@service_config['label']}")
   end
 
   # Outages may redirect, render custom forms, or custom messasges, or use a default form

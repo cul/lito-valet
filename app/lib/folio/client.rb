@@ -226,6 +226,66 @@ module Folio
       return folio_response
     end
 
+    # LIBSYS-8360
+    # Check a patron's FOLIO account for any condition that should keep them
+    # from using authenticated request services:
+    #   - patron blocks, automated or manual (fines, overdue recalls, etc.)
+    #   - inactive account  ("active": false)
+    #   - expired account   ("expirationDate" in the past)
+    #
+    # Returns an array of short problem descriptions (useful for logging),
+    # or an empty array when the account is in good standing.
+    #
+    # If the FOLIO lookup fails, or the user isn't found, this returns []
+    # (fail open), matching the existing blocks behavior, so that a FOLIO
+    # outage doesn't send every patron to the account-problem page.
+    def self.get_account_problems_by_uni(uni)
+      return [] if uni.blank?
+
+      # One user lookup, shared by all three checks
+      folio_user = get_user_by_uni(uni)
+
+      # nil => the FOLIO API lookup call failed
+      # {}  => FOLIO has no user record for this uni
+      if folio_user.nil?
+        Rails.logger.warn("get_account_problems_by_uni(#{uni}): FOLIO user lookup failed, skipping account checks")
+        return []
+      end
+      if folio_user.empty?
+        Rails.logger.warn("get_account_problems_by_uni(#{uni}): no FOLIO user record found, skipping account checks")
+        return []
+      end
+
+      problems = []
+      problems << 'inactive account' if user_inactive?(folio_user)
+      problems << "expired account (#{folio_user['expirationDate']})" if user_expired?(folio_user)
+
+      blocks = get_blocks_by_user_id(folio_user['id']) || []
+      blocks.each { |block_message| problems << "block: #{block_message}" }
+
+      return problems
+    end
+
+    # Only an explicit false counts as inactive
+    def self.user_inactive?(folio_user)
+      folio_user['active'] == false
+    end
+
+    # A blank expirationDate means the account never expires.
+    # An unparseable one is also treated as not expired.
+    def self.user_expired?(folio_user)
+      expiration_date = folio_user['expirationDate']
+      return false if expiration_date.blank?
+
+      expires_at = Time.zone.parse(expiration_date)
+      return false if expires_at.nil?
+
+      return expires_at < Time.current
+    rescue ArgumentError => e
+      Rails.logger.warn("user_expired?: cannot parse expirationDate '#{expiration_date}': #{e.message}")
+      false
+    end
+
     def self.get_blocks_by_uni(uni)
       return nil unless uni
 
